@@ -1,0 +1,1 @@
+<img src="<?php echo BASE_FOLDER;?>application/views/employee/employee/html/import_employee_sample.jpg" />

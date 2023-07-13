@@ -1,0 +1,227 @@
+<?php
+class G_Overtime_Helper_DEPRECATED {
+	
+	/*
+		Usage : 
+		
+		$return = G_Overtime_Helper::validate_overtime_request($employee,$start_date,$start_time,$end_time);
+
+		condition:
+		1. No Late
+		2. Actual Time-Out must be >= Schedule Time-Out
+		3. OT Start must be >= Schedule Time-Out
+		4. OT End must be <= Actual Time Out
+		
+		#5. OT Start must be >= Actual Time Start
+	*/	
+	
+	
+	public static function compute_total_hours($date,$time_in,$time_out) {
+		$time_in 	= Tools::convert12To24Hour($time_in); 
+		$time_out	= Tools::convert12To24Hour($time_out);
+		
+		$dates 			= Tools::getDateInAndOut($time_in, $time_out, $date);
+		$date_time_in 	= $dates['date_in'] . " " . $time_in;
+		$date_time_out	= $dates['date_out'] . " ". $time_out;
+		
+		$total_ot_duration =  Tools::computeHourDifference($date_time_in, $date_time_out);
+		
+		return $total_ot_duration;
+	}
+	
+	public static function validate_overtime_request($e, $overtime_date,$time_in,$time_out) {
+		$a = G_Attendance_Finder::findByEmployeeAndDate($e, $overtime_date);
+		if($a) {
+			if (!$a->isPresent()) {
+				$return['message']   	= 'Error : Unable to file overtime request. ' . $e->getFirstName() .' '. $e->getLastName() . ' was absent on '. date('m/d/Y',strtotime($overtime_date));
+				$return['is_saved'] 	= 0;
+			} else {
+				$t = $a->getTimesheet();
+				$schedule_time_in 	= Tools::convert24To12Hour($t->getScheduledTimeIn());
+				$schedule_time_out 	= Tools::convert24To12Hour($t->getScheduledTimeOut());
+				$actual_time_in 	= Tools::convert24To12Hour($t->getTimeIn());
+				$actual_time_out 	= Tools::convert24To12Hour($t->getTimeOut());
+				
+				$required_hours		= G_Overtime_Helper::compute_total_hours($overtime_date,$schedule_time_in,$schedule_time_out);
+				$total_hours_worked	= G_Overtime_Helper::compute_total_hours($overtime_date,$actual_time_in,$actual_time_out);
+				$total_ot_duration 	= G_Overtime_Helper::compute_total_hours($overtime_date,$time_in,$time_out);					  
+				
+				if($total_ot_duration >= 0.5) {
+					if($a->isRestDay() || $a->isHoliday()) {
+						$return['message']   = 'Overtime request has been saved';
+						$return['is_saved'] = true;
+					} else {
+						
+						if($total_hours_worked > $required_hours) {
+							//if($t->getLateHours() == 0) {
+								if(strtotime($t->getTimeOut()) >= strtotime($t->getScheduledTimeOut())) {
+									if((strtotime($time_in) >= strtotime($t->getScheduledTimeOut())) && (strtotime($time_out) >= (strtotime($time_in))) && (strtotime($time_out) <= strtotime($t->getTimeOut()))) {
+										$return['message']   	= 'Overtime request has been saved';
+										$return['is_saved'] 	= true;
+									} else { 
+										if(strtotime($time_in) < strtotime($t->getScheduledTimeOut())) {
+											$return['message']   = 'Error : Invalid request! Your Overtime start must be ' .Tools::convert24To12Hour($t->getScheduledTimeOut()). ' onwards.';
+										} else if(strtotime($time_out) < (strtotime($time_in))) {
+											$return['message']   = 'Error : Invalid Overtime Time-Out.';
+										} else {
+											$return['message']   = 'Error : Invalid request! Your Overtime must not exceed ' .Tools::convert24To12Hour($t->getTimeOut());	
+										}
+									
+										$return['is_saved'] = 0;					
+									}
+								} else {
+									$return['message']   = 'Error : Overtime request is invalid. Your actual time out on ' . date('m/d/Y',strtotime($overtime_date)) . ' was '.Tools::convert24To12Hour($t->getTimeOut());
+									$return['is_saved'] = 0;
+								}
+					
+							/*} else { 
+								$return['message']   	= 'Error : Unable to file overtime request. ' . $e->getFirstName() .' '. $e->getLastName() . ' was late on '. date('m/d/Y',strtotime($overtime_date));
+								$return['is_saved'] 	= 0;
+							}*/
+						} else {
+							$return['message']	= 'Error : Total Hours Worked is less than Required Working Hours!';
+							$return['is_saved'] = 0;
+						}
+					}
+				} else {
+					$return['message']	= 'Error : Overtime must be greater than 30 minutes!';
+					$return['is_saved'] = 0;	
+				}
+			}
+		} else { 
+				//$return['message']   = 'Error : Invalid Request. <b>' . $e->getFirstName() .' '. $e->getLastName() . '</b> on was late during that day.';
+				$return['message']   	= 'Error : System cannot find attendance of <b>' . $e->getFirstName() .' '. $e->getLastName() . '</b> on ' . date('m/d/Y',strtotime($overtime_date));
+				$return['is_saved'] 	= 0;
+		}
+		return $return;
+
+	}
+	
+	public static function validateImportOvertime($e, $overtime_date,$time_in,$time_out) {
+		
+		$employee_id	= $e->getId();
+		$employee_code	= $e->getEmployeeCode();
+		$date			= $overtime_date;
+		
+		$a = G_Attendance_Finder::findByEmployeeAndDate($e, $overtime_date);
+		if($a) {
+			
+			if (!$a->isPresent()) {
+				$message	= 'Error : Unable to file overtime. ' . $e->getName() .' was absent';
+				$error_id	= G_Overtime_Error::INVALID_ACTUAL_TIME_INOUT;
+				$return['is_saved'] = 0;
+			} else {
+				
+				$t = $a->getTimesheet();
+				$schedule_time_in 	= Tools::convert24To12Hour($t->getScheduledTimeIn());
+				$schedule_time_out 	= Tools::convert24To12Hour($t->getScheduledTimeOut());
+				$actual_time_in 	= Tools::convert24To12Hour($t->getTimeIn());
+				$actual_time_out 	= Tools::convert24To12Hour($t->getTimeOut());
+				
+				$required_hours		= G_Overtime_Helper::compute_total_hours($overtime_date,$schedule_time_in,$schedule_time_out);
+				$total_hours_worked	= G_Overtime_Helper::compute_total_hours($overtime_date,$actual_time_in,$actual_time_out);
+				$total_ot_duration 	= G_Overtime_Helper::compute_total_hours($overtime_date,$time_in,$time_out);
+				
+				if($total_ot_duration >= 0.5) {
+					if($a->isRestDay() || $a->isHoliday()) {
+						$return['message']   = 'Overtime request has been saved';
+						$return['is_saved'] = true;
+					} else {
+						
+						if($total_hours_worked > $required_hours) {
+							if(!$t) {
+							//$message 	= $e->getName() . " (Employee Code: " . $e->getEmployeeCode() . ") has no log-in / log-out";
+							$message	= 'Error : Cannot find attendance of ' . $e->getName();
+							$error_id	= G_Overtime_Error::INVALID_ACTUAL_TIME_INOUT;
+							$return['is_saved'] = 0;
+						} else {
+							 //if($t->getLateHours() == 0) { // if not late
+								if(strtotime($t->getTimeOut()) >= strtotime($t->getScheduledTimeOut())) {
+									if((strtotime($time_in) >= strtotime($t->getScheduledTimeOut())) && (strtotime($time_out) >= (strtotime($time_in))) && (strtotime($time_out) <= strtotime($t->getTimeOut()))) {
+										$return['message']   = 'Overtime request has been saved';
+										$return['is_saved'] = true;
+									} else { 
+										if(strtotime($time_in) < strtotime($t->getScheduledTimeOut())) {
+											//$return['message']   = 'Error : Invalid request! Your Overtime start must be ' .Tools::convert24To12Hour($t->getScheduledTimeOut()). ' onwards.';
+				
+											//$message 	= $e->getName() . " (Employee Code: " . $e->getEmployeeCode() . ") overtime start is less than schedule time-out.";
+											$message	= 'Error : Overtime start must be ' .Tools::convert24To12Hour($t->getScheduledTimeOut()). ' onwards.';
+											$error_id	= G_Overtime_Error::OT_START_LESS_THAN_STO;
+											
+										} else if(strtotime($time_out) < (strtotime($time_in))) {
+											//$return['message']   = 'Error : Invalid Overtime Time-Out.';
+											
+											//$message 	= $e->getName() . " (Employee Code: " . $e->getEmployeeCode() . ") overtime start is greater than overtime end.";
+											$message	= 'Error : Overtime end must be greater than overtime start.';
+											$error_id	= G_Overtime_Error::INVALID_ACTUAL_TIME_INOUT;
+											
+										} else {
+											//$return['message']   = 'Error : Invalid request! Your Overtime must not exceed ' .Tools::convert24To12Hour($t->getTimeOut());
+											
+											//$message 	= $e->getName() . " (Employee Code: " . $e->getEmployeeCode() . ") overtime end is greater than actual time-out.";
+											$message	= 'Error : overtime end must not exceed ' . Tools::convert24To12Hour($t->getTimeOut());
+											$error_id	= G_Overtime_Error::OT_END_GREATER_THAN_ATO;	
+										}
+									
+										$return['is_saved'] = 0;					
+									}
+								} else {
+									//$return['message']   = 'Error : Overtime request is invalid. Your actual time out on ' . date('m/d/Y',strtotime($overtime_date)) . ' was '.Tools::convert24To12Hour($t->getTimeOut());
+									
+									//$message 	= $e->getName() . " (Employee Code: " . $e->getEmployeeCode() . ") overtime end is greater than actual time-out.";
+									$message	= 'Error : Actual time-out on '.date('m/d/Y',strtotime($overtime_date)) . ' was '.Tools::convert24To12Hour($t->getTimeOut());
+									$error_id	= G_Overtime_Error::OT_END_GREATER_THAN_ATO;	
+									
+									$return['is_saved'] = 0;
+								}
+					
+							/*} else { 
+								//$return['message']   = 'Error : Unable to file overtime request. ' . $e->getFirstName() .' '. $e->getLastName() . ' was late on '. date('m/d/Y',strtotime($overtime_date));
+								
+								//$message 	= $e->getName() . " (Employee Code: " . $e->getEmployeeCode() . ") was late.";
+								$message	= 'Error : Unable to file overtime request due to late attendance. ';
+								$error_id	= G_Overtime_Error::LATE;
+								
+								$return['is_saved'] = 0;
+							}*/
+							
+						}	// if $t
+						} else {
+							$message			= 'Error : Total Hours Worked is less than Required Working Hours ';
+							$error_id			= G_Overtime_Error::RWH_LESS_THAN_TWH;
+							$return['is_saved'] = 0;
+						}
+					}	// if($a->isRestDay() || $a->isHoliday())
+				} else { // if($total_ot_duration['minutes'] > 30)
+					$message			= 'Error : Overtime must be greater than 30 minutes ';
+					$error_id			= G_Overtime_Error::OT_LESS_THAN_30;
+					$return['is_saved'] = 0;
+				}
+			}
+	
+		} else { 
+				//$message 	= $e->getName() . " (Employee Code: " . $e->getEmployeeCode() . ") has no log-in / log-out.";
+				$message	= 'Error : Cannot find attendance of ' . $e->getName() .' ('.$e->getEmployeeCode(). ')';
+				$error_id	= G_Overtime_Error::INVALID_SCHEDULE_TIME_INOUT;
+				$return['is_saved'] = 0;
+		}
+		
+		if($return['is_saved'] == 0) {
+			$error = new G_Overtime_Error;
+			$error->setEmployeeId($employee_id);
+			$error->setEmployeeCode($employee_code);
+			$error->setEmployeeName($e->getName());
+			$error->setDate($date);
+			$error->setTimeIn($time_in);
+			$error->setTimeOut($time_out);
+			$error->setMessage($message);
+			$error->setErrorTypeId($error_id);
+			$error->addError();
+			
+			$_SESSION['error']['import_overtime']++;
+		}
+		
+		return $return['is_saved'];
+	}
+}
+?>

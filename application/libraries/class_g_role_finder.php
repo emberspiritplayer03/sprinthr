@@ -1,0 +1,61 @@
+<?php
+class G_Role_Finder {
+
+     public static function findById($id) {
+		$sql = "
+			SELECT * 
+			FROM " . ROLES ." 
+			WHERE id =". Model::safeSql($id) ."
+			LIMIT 1
+		";		
+		return 
+		self::getRecord($sql);
+	}	
+		
+	public static function findAll($order_by = '', $limit = '') {
+		$sql = "
+			SELECT * 
+			FROM " . ROLES ." 			
+			" . $order_by . "
+			" . $limit . "		
+		";
+		return self::getRecords($sql);
+	}
+
+	private static function getRecord($sql) {
+		$result = Model::runSql($sql);
+		$total = mysql_num_rows($result);
+		if ($total == 0) {
+			return false;	
+		}		
+		$row = Model::fetchAssoc($result);
+		$records = self::newObject($row);	
+		return $records;
+	}
+	
+	private static function getRecords($sql) {
+		$result = Model::runSql($sql);
+		$total = mysql_num_rows($result);
+		if ($total == 0) {
+			return false;	
+		}
+		while ($row = Model::fetchAssoc($result)) {
+			$records[$row['id']] = self::newObject($row);
+		}
+		return $records;
+	}
+
+    private static function newObject($row) {
+               
+        $gr = new G_Role();
+        $gr->setId($row['id']);
+        $gr->setName($row['name']);
+        $gr->setDescription($row['description']);        
+        $gr->setIsArchive($row['is_archive']);        
+        $gr->setDateCreated($row['date_created']);
+        $gr->setLastModified($row['last_modified']);
+        return $gr;
+    }
+
+}
+?>

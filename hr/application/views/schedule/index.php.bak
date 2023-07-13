@@ -1,0 +1,18 @@
+<div id="create_schedule_link">
+    <a href="javascript:void(0)" onclick="javascript:createSchedule()">Create Schedule</a>
+</div>
+<table>
+<tr><td>
+    <div id="create_schedule_handler"></div>
+</td></tr>
+</table>
+
+<div id="schedule_list"></div>
+
+<div style="display:none" id="create_schedule_id">
+<?php include 'application/views/schedule/forms/create_schedule_form.php';?>
+</div>
+
+<script>
+showScheduleList('#schedule_list');
+</script>

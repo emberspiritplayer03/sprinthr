@@ -1,0 +1,11 @@
+<?php include('includes/header_website.php');?>
+<div id="main">
+    <div id="content">            	
+        <div class="page_content">
+            <h1 class="page_title"><?php echo $page_title;?></h1>
+            <?php $this->showContent();?>
+        </div>
+    </div><!-- #content -->            
+</div>
+<?php include('includes/sidebar_website.php');?>
+<?php include('includes/footer_website.php');?>

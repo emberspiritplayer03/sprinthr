@@ -1,0 +1,22 @@
+<?php
+class G_Audit_Trail extends Audit_Trail {	
+	
+	// CONSTANTS
+	const FAIL 			= 'FAIL';
+	const SUCCESS 		= 'SUCCESS';
+			
+	public function __construct() {}	
+	
+	public function getUserIPAndCountry() {		
+		return G_Applicant_Logs_Helper::getUserIPAndCountry();
+	}		
+	
+	public function save() {		
+		return G_Audit_Trail_Manager::save($this);
+	}
+	
+	public function delete() {
+		return G_Audit_Trail_Manager::delete($this);
+	}
+}
+?>

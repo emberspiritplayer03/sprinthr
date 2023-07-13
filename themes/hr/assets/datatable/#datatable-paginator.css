@@ -1,0 +1,19 @@
+/*
+Copyright (c) 2008, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 2.6.0
+*/
+.yui-skin-sam .yui-pg-container{display:block;margin:6px 0;white-space:nowrap;}
+.yui-skin-sam .yui-pg-first,.yui-skin-sam .yui-pg-previous,.yui-skin-sam .yui-pg-next,.yui-skin-sam .yui-pg-last,.yui-skin-sam .yui-pg-current,.yui-skin-sam .yui-pg-pages,.yui-skin-sam .yui-pg-page{display:inline-block;font-family:"Helvetica Neue",helvetica,arial,clean,sans-serif;padding:3px 6px;zoom:1;}
+.yui-skin-sam .yui-pg-pages{padding:0;}
+.yui-skin-sam .yui-pg-current{padding:3px 0;}
+.yui-skin-sam a.yui-pg-first:link,.yui-skin-sam a.yui-pg-first:visited,.yui-skin-sam a.yui-pg-first:active,.yui-skin-sam a.yui-pg-first:hover,.yui-skin-sam a.yui-pg-previous:link,.yui-skin-sam a.yui-pg-previous:visited,.yui-skin-sam a.yui-pg-previous:active,.yui-skin-sam a.yui-pg-previous:hover,.yui-skin-sam a.yui-pg-next:link,.yui-skin-sam a.yui-pg-next:visited,.yui-skin-sam a.yui-pg-next:active,.yui-skin-sam a.yui-pg-next:hover,.yui-skin-sam a.yui-pg-last:link,.yui-skin-sam a.yui-pg-last:visited,.yui-skin-sam a.yui-pg-last:active,.yui-skin-sam a.yui-pg-last:hover,.yui-skin-sam a.yui-pg-page:link,.yui-skin-sam a.yui-pg-page:visited,.yui-skin-sam a.yui-pg-page:active,.yui-skin-sam a.yui-pg-page:hover{text-decoration:none;outline:0;}
+.yui-skin-sam span.yui-pg-first,.yui-skin-sam span.yui-pg-previous,.yui-skin-sam span.yui-pg-next,.yui-skin-sam span.yui-pg-last{color:#a6a6a6;}
+.yui-skin-sam .yui-pg-page{background-color:#fff;border:1px solid #ffffff;padding:1px 5px;text-decoration:none;}
+.yui-skin-sam .yui-pg-current-page{background:#1485bf;filter: progid: DXImageTransform.Microsoft.gradient(startColorstr = '#1e98d6', endColorstr = '#1485bf');-ms-filter: "progid: DXImageTransform.Microsoft.gradient(startColorstr = '#1e98d6', endColorstr = '#1485bf')";background-image: -moz-linear-gradient(top, #1e98d6, #1485bf);background-image: -ms-linear-gradient(top, #1e98d6, #1485bf);background-image: -o-linear-gradient(top, #1e98d6, #1485bf);background-image: -webkit-gradient(linear, center top, center bottom, from(#1e98d6), to(#1485bf));background-image: -webkit-linear-gradient(top, #1e98d6, #1485bf);background-image: linear-gradient(top, #1e98d6, #1485bf);border:none;color:#fff;font-weight:bold;-moz-border-radius:3px;-o-border-radius:3px;-khtml-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;}
+.yui-skin-sam .yui-pg-page{margin-left:1px;margin-right:1px;}
+.yui-skin-sam .yui-pg-first,.yui-skin-sam .yui-pg-previous{padding-left:0;}
+.yui-skin-sam .yui-pg-next,.yui-skin-sam .yui-pg-last{padding-right:0;}
+.yui-skin-sam .yui-pg-current,.yui-skin-sam .yui-pg-rpp-options{margin-left:1em;margin-right:1em;}
+

@@ -1,0 +1,58 @@
+<?php
+class G_Philhealth_Manager {	
+	public static function saveToEmployee(IEmployee $e, G_Philhealth $s) {		
+		if ($s->getId() > 0) {
+			$action = 'update';
+			$sql_start = "UPDATE g_employee_contribution";
+			$sql_end   = " WHERE employee_id = ". Model::safeSql($e->getId());		
+		} else {
+			$action = 'insert';
+			$sql_start = "INSERT INTO g_employee_contribution";
+			$sql_end   = ",employee_id = ". Model::safeSql($e->getId());
+		}
+		
+		$sql = $sql_start ."
+			SET
+			philhealth_ee   = " . Model::safeSql($s->getEmployeeShare()) .",
+			philhealth_er	 = " . Model::safeSql($s->getCompanyShare()) ."
+			". $sql_end ."		
+		";	
+
+		Model::runSql($sql);
+		if (mysql_errno() > 0) {
+			return false;
+		}
+		if ($action == 'insert') {
+			return mysql_insert_id();
+		} else if ($action == 'update') {
+			return true;
+		}	
+	}
+	
+	public static function save(G_Philhealth $gp) {		
+		if (G_Philhealth_Helper::isIdExist($gp) > 0 ) {
+			$sql_start = "UPDATE ". PHILHEALTH . "";
+			$sql_end   = "WHERE id = ". Model::safeSql($gp->getId());		
+		}else{
+			$sql_start = "INSERT INTO ". PHILHEALTH . "";
+			$sql_end   = " ";		
+		}
+		
+		$sql = $sql_start ."
+			SET
+			company_share			= " . Model::safeSql($gp->getCompanyShare()) .",
+			employee_share			= " . Model::safeSql($gp->getEmployeeShare()) .",
+			salary_base				= " . Model::safeSql($gp->getSalaryBase()) .",
+			salary_bracket			= " . Model::safeSql($gp->getSalaryBracket()) .",
+			from_salary				= " . Model::safeSql($gp->getFromSalary()) .",
+			to_salary				= " . Model::safeSql($gp->getToSalary()) .",
+			monthly_contribution = " . Model::safeSql($gp->getMonthlyContribution()) ."
+			"
+			. $sql_end ."	
+		";	
+
+		Model::runSql($sql);
+		return mysql_insert_id();		
+	}
+}
+?>

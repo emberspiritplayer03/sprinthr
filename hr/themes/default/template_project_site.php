@@ -1,0 +1,28 @@
+<?php include('includes/header.php'); ?>
+<div id="content" class="sidebar_left">
+    <div class="mtcntnr">
+        <h1 class="module_title">
+            <i class="mticon_img icon_reports"></i>
+            <?php echo $page_title; ?>
+            <a href="javascript:history.go(-1)" class="gray_button title_back_button"><i></i>Back</a>
+            <?php echo $btn_add_employee_activity; ?>
+            <?php echo $btn_import_employee_activity; ?>
+            <?php echo $btn_generate_employee_activity; ?>
+        </h1>
+        <div class="mtshad"></div>
+    </div>
+    <div class="holder_sidecontent clearfix">
+        <?php include('includes/submenu_project_site.php'); ?>
+        <div class="sidebar_maincontent">
+            <div class="maincontent" style="width:80%; padding:5px 20px 15px 16px;">
+                <div id="message_container" style="width:auto; display:none" class="ui-state-highlight ui-corner-all message_box">
+                    <span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-info"></span>
+                    <span class="message"></span><a class="ui-icon ui-icon-close" href="javascript:void(0)" onclick="javascript:$('#message_container').hide()" style="float:right" title="Close"></a>
+                </div>
+                <?php $this->showContent(); ?>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<?php include('includes/footer.php'); ?>

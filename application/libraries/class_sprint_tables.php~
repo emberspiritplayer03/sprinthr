@@ -1,0 +1,2720 @@
+<?php
+
+class Sprint_Tables {	
+	public $table_name;
+	
+	public function __construct($value) {
+		$this->table_name = $value;
+	}
+	
+	public function setTableName($value) {
+		$this->table_name = $value;
+	}	
+	
+	public function truncateSelectedTable()
+	{
+		$sql = 'TRUNCATE TABLE ' . $this->table_name;		
+		Model::runSql($sql);
+	}
+	
+	public function truncateAllTables()
+	{
+		$sql = 'TRUNCATE TABLE ' . COMPANY_INFO;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . COMPANY_STRUCTURE;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . COMPANY_BRANCH;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_ACCESS_RIGHTS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_USER_GROUP;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . SSS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . PHILHEALTH;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_PAGIBIG;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_TAX_TABLE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . SUBDIVISION_TYPE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . LOCATION;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . LICENSE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . DEPENDENT_RELATIONSHIP;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . MEMBERSHIP_TYPE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . EMPLOYMENT_STATUS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_JOB;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_JOB_SPECIFICATION;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_JOB_EMPLOYMENT_STATUS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EEO_JOB_CATEGORY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_JOB_SALARY_RATE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_LOAN;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_LOAN_DETAILS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_LOAN_TYPE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_LOAN_DEDUCTION_TYPE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_EARNINGS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SETTINGS_EMPLOYMENT_STATUS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SETTINGS_PAY_PERIOD;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_JOB_VACANCY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . EMPLOYEE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_DETAILS_HISTORY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . APPLICANT;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_ERROR_LEAVE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_HOLIDAY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_HOLIDAY_BRANCH;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_CONTACT_DETAILS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_EMERGENCY_CONTACT;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_DEPENDENT;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_DIRECT_DEPOSIT;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_ATTENDANCE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_BRANCH_HISTORY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_BASIC_SALARY_HISTORY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_JOB_HISTORY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_SUBDIVISION_HISTORY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_PERFORMANCE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_TRAINING;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_WORK_EXPERIENCE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_EDUCATION;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_SKILLS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_SUPERVISOR;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_LICENSE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_LANGUAGE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_MEMBERSHIP;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_MEMO;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_LEAVE_AVAILABLE;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_LEAVE_REQUEST;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_DYNAMIC_FIELD;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_ATTACHMENT;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_REQUIREMENTS;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_LEAVE;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_CONTRIBUTION;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_EXTEND_CONTRACT;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_TAGS;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_JOB_APPLICATION_EVENT;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_ATTACHMENT;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_REQUIREMENTS;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_EXAMINATION;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_EDUCATION;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_TRAINING;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_SKILLS;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_LICENSE;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_LANGUAGE;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_WORK_EXPERIENCE;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_EXAM;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_EXAM_CHOICES;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_EXAM_QUESTION;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_PERFORMANCE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_PERFORMANCE_INDICATOR;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SALARY_CYCLE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_CUTOFF_PERIOD;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SETTINGS_EMPLOYEE_FIELD;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_PAYSLIP_ERROR;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_ATTENDANCE_ERROR;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_PAYSLIP;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_DAILY_TIME_RECORD;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_OVERTIME_ERROR;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_OVERTIME_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_REST_DAY_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_CHANGE_SCHEDULE_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_OFFICIAL_BUSINESS_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_UNDERTIME_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_MAKE_UP_SCHEDULE_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_ATTENDANCE_CORRECTION_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SETTINGS_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SETTINGS_REQUEST_APPROVERS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_REQUEST_APPROVERS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_OVERTIME;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_ATTENDANCE_LOG;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_RESTDAY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SCHEDULE_GROUP;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SCHEDULE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_GROUP_SCHEDULE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_SCHEDULE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_PAYABLE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_PAYABLE_HISTORY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . EMAIL_BUFFER;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_USER;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SETTINGS_DEFAULT_LEAVE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SETTINGS_GRACE_PERIOD;		
+		Model::runSql($sql);
+	}
+	
+	public function truncateRecommendedTables()
+	{
+		$sql = 'TRUNCATE TABLE ' . COMPANY_BRANCH;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_ACCESS_RIGHTS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_USER_GROUP;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . SUBDIVISION_TYPE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . LICENSE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_JOB;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_JOB_SPECIFICATION;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_JOB_SALARY_RATE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_LOAN;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_LOAN_DETAILS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_EARNINGS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_JOB_VACANCY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . EMPLOYEE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_DETAILS_HISTORY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . APPLICANT;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_ERROR_LEAVE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_HOLIDAY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_HOLIDAY_BRANCH;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_CONTACT_DETAILS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_EMERGENCY_CONTACT;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_DEPENDENT;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_DIRECT_DEPOSIT;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_ATTENDANCE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_BRANCH_HISTORY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_BASIC_SALARY_HISTORY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_JOB_HISTORY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_SUBDIVISION_HISTORY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_PERFORMANCE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_TRAINING;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_WORK_EXPERIENCE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_EDUCATION;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_SKILLS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_SUPERVISOR;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_LICENSE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_LANGUAGE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_MEMBERSHIP;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_MEMO;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_LEAVE_AVAILABLE;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_LEAVE_REQUEST;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_DYNAMIC_FIELD;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_ATTACHMENT;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_REQUIREMENTS;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_LEAVE;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_CONTRIBUTION;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_EXTEND_CONTRACT;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_TAGS;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_JOB_APPLICATION_EVENT;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_ATTACHMENT;		
+		Model::runSql($sql);	
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_REQUIREMENTS;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_EXAMINATION;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_EDUCATION;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_TRAINING;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_SKILLS;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_LICENSE;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_LANGUAGE;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_APPLICANT_WORK_EXPERIENCE;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_EXAM;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_EXAM_CHOICES;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_EXAM_QUESTION;		
+		Model::runSql($sql);		
+		$sql = 'TRUNCATE TABLE ' . G_PERFORMANCE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_PERFORMANCE_INDICATOR;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SETTINGS_EMPLOYEE_FIELD;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_PAYSLIP_ERROR;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_ATTENDANCE_ERROR;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_PAYSLIP;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_DAILY_TIME_RECORD;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_OVERTIME_ERROR;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_OVERTIME_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_REST_DAY_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_CHANGE_SCHEDULE_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_OFFICIAL_BUSINESS_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_UNDERTIME_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_MAKE_UP_SCHEDULE_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_ATTENDANCE_CORRECTION_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SETTINGS_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SETTINGS_REQUEST_APPROVERS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_REQUEST;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_REQUEST_APPROVERS;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_OVERTIME;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_ATTENDANCE_LOG;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_RESTDAY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SCHEDULE_GROUP;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SCHEDULE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_GROUP_SCHEDULE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_SCHEDULE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_PAYABLE;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_EMPLOYEE_PAYABLE_HISTORY;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . EMAIL_BUFFER;		
+		Model::runSql($sql);
+		$sql = 'TRUNCATE TABLE ' . G_SETTINGS_DEFAULT_LEAVE;		
+		Model::runSql($sql);
+	}
+	
+	public static function convertXmlToArray($xml,$type)
+	{
+		//CONVERT XML TO ARRAY
+		if($type == 'settings'){
+			$xmlUrl = $_SERVER['DOCUMENT_ROOT'].BASE_FOLDER. 'files/xml/settings/' . $xml;		
+		}elseif($type == 'tables'){
+			$xmlUrl = $_SERVER['DOCUMENT_ROOT'].BASE_FOLDER. 'files/xml/tables/' . $xml;
+		}else{
+			$xmlUrl = $_SERVER['DOCUMENT_ROOT'].BASE_FOLDER. 'files/xml/company_structure/' . $xml;
+		}		
+		if(Tools::isFileExist($file)==true) {			
+			$xmlStr = file_get_contents($xmlUrl);
+			$xmlStr = simplexml_load_string($xmlStr);
+
+			$xml2 = new Xml;
+			$arrXml = $xml2->objectsIntoArray($xmlStr);				
+			$return = $arrXml;
+		}else {
+			$return = 'No file exist';
+		}
+		
+		return $return;
+		
+	}
+	
+	public static function checkTableIfExists()
+	{
+		$arr = self::convertXmlToArray("table_structure.xml","tables");		
+		
+		foreach($arr as $key => $value){
+			foreach($value as $keysub => $subvalue){
+				$sql = 'SELECT 1 from `' . $subvalue['name'] . '`';		
+				$is_exists =  Model::runSql($sql);
+				if($is_exists == false){
+					self::createTable($subvalue['name']);
+				}
+			}
+		}
+	}
+	
+	function createTable($table_name)
+	{
+		//Drop Table if exists
+			self::sqlDropTable($table_name);
+		//
+		switch ($table_name) {
+			case G_ACCESS_RIGHTS:				
+			$sql = "CREATE TABLE IF NOT EXISTS `g_access_rights` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `user_group_id` int(11) NOT NULL,
+					  `rights` varchar(240) COLLATE utf8_unicode_ci NOT NULL COMMENT 'serialize',
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
+			break;
+			
+			case APPLICANT:	
+			$sql = "CREATE TABLE IF NOT EXISTS `g_applicant` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `hash` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `photo` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `employee_id` int(11) DEFAULT NULL COMMENT 'if hired',
+					  `company_structure_id` int(11) NOT NULL,
+					  `job_vacancy_id` int(11) NOT NULL,
+					  `job_id` int(11) NOT NULL,
+					  `application_status_id` int(11) NOT NULL COMMENT '0=application submitted,  1=interview,  2=offered a job, 3=declined offer, 4=reject, 5=hired',
+					  `lastname` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `firstname` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `middlename` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `extension_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `gender` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `marital_status` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `birthdate` date NOT NULL,
+					  `birth_place` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `address` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
+					  `city` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `province` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `zip_code` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `country` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `home_telephone` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `mobile` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `email_address` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `qualification` text COLLATE utf8_unicode_ci NOT NULL,
+					  `sss_number` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `tin_number` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `pagibig_number` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `philhealth_number` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `applied_date_time` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `hired_date` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `rejected_date` varchar(64) COLLATE utf8_unicode_ci NOT NULL COMMENT 'if applicant did not passed, or failed or declined or delinquent',
+					  `resume_name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `resume_path` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`),
+					  KEY `application_status_id` (`application_status_id`),
+					  KEY `job_id` (`job_id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";			
+			break;
+			
+			case G_APPLICANT_ATTACHMENT:	
+			$sql = "CREATE TABLE IF NOT EXISTS `g_applicant_attachment` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `applicant_id` int(11) NOT NULL,
+					  `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `filename` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `description` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `size` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT '346kb',
+					  `type` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'doc, docx, pdf',
+					  `date_attached` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+					  `added_by` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'hr admin name',
+					  `screen` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'personal details,\r\n employment details, qualification',
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
+						
+			break;
+			
+			case G_APPLICANT_EDUCATION:	
+			$sql = "CREATE TABLE IF NOT EXISTS `g_applicant_education` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `applicant_id` int(11) NOT NULL,
+					  `institute` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+					  `course` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+					  `year` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `start_date` date NOT NULL,
+					  `end_date` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+					  `gpa_score` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `attainment` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
+			break;
+			
+			case G_APPLICANT_EXAMINATION:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_applicant_examination` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `applicant_id` int(11) NOT NULL,
+					  `exam_id` int(11) NOT NULL,
+					  `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `description` text COLLATE utf8_unicode_ci NOT NULL,
+					  `passing_percentage` varchar(6) COLLATE utf8_unicode_ci NOT NULL,
+					  `exam_code` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `schedule_date` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `status` varchar(128) COLLATE utf8_unicode_ci NOT NULL COMMENT 'pending, failed, passed, rescheduled',
+					  `result` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `questions` text COLLATE utf8_unicode_ci NOT NULL,
+					  `time_duration` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT 'day:hour:minute',
+					  `scheduled_by` int(11) NOT NULL COMMENT 'employee_id',
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
+			break;
+			
+			case G_APPLICANT_LANGUAGE:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_applicant_language` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `applicant_id` int(11) NOT NULL,
+					  `language` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `fluency` varchar(30) COLLATE utf8_unicode_ci NOT NULL COMMENT 'writing, speaking,reading',
+					  `competency` varchar(30) COLLATE utf8_unicode_ci NOT NULL COMMENT 'poor,basic,good, mother tongue',
+					  `comments` text COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
+			break;
+			
+			case G_APPLICANT_LICENSE:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_applicant_license` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `applicant_id` int(11) NOT NULL,
+					  `license_type` varchar(256) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Engineer License etc',
+					  `license_number` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `issued_date` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `expiry_date` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_APPLICANT_REQUIREMENTS:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_applicant_requirements` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `applicant_id` int(11) NOT NULL,
+					  `requirements` text COLLATE utf8_unicode_ci NOT NULL,
+					  `is_complete` varchar(15) COLLATE utf8_unicode_ci NOT NULL COMMENT '1=complete, 0=incomplete',
+					  `date_updated` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`),
+					  KEY `applicant_id` (`applicant_id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_APPLICANT_SKILLS:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_applicant_skills` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `applicant_id` int(11) NOT NULL,
+					  `skill` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+					  `years_experience` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `comments` text COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_APPLICANT_TRAINING:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_applicant_training` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `applicant_id` int(11) NOT NULL,
+					  `from_date` date NOT NULL,
+					  `to_date` date NOT NULL,
+					  `description` text COLLATE utf8_unicode_ci NOT NULL,
+					  `provider` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `location` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `cost` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `renewal_date` date NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			
+			break;
+			
+			case G_APPLICANT_WORK_EXPERIENCE:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_applicant_work_experience` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `applicant_id` int(11) NOT NULL,
+					  `company` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `address` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `job_title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `from_date` date NOT NULL,
+					  `to_date` date NOT NULL,
+					  `comment` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_attendance_rate":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_attendance_rate` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `nightshift_rate` float NOT NULL COMMENT '%',
+					  `regular_overtime` float NOT NULL COMMENT '% (example: 125%)',
+					  `nightshift_overtime` float NOT NULL COMMENT '%',
+					  `restday` float NOT NULL COMMENT '%',
+					  `restday_overtime` float NOT NULL COMMENT '%',
+					  `holiday_special` float NOT NULL COMMENT '%',
+					  `holiday_special_overtime` float NOT NULL COMMENT '%',
+					  `holiday_legal` float NOT NULL COMMENT '%',
+					  `holiday_legal_overtime` float NOT NULL COMMENT '%',
+					  `holiday_special_restday` float NOT NULL COMMENT '%',
+					  `holiday_special_restday_overtime` float NOT NULL COMMENT '%',
+					  `holiday_legal_restday` float NOT NULL COMMENT '%',
+					  `holiday_legal_restday_overtime` float NOT NULL COMMENT '%',
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+					";
+			break;
+			
+			case COMPANY_BRANCH:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_company_branch` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `name` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+					  `province` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+					  `city` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+					  `address` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `zip_code` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `phone` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `fax` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `location_id` int(40) NOT NULL,
+					  `is_archive` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+					";
+			break;
+			
+			case COMPANY_INFO:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_company_info` (
+					  `id` int(6) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(6) NOT NULL,
+					  `address` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `phone` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `fax` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `address1` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+					  `city` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `address2` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+					  `state` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `zip_code` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `remarks` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+					  `company_logo` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+					";
+			break;
+			
+			case COMPANY_STRUCTURE:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_company_structure` (
+					  `id` smallint(6) NOT NULL AUTO_INCREMENT,
+					  `company_branch_id` int(6) NOT NULL DEFAULT '0',
+					  `title` tinytext COLLATE utf8_unicode_ci NOT NULL,
+					  `description` text COLLATE utf8_unicode_ci NOT NULL,
+					  `type` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Branch / Department / Group / Team',
+					  `parent_id` int(6) NOT NULL DEFAULT '0',
+					  `is_archive` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=12 ;
+					";
+			break;
+			
+			case G_CUTOFF_PERIOD:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_cutoff_period` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `period_start` date NOT NULL,
+					  `period_end` date NOT NULL,
+					  `payout_date` date NOT NULL,
+					  `salary_cycle_id` int(11) NOT NULL,
+					  `is_lock` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'No' COMMENT 'Yes / No',
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+					";
+			break;
+			
+			case G_DAILY_TIME_RECORD:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_daily_time_record` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_code` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `employee_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_entry` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `time_entry` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EEO_JOB_CATEGORY:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_eeo_job_category` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `category_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+					";
+			break;
+			
+			case EMAIL_BUFFER:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_email_buffer` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `sent_from` varchar(80) CHARACTER SET latin1 NOT NULL COMMENT 'sender name, web email (Administrator, admin@gleent.com)',
+					  `email_address` varchar(50) CHARACTER SET latin1 NOT NULL,
+					  `sent_name` varchar(100) CHARACTER SET latin1 NOT NULL,
+					  `subject` varchar(100) CHARACTER SET latin1 NOT NULL,
+					  `message` text CHARACTER SET latin1 NOT NULL,
+					  `attachment` varchar(100) CHARACTER SET latin1 NOT NULL,
+					  `is_sent` varchar(10) CHARACTER SET latin1 NOT NULL COMMENT 'Yes / No',
+					  `is_archive` varchar(10) CHARACTER SET latin1 NOT NULL COMMENT 'Yes / No',
+					  `error_message` text CHARACTER SET latin1 NOT NULL,
+					  `date_added` datetime NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case EMPLOYEE:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee` (
+					  `id` bigint(30) NOT NULL AUTO_INCREMENT,
+					  `hash` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `employee_code` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `company_structure_id` int(11) NOT NULL,
+					  `employment_status_id` int(11) NOT NULL,
+					  `eeo_job_category_id` int(11) NOT NULL,
+					  `photo` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `salutation` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `lastname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `firstname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `middlename` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `extension_name` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  `nickname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `birthdate` date NOT NULL,
+					  `gender` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `marital_status` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `nationality` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `number_dependent` int(11) NOT NULL,
+					  `sss_number` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `tin_number` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `pagibig_number` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `philhealth_number` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `hired_date` date NOT NULL,
+					  `terminated_date` date NOT NULL,
+					  `e_is_archive` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'No',
+					  PRIMARY KEY (`id`),
+					  KEY `firstname-lastname` (`firstname`,`lastname`,`id`),
+					  KEY `id-first-last-code` (`id`,`firstname`,`lastname`,`employee_code`),
+					  KEY `firstname` (`firstname`),
+					  KEY `lastname` (`lastname`),
+					  KEY `employee_code` (`employee_code`),
+					  KEY `id` (`id`,`hash`,`firstname`,`lastname`,`employee_code`),
+					  KEY `company_structure_id` (`company_structure_id`),
+					  KEY `nationality` (`nationality`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_ATTACHMENT:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_attachment` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `filename` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `description` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `size` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT '346kb',
+					  `type` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'doc, docx, pdf',
+					  `date_attached` date NOT NULL,
+					  `added_by` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'hr admin name',
+					  `screen` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'personal details, employment details, qualification',
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_ATTENDANCE:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_attendance` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `date_attendance` date NOT NULL,
+					  `is_present` tinyint(1) NOT NULL,
+					  `is_paid` tinyint(1) NOT NULL,
+					  `is_restday` tinyint(1) NOT NULL,
+					  `is_holiday` tinyint(1) NOT NULL,
+					  `is_leave` smallint(1) NOT NULL,
+					  `leave_id` int(11) NOT NULL,
+					  `is_suspended` tinyint(1) NOT NULL,
+					  `holiday_id` int(11) NOT NULL,
+					  `holiday_title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+					  `holiday_type` tinyint(4) NOT NULL COMMENT '1 = legal, 2 = special',
+					  `scheduled_time_in` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  `scheduled_time_out` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  `actual_time_in` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  `actual_time_out` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  `actual_date_in` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `actual_date_out` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `overtime_time_in` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  `overtime_time_out` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  `total_hours_worked` float NOT NULL COMMENT 'based from actual time in and out',
+					  `night_shift_hours` float NOT NULL,
+					  `night_shift_overtime_hours` float NOT NULL,
+					  `night_shift_overtime_excess_hours` float NOT NULL,
+					  `night_shift_hours_special` float NOT NULL,
+					  `night_shift_hours_legal` float NOT NULL,
+					  `holiday_hours_special` float NOT NULL,
+					  `holiday_hours_legal` float NOT NULL,
+					  `overtime_hours` float NOT NULL,
+					  `overtime_excess_hours` float NOT NULL,
+					  `restday_overtime_hours` float NOT NULL,
+					  `restday_overtime_excess_hours` float NOT NULL,
+					  `restday_overtime_nightshift_hours` float NOT NULL,
+					  `restday_overtime_nightshift_excess_hours` float NOT NULL,
+					  `late_hours` float NOT NULL,
+					  `undertime_hours` float NOT NULL,
+					  PRIMARY KEY (`id`),
+					  KEY `employee_id-date_attendance` (`employee_id`,`date_attendance`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_ATTENDANCE_CORRECTION_REQUEST:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_attendance_correction_request` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `employee_id` int(11) NOT NULL,
+					  `date_applied` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_in` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `time_in` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `time_out` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `correct_date_in` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `correct_time_in` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `correct_time_out` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `comment` text COLLATE utf8_unicode_ci NOT NULL,
+					  `is_approved` varchar(10) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Pending / Approved / Disapproved',
+					  `is_archive` varchar(10) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Yes / No',
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_BASIC_SALARY_HISTORY:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_basic_salary_history` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `job_salary_rate_id` int(11) NOT NULL,
+					  `type` varchar(30) COLLATE utf8_unicode_ci NOT NULL COMMENT 'monthly_rate, daily_rate, hourly_rate',
+					  `basic_salary` float NOT NULL,
+					  `pay_period_id` int(11) NOT NULL COMMENT 'frequency rate: example Bi-Monthly or Monthly',
+					  `start_date` date NOT NULL,
+					  `end_date` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
+					  PRIMARY KEY (`id`),
+					  KEY `employee_id` (`employee_id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_BRANCH_HISTORY:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_branch_history` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `company_branch_id` int(11) NOT NULL,
+					  `branch_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `start_date` date NOT NULL,
+					  `end_date` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Null it means Current',
+					  PRIMARY KEY (`id`),
+					  KEY `employee_id` (`employee_id`),
+					  KEY `company_branch_id` (`company_branch_id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_CHANGE_SCHEDULE_REQUEST:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_change_schedule_request` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `employee_id` int(11) NOT NULL,
+					  `date_applied` datetime NOT NULL,
+					  `date_start` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_end` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `time_in` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `time_out` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `change_schedule_comments` text COLLATE utf8_unicode_ci NOT NULL,
+					  `is_approved` int(11) NOT NULL,
+					  `is_archive` int(11) NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_CONTACT_DETAILS:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_contact_details` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `address` text COLLATE utf8_unicode_ci NOT NULL,
+					  `city` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `province` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `zip_code` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `country` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `home_telephone` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `mobile` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `work_telephone` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `work_email` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `other_email` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_CONTRIBUTION:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_contribution` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `sss_ee` float NOT NULL,
+					  `pagibig_ee` float NOT NULL,
+					  `philhealth_ee` float NOT NULL,
+					  `sss_er` float NOT NULL,
+					  `pagibig_er` float NOT NULL,
+					  `philhealth_er` float NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+					";
+			break;
+			
+			
+			case G_EMPLOYEE_DEPENDENT:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_dependent` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+					  `relationship` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `birthdate` date NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_DETAILS_HISTORY:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_details_history` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` bigint(30) NOT NULL,
+					  `employee_code` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `modified_by` bigint(30) NOT NULL,
+					  `remarks` text COLLATE utf8_unicode_ci NOT NULL,
+					  `history_date` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_modified` datetime NOT NULL,
+					  `is_archive` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'No' COMMENT 'Yes / No',
+					  PRIMARY KEY (`id`),
+					  KEY `firstname-lastname` (`id`),
+					  KEY `id-first-last-code` (`id`,`employee_code`),
+					  KEY `employee_code` (`employee_code`),
+					  KEY `id` (`id`,`employee_code`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_DIRECT_DEPOSIT:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_direct_deposit` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `bank_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `account` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `account_type` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'checking / savings',
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_DYNAMIC_FIELD:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_dynamic_field` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `settings_employee_field_id` int(11) NOT NULL,
+					  `employee_id` int(11) NOT NULL,
+					  `title` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `value` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `screen` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_EARNINGS:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_earnings` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `employee_id` varchar(240) COLLATE utf8_unicode_ci NOT NULL,
+					  `title` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+					  `remarks` text COLLATE utf8_unicode_ci NOT NULL,
+					  `amount` double NOT NULL,
+					  `payroll_period_id` int(11) NOT NULL,
+					  `apply_to_all_employee` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `is_taxable` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `is_archive` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_created` datetime NOT NULL,
+					  PRIMARY KEY (`id`),
+					  KEY `company_structure_id` (`company_structure_id`),
+					  KEY `employee_id` (`employee_id`),
+					  KEY `payroll_period_id` (`payroll_period_id`),
+					  KEY `id` (`id`,`company_structure_id`,`employee_id`,`payroll_period_id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_EDUCATION:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_education` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `institute` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+					  `course` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+					  `year` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `start_date` date NOT NULL,
+					  `end_date` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+					  `gpa_score` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `attainment` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_EMERGENCY_CONTACT:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_emergency_contact` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `person` varchar(160) COLLATE utf8_unicode_ci NOT NULL,
+					  `relationship` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `home_telephone` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `mobile` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `work_telephone` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `address` varchar(280) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_EXTEND_CONTRACT:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_extend_contract` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `start_date` date NOT NULL,
+					  `end_date` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+					  `attachment` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `remarks` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `is_done` int(11) NOT NULL,
+					  PRIMARY KEY (`id`),
+					  KEY `employee_id` (`employee_id`),
+					  KEY `end_date` (`end_date`),
+					  KEY `start_date` (`start_date`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_GROUP_SCHEDULE:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_group_schedule` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_group_id` int(11) NOT NULL COMMENT 'g_employee.id OR g_company_structure.id ',
+					  `schedule_group_id` int(11) NOT NULL,
+					  `schedule_id` int(11) NOT NULL,
+					  `date_start` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_end` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
+					  `employee_group` int(1) NOT NULL COMMENT '1 = Employee; 2 = Group',
+					  PRIMARY KEY (`id`),
+					  KEY `schedule_id` (`schedule_id`),
+					  KEY `employee_group_id` (`employee_group_id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='This is template schedule' AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_JOB_HISTORY:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_job_history` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `job_id` int(11) NOT NULL,
+					  `name` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+					  `employment_status` varchar(64) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Part Time, Full Time etc',
+					  `start_date` date NOT NULL,
+					  `end_date` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+					  PRIMARY KEY (`id`),
+					  KEY `job_id` (`job_id`),
+					  KEY `employee_id` (`employee_id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_LANGUAGE:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_language` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `language` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `fluency` varchar(30) COLLATE utf8_unicode_ci NOT NULL COMMENT 'writing, speaking,reading',
+					  `competency` varchar(30) COLLATE utf8_unicode_ci NOT NULL COMMENT 'poor,basic,good, mother tongue',
+					  `comments` text COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_LEAVE_AVAILABLE:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_leave_available` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `leave_id` int(11) NOT NULL,
+					  `no_of_days_alloted` int(11) NOT NULL,
+					  `no_of_days_available` int(11) NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_LEAVE_REQUEST:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_leave_request` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `employee_id` int(11) NOT NULL,
+					  `leave_id` int(11) NOT NULL,
+					  `date_applied` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_start` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_end` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+					  `apply_half_day_date_start` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `apply_half_day_date_end` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `leave_comments` text COLLATE utf8_unicode_ci NOT NULL,
+					  `is_approved` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Pending / Approved / Disapproved',
+					  `is_paid` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  `created_by` int(11) NOT NULL,
+					  `is_archive` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Yes / No',
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_LICENSE:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_license` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `license_type` varchar(256) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Engineer License etc',
+					  `license_number` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `issued_date` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `expiry_date` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `notes` varchar(164) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_LOAN:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_loan` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `employee_id` int(11) NOT NULL,
+					  `type_of_loan_id` int(11) NOT NULL,
+					  `interest_rate` varchar(50) CHARACTER SET latin1 NOT NULL,
+					  `loan_amount` double NOT NULL,
+					  `balance` int(11) NOT NULL,
+					  `type_of_deduction_id` int(11) NOT NULL,
+					  `no_of_installment` int(11) NOT NULL,
+					  `start_date` varchar(10) CHARACTER SET latin1 NOT NULL,
+					  `end_date` varchar(10) CHARACTER SET latin1 NOT NULL,
+					  `status` varchar(20) CHARACTER SET latin1 NOT NULL,
+					  `is_archive` varchar(10) CHARACTER SET latin1 NOT NULL,
+					  `date_created` datetime NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_LOAN_DETAILS:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_loan_details` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `employee_id` int(11) NOT NULL,
+					  `loan_id` int(11) NOT NULL,
+					  `date_of_payment` varchar(10) CHARACTER SET latin1 NOT NULL,
+					  `amount` double NOT NULL,
+					  `amount_paid` double NOT NULL,
+					  `is_paid` varchar(10) CHARACTER SET latin1 NOT NULL,
+					  `remarks` text CHARACTER SET latin1 NOT NULL,
+					  `date_created` datetime NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_LOAN_PAYMENT_BREAKDOWN:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_loan_payment_breakdown` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `loan_id` int(11) NOT NULL,
+					  `employee_id` int(11) NOT NULL,
+					  `loan_payment_id` int(11) NOT NULL,
+					  `reference_number` varchar(180) COLLATE utf8_unicode_ci NOT NULL,
+					  `amount_paid` double NOT NULL,
+					  `date_paid` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `remarks` text COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=37 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_MAKE_UP_SCHEDULE_REQUEST:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_make_up_schedule_request` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `date_applied` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_from` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_to` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+					  `start_time` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+					  `end_time` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+					  `comment` text COLLATE utf8_unicode_ci NOT NULL,
+					  `created_by` int(11) NOT NULL,
+					  `is_approved` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `is_archive` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_MEMBERSHIP:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_membership` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `membership_type_id` int(11) NOT NULL,
+					  `membership_id` int(11) NOT NULL,
+					  `subscription_ownership` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'company, individual',
+					  `subscription_amount` double NOT NULL,
+					  `commence_date` date NOT NULL,
+					  `renewal_date` date NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_MEMO:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_memo` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `memo` text COLLATE utf8_unicode_ci NOT NULL,
+					  `attachment` varchar(164) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_created` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `created_by` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_OFFICIAL_BUSINESS_REQUEST:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_official_business_request` (
+					  `id` bigint(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `employee_id` int(11) NOT NULL,
+					  `date_applied` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_start` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_end` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+					  `comments` text COLLATE utf8_unicode_ci NOT NULL,
+					  `is_approved` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `created_by` int(11) NOT NULL,
+					  `is_archive` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_OVERTIME:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_overtime` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `date` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `time_in` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  `time_out` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  `reason` text COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_OVERTIME_REQUEST:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_overtime_request` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `employee_id` int(11) NOT NULL,
+					  `date_applied` datetime NOT NULL,
+					  `date_start` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_end` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `time_in` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `time_out` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `overtime_comments` text COLLATE utf8_unicode_ci NOT NULL,
+					  `is_approved` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Pending / Approved / Disapproved',
+					  `is_archive` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Yes / No',
+					  `created_by` int(11) NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_PAYABLE:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_payable` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `balance_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+					  `total_amount` double(15,2) NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_PAYABLE_HISTORY:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_payable_history` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_payable_id` int(11) NOT NULL,
+					  `employee_id` int(11) NOT NULL,
+					  `amount_paid` double(15,2) NOT NULL,
+					  `date_paid` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_PAYSLIP:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_payslip` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `period_start` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `period_end` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `payout_date` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `basic_pay` double(15,2) NOT NULL,
+					  `gross_pay` double(15,2) NOT NULL,
+					  `net_pay` double(15,2) NOT NULL,
+					  `taxable` double(15,2) NOT NULL,
+					  `withheld_tax` double(15,2) NOT NULL,
+					  `month_13th` double(15,2) NOT NULL,
+					  `sss` double(15,2) NOT NULL,
+					  `pagibig` double(15,2) NOT NULL,
+					  `philhealth` double(15,2) NOT NULL,
+					  `earnings` longtext COLLATE utf8_unicode_ci NOT NULL COMMENT 'Initial earnings like overtime, late, basic pay',
+					  `other_earnings` longtext COLLATE utf8_unicode_ci NOT NULL COMMENT 'other earnings to be added manually',
+					  `deductions` longtext COLLATE utf8_unicode_ci NOT NULL,
+					  `other_deductions` longtext COLLATE utf8_unicode_ci NOT NULL,
+					  `labels` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`),
+					  KEY `period_start-end` (`period_start`,`period_end`,`employee_id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_PERFORMANCE:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_performance` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `performance_id` int(11) NOT NULL,
+					  `performance_title` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
+					  `employee_id` int(11) NOT NULL,
+					  `reviewer_id` int(11) NOT NULL,
+					  `created_by` int(11) NOT NULL,
+					  `position` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
+					  `created_date` date NOT NULL,
+					  `period_from` date NOT NULL,
+					  `period_to` date NOT NULL,
+					  `due_date` date NOT NULL,
+					  `summary` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
+					  `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT 'being reviewed, pending',
+					  `kpi` text COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case G_EMPLOYEE_REQUEST:
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_request` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `settings_request_id` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `request_id` int(11) NOT NULL,
+					  `start_date` date NOT NULL,
+					  `end_date` date NOT NULL,
+					  `start_time` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+					  `end_time` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+					  `reason` text COLLATE utf8_unicode_ci NOT NULL,
+					  `status` varchar(30) COLLATE utf8_unicode_ci NOT NULL COMMENT '0 = Pending / 1 = Approve / -1 = Disapprove',
+					  `date_created` datetime NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_employee_request_approvers":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_request_approvers` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `request_type` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Generic / Overtime / Leave / Rest Day',
+					  `request_type_id` int(11) NOT NULL,
+					  `position_employee_id` int(11) NOT NULL,
+					  `type` varchar(30) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Employee Id / Position Id / Department Id',
+					  `level` int(11) NOT NULL COMMENT '0 = Override',
+					  `override_level` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `message` text COLLATE utf8_unicode_ci NOT NULL,
+					  `status` varchar(30) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Pending / Approved / Disapproved',
+					  `remarks` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Approver''s Remarks',
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_employee_requirements":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_requirements` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `requirements` text COLLATE utf8_unicode_ci NOT NULL,
+					  `is_complete` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_updated` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_employee_restday":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_restday` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `date` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `time_in` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  `time_out` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  `reason` text COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_employee_rest_day_request":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_rest_day_request` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `employee_id` int(11) NOT NULL,
+					  `schedule_id` int(11) NOT NULL,
+					  `date_applied` datetime NOT NULL,
+					  `date_start` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_end` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+					  `rest_day_comments` text COLLATE utf8_unicode_ci NOT NULL,
+					  `is_approved` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+					  `is_archive` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_employee_schedule_specific":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_schedule_specific` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `date_start` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_end` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `time_in` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  `time_out` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_employee_skills":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_skills` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `skill` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+					  `years_experience` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+					  `comments` text COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_employee_subdivision_history":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_subdivision_history` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `company_structure_id` int(11) NOT NULL COMMENT 'branch,division, department, team',
+					  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Finance Department, Production Team',
+					  `type` varchar(128) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Department, Group, Team etc',
+					  `start_date` date NOT NULL,
+					  `end_date` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'if null means current',
+					  PRIMARY KEY (`id`),
+					  KEY `employee_id` (`employee_id`),
+					  KEY `company_structure_id` (`company_structure_id`),
+					  KEY `start_date` (`start_date`),
+					  KEY `end_date` (`end_date`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_employee_supervisor":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_supervisor` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `supervisor_id` int(11) NOT NULL COMMENT 'employee_id',
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_employee_tags":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_tags` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `employee_id` int(11) NOT NULL,
+					  `tags` text COLLATE utf8_unicode_ci NOT NULL,
+					  `is_archive` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_created` datetime NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_employee_training":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_training` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `from_date` date NOT NULL,
+					  `to_date` date NOT NULL,
+					  `description` text COLLATE utf8_unicode_ci NOT NULL,
+					  `provider` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `location` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `cost` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `renewal_date` date NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_employee_undertime_request":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_undertime_request` (
+					  `id` bigint(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `employee_id` int(11) NOT NULL,
+					  `date_applied` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_of_undertime` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `time_out` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+					  `reason` text COLLATE utf8_unicode_ci NOT NULL,
+					  `created_by` int(11) NOT NULL,
+					  `is_approved` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `is_archive` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_employee_work_experience":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_employee_work_experience` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `company` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `address` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `job_title` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+					  `from_date` date NOT NULL,
+					  `to_date` date NOT NULL,
+					  `comment` text COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_error_attendance":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_error_attendance` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `employee_code` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_attendance` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+					  `message` text COLLATE utf8_unicode_ci NOT NULL,
+					  `is_fixed` tinyint(1) NOT NULL,
+					  `error_type_id` tinyint(10) NOT NULL COMMENT 'ERROR_INVALID_EMPLOYEE = 1; ERROR_INVALID_TIME = 2; ERROR_INVALID_OT = 3; ERROR_INVALID_DATE = 4; ERROR_NO_OUT = 5; ERROR_NO_IN = 6;',
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_error_leave":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_error_leave` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `employee_code` int(11) NOT NULL,
+					  `employee_name` varchar(50) CHARACTER SET latin1 NOT NULL,
+					  `date_applied` varchar(20) CHARACTER SET latin1 NOT NULL,
+					  `date_start` varchar(15) CHARACTER SET latin1 NOT NULL,
+					  `date_end` varchar(15) CHARACTER SET latin1 NOT NULL,
+					  `message` text CHARACTER SET latin1 NOT NULL,
+					  `is_fixed` varchar(10) CHARACTER SET latin1 NOT NULL DEFAULT 'No' COMMENT 'Yes / No',
+					  `error_type_id` int(11) NOT NULL COMMENT '1 = EMPLOYEE_DOES_NOT_EXISTS, 2 = INVALID_START_END_DATE',
+					  PRIMARY KEY (`id`),
+					  KEY `default_log` (`employee_code`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_error_overtime":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_error_overtime` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `employee_code` int(11) NOT NULL,
+					  `employee_name` varchar(50) CHARACTER SET latin1 NOT NULL,
+					  `date_attendance` varchar(20) CHARACTER SET latin1 NOT NULL,
+					  `time_in` varchar(15) CHARACTER SET latin1 NOT NULL,
+					  `time_out` varchar(15) CHARACTER SET latin1 NOT NULL,
+					  `message` text CHARACTER SET latin1 NOT NULL,
+					  `is_fixed` varchar(10) CHARACTER SET latin1 NOT NULL DEFAULT 'No' COMMENT 'Yes / No',
+					  `error_type_id` int(11) NOT NULL COMMENT '1 - INVALID_SCHEDULE_TIME_INOUT, 2 - INVALID_ACTUAL_TIME_INOUT, 3 = LATE, 4 - ATO_LESS_THAN_STO, 5 - OT_START_LESS_THAN_STO, 6 - OT_END_GREATER_THAN_ATO, 7 - OT_START_LESS_THAN_ATS, 8 - INVALID_EMPLOYEE_ID, ABSENT = 9, OT_LESS_THAN_30 = 10',
+					  PRIMARY KEY (`id`),
+					  KEY `default_log` (`employee_code`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_error_payslip":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_error_payslip` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `message` text COLLATE utf8_unicode_ci NOT NULL,
+					  `is_fixed` tinyint(1) NOT NULL,
+					  `error_type_id` int(11) NOT NULL COMMENT '1 = ERROR_NO_SALARY, 2 = ERROR_NO_ATTENDANCE',
+					  `date_logged` date NOT NULL,
+					  `time_logged` time NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_exam":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_exam` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `title` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `description` text COLLATE utf8_unicode_ci NOT NULL,
+					  `passing_percentage` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `time_duration` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT 'days:hours:minutes',
+					  `created_by` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `date_created` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_exam_choices":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_exam_choices` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `exam_question_id` int(11) NOT NULL,
+					  `choices` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `order_by` int(11) NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_exam_question":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_exam_question` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `exam_id` int(11) NOT NULL,
+					  `question` text COLLATE utf8_unicode_ci NOT NULL,
+					  `answer` text COLLATE utf8_unicode_ci NOT NULL,
+					  `order_by` int(11) NOT NULL,
+					  `type` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_fp_attendance_log":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_fp_attendance_log` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `user_id` int(11) NOT NULL,
+					  `employee_code` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `employee_name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `date` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `time` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `type` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `remarks` varchar(128) CHARACTER SET latin1 NOT NULL,
+					  PRIMARY KEY (`id`),
+					  KEY `code,date,type` (`employee_code`,`date`,`type`),
+					  KEY `date` (`date`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_fp_attendance_summary":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_fp_attendance_summary` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `employee_id` int(11) NOT NULL,
+					  `employee_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL COMMENT 'for biometrics',
+					  `actual_date_in` varchar(64) COLLATE utf8_unicode_ci NOT NULL COMMENT 'for biometrics',
+					  `actual_time_in` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  `actual_date_out` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `actual_time_out` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+					  `actual_total_hours_worked` varchar(16) COLLATE utf8_unicode_ci NOT NULL COMMENT 'compute by biometrics',
+					  `done` int(11) NOT NULL COMMENT 'for biometrics',
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_fp_fingerprint":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_fp_fingerprint` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `user_id` int(11) NOT NULL,
+					  `employee_code` varchar(64) CHARACTER SET latin1 NOT NULL COMMENT 'employee_code example 100203-023',
+					  `name` varchar(64) CHARACTER SET latin1 NOT NULL,
+					  `template` longblob NOT NULL,
+					  `finger` varchar(64) CHARACTER SET latin1 NOT NULL,
+					  `integer_representation` int(11) NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_holiday":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_holiday` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `public_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+					  `holiday_type` tinyint(1) NOT NULL COMMENT '1 = legal, 2 = special',
+					  `holiday_title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+					  `holiday_month` tinyint(12) NOT NULL,
+					  `holiday_day` tinyint(31) NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_holiday_branch":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_holiday_branch` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `holiday_id` int(11) NOT NULL,
+					  `company_branch_id` int(11) NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_job":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_job` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `job_specification_id` int(11) NOT NULL,
+					  `title` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `is_active` tinyint(4) NOT NULL DEFAULT '1',
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=16 ;
+					";
+			break;
+			
+			case "g_job_application_event":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_job_application_event` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `applicant_id` int(11) NOT NULL,
+					  `date_time_created` datetime NOT NULL,
+					  `created_by` int(11) NOT NULL COMMENT 'employee_id',
+					  `hiring_manager_id` int(11) DEFAULT NULL,
+					  `date_time_event` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'on march 6, 3:00pm',
+					  `event_type` int(11) NOT NULL COMMENT 'Application Submitted: 0, Interview: 1, Job Offered: 2, Offer Declined: 3, Rejected: 4, Hired: 5',
+					  `application_status_id` int(11) NOT NULL,
+					  `notes` text COLLATE utf8_unicode_ci NOT NULL,
+					  `remarks` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`),
+					  KEY `applicant_id` (`applicant_id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_job_employment_status":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_job_employment_status` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `job_id` int(11) NOT NULL,
+					  `employment_status_id` int(11) NOT NULL,
+					  `employment_status` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_job_salary_rate":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_job_salary_rate` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `job_level` varchar(100) COLLATE utf8_unicode_ci NOT NULL COMMENT 'senior programmer, beginner programmer etc',
+					  `minimum_salary` double DEFAULT NULL,
+					  `maximum_salary` double DEFAULT NULL,
+					  `step_salary` double DEFAULT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
+					";
+			break;
+			
+			case "g_job_specification":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_job_specification` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+					  `description` text COLLATE utf8_unicode_ci NOT NULL,
+					  `duties` text COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_job_vacancy":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_job_vacancy` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `job_id` int(11) NOT NULL,
+					  `hiring_manager_id` int(11) NOT NULL COMMENT 'employee_id',
+					  `job_title` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `hiring_manager_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+					  `publication_date` date NOT NULL,
+					  `advertisement_end` date NOT NULL,
+					  `is_active` smallint(6) NOT NULL DEFAULT '1',
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_leave":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_leave` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+					  `default_credit` int(11) NOT NULL,
+					  `is_paid` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
+					  `gl_is_archive` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+					";
+			break;
+			
+			case "g_loan_deduction_type":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_loan_deduction_type` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `deduction_type` varchar(180) CHARACTER SET latin1 NOT NULL,
+					  `is_archive` varchar(10) CHARACTER SET latin1 NOT NULL,
+					  `date_created` datetime NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+					";
+			break;
+			
+			case "g_loan_type":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_loan_type` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `loan_type` varchar(180) CHARACTER SET latin1 NOT NULL,
+					  `is_archive` varchar(10) CHARACTER SET latin1 NOT NULL,
+					  `date_created` datetime NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_pagibig_table":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_pagibig_table` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `salary_from` float NOT NULL,
+					  `salary_to` float NOT NULL,
+					  `multiplier_employee` float NOT NULL,
+					  `multiplier_employer` float NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_payslip_deductions":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_payslip_deductions` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `deduction_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_payslip_earnings":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_payslip_earnings` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `earning_type` int(10) NOT NULL COMMENT '0=normal, 1=adjustment, 2=allowance, 3=bonus, 4=advance',
+					  `earning_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "g_performance":
+			$sql = "CREATE TABLE IF NOT EXISTS `g_performance` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `company_structure_id` int(11) NOT NULL,
+					  `title` varchar(124) COLLATE utf8_unicode_ci NOT NULL,
+					  `job_id` int(11) NOT NULL,
+					  `description` text COLLATE utf8_unicode_ci NOT NULL,
+					  `date_created` date NOT NULL,
+					  `created_by` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+					  `is_archive` int(11) NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+					";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+			
+			case "tablename":
+			$sql = "";
+			break;
+		}
+		Model::runSql($sql);
+	}
+	
+	function sqlDropTable($table_name)
+	{
+		$sql = "DROP TABLE IF EXISTS `" . $table_name . "`;";
+		Model::runSql($sql);
+	}
+	
+	public function loadDefaultCompanyInfo($c)
+	{		
+		$arr = self::convertXmlToArray("company_info.xml","company_structure");		
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . COMPANY_INFO;		
+			Model::runSql($sql);
+		
+			$gci = new G_Company_Info();			
+			$gci->setAddress($arr['address']);
+			$gci->setPhone($arr['phone']);	
+			$gci->setFax($arr['fax']);		
+			$gci->setAddress1($arr['address1']);
+			$gci->setCity($arr['city']);
+			$gci->setAddress2($arr['address2']);
+			$gci->setState($arr['state']);
+			$gci->setZipCode($arr['zip_code']);
+			$gci->setRemarks($arr['remarks']);		
+			$gci->setCompanyLogo($arr['company_logo] ']);
+			$gci->save($c);
+		}
+	}
+	
+	public function loadDefaultCompanyStructure()
+	{		
+		$arr = self::convertXmlToArray("company_structure.xml","company_structure");		
+		if($arr){			
+	
+			$sql = 'TRUNCATE TABLE ' . COMPANY_STRUCTURE;		
+			Model::runSql($sql);
+			
+			$gcs = new G_Company_Structure();			
+			$gcs->setCompanyBranchId($arr['company_branch_id']);
+			$gcs->setTitle($arr['title']);
+			$gcs->setDescription($arr['description']);
+			$gcs->setType($arr['type']);
+			$gcs->setParentId($arr['parent_id']);	
+			$gcs->setIsArchive(G_Company_Structure::NO);			
+			return $csid = $gcs->save();
+		}
+	}
+	
+	public function loadDefaultCompanyBranch($c)
+	{		
+		$arr = self::convertXmlToArray("company_branch.xml","company_structure");		
+		if($arr){		
+		
+			$sql = 'TRUNCATE TABLE ' . COMPANY_BRANCH;		
+			Model::runSql($sql);
+			
+			$gcb = new G_Company_Branch();			
+			$gcb->setName($arr['name']);
+			$gcb->setProvince($arr['province']);	
+			$gcb->setCity($arr['city']);				
+			$gcb->setAddress($arr['address']);
+			$gcb->setZipCode($arr['zip_code']);
+			$gcb->setPhone($arr['phone']);
+			$gcb->setFax($arr['fax']);
+			$gcb->setLocationId($arr['location_id']);
+			$gcb->setIsArchive(G_Company_Branch::NO);
+			return $gcb->save($c);
+		}
+	}
+	
+	public function loadDefaultCompanyDepartment($c,$b)
+	{		
+		$arr = self::convertXmlToArray("department.xml","company_structure");		
+		if($arr){				
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$gcs = new G_Company_Structure;					
+					$gcs->setCompanyBranchId($b->getId());
+					$gcs->setTitle($subvalue['title']);
+					$gcs->setDescription("");
+					$gcs->setType(G_Company_Structure::DEPARTMENT);
+					$gcs->setParentId($c->getId());	
+					$gcs->setIsArchive(G_Company_Structure::NO);	
+					$gcs->save();							
+				}
+			}	
+		}
+	}
+	
+	public function loadDefaultSettingsDeductionType($c)
+	{		
+		$arr = self::convertXmlToArray("loan_deduction_type.xml","settings");		
+		if($arr){	
+			
+			$sql = 'TRUNCATE TABLE ' . G_LOAN_DEDUCTION_TYPE;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$gldt = new G_Loan_Deduction_Type();			
+					$gldt->setCompanyStructureId($c->getId());
+					$gldt->setDeductionType($subvalue['deduction_type']);
+					$gldt->setIsArchive(G_Loan_Deduction_Type::NO);					
+					$gldt->setDateCreated(Tools::getCurrentDateTime('Y-m-d H:i:s','Asia/Manila'));	
+					$gldt->save();							
+				}
+			}					
+		}
+	}
+	
+	public function loadDefaultSettingsLoanType($c)
+	{		
+		$arr = self::convertXmlToArray("loan_type.xml","settings");		
+		if($arr){	
+			
+			$sql = 'TRUNCATE TABLE ' . G_LOAN_TYPE;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$glt = new G_Loan_Type();					
+					$glt->setCompanyStructureId($c->getId());
+					$glt->setLoanType($subvalue['loan_type']);
+					$glt->setIsArchive(G_Loan_Type::NO);					
+					$glt->setDateCreated(Tools::getCurrentDateTime('Y-m-d H:i:s','Asia/Manila'));								
+				}
+			}					
+		}
+	}
+		
+	public function loadDefaultSettingsApplicationStatus($c)
+	{		
+		$arr = self::convertXmlToArray("application_status.xml","settings");				
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . G_SETTINGS_APPLICATION_STATUS;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$g = new G_Settings_Application_Status();					
+					$g->setCompanyStructureId($c->getId());
+					$g->setStatus($subvalue['status']);			
+					$g->save();
+				}
+			}		
+		}
+	}
+	
+	public function loadDefaultSettingsSalutation($c)
+	{		
+		$arr = self::convertXmlToArray("salutation.xml","settings");					
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . G_SETTINGS_SALUTATION;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$gss = new G_Settings_Salutation();
+					$gss->setId($row['id']);
+					$gss->setCompanyStructureId($c->getId());
+					$gss->setSalutation($subvalue['salutation']);
+					$gss->setDescription("");				
+					$gss->save();
+				}
+			}		
+		}
+	}
+	
+	public function loadDefaultSettingsEmploymentStatus($c)
+	{		
+		$arr = self::convertXmlToArray("employment_status.xml","settings");					
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . EMPLOYMENT_STATUS;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$g = new G_Settings_Employment_Status($row['id']);
+					$g->setCode($subvalue['code']);
+					$g->setStatus($subvalue['status']);	
+					$g->save($c);
+				}
+			}		
+		}
+	}
+	
+	public function loadDefaultSettingsLicenses($c)
+	{		
+		$arr = self::convertXmlToArray("license.xml","settings");								
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . LICENSE;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$gsl = new G_Settings_License();					
+					$gsl->setLicenseType($subvalue['license_type']);
+					$gsl->setDescription($subvalue['description']);	
+					$gsl->save($c);						
+				}
+			}		
+		}
+	}
+	
+	public function loadDefaultSettingsLeaveType($c)
+	{		
+		$arr = self::convertXmlToArray("leave_type.xml","settings");			
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . G_LEAVE;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$l = new G_Leave;					
+					$l->setCompanyStructureId($c->getId());
+					$l->setName($subvalue['name']);
+					$l->setIsPaid(G_Leave::YES);
+					$l->setIsArchive(G_Leave::NO);
+					$l->save();
+				}
+			}		
+		}
+	}
+	
+	public function loadDefaultSettingsPayPeriod($c)
+	{		
+		$arr = self::convertXmlToArray("pay_period.xml","settings");				
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . G_SETTINGS_PAY_PERIOD;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$gspp = new G_Settings_Pay_Period();					
+					$gspp->setPayPeriodCode($subvalue['pay_period_code']);
+					$gspp->setPayPeriodName($subvalue['pay_period_name']);
+					$gspp->setCutOff($subvalue['cut_off']);
+					$gspp->setPayOutDay($subvalue['payout_day']);
+					$gspp->setIsDefault($subvalue['default']);
+					$gspp->save($c);
+				}
+			}		
+		}
+	}
+	
+	public function loadDefaultSettingsJob($c)
+	{		
+		$arr = self::convertXmlToArray("jobs.xml","settings");			
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . G_JOB;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$g = new G_Job();					
+					$g->setCompanyStructureId($c->getId());
+					$g->setJobSpecificationId(G_Job::DEFAULT_JOB_SPECIFICATION_ID);	
+					$g->setTitle($subvalue['title']);		
+					$g->setIsActive(G_Job::ACTIVE);
+					$g->save();
+				}
+			}		
+		}
+	}
+	
+	public function loadDefaultSettingsSkills($c)
+	{		
+		$arr = self::convertXmlToArray("skills.xml","settings");			
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . SKILLS;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$gss = new G_Settings_Skills();					
+					$gss->setSkill($subvalue['skill']);		
+					$gss->save($c);
+				}
+			}		
+		}
+	}
+	
+	public function loadDefaultSettingsSubdivisionType($c)
+	{		
+		$arr = self::convertXmlToArray("subdivision_type.xml","settings");				
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . SUBDIVISION_TYPE;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$gsst = new G_Settings_Subdivision_Type();					
+					$gsst->setType($subvalue['type']);		
+					$gsst->save($c);
+				}
+			}		
+		}
+	}
+	
+	public function loadDefaultSettingsLocations($c)
+	{
+		$arr = self::convertXmlToArray("location.xml","settings");						
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . LOCATION;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$gsl = new G_Settings_Location();					
+					$gsl->setCode($subvalue['code']);
+					$gsl->setLocation($subvalue['location']);	
+					$gsl->save($c);	
+				}
+			}		
+		}	
+	}
+	
+	public function loadDefaultSettingsLanguages($c)
+	{		
+		$arr = self::convertXmlToArray("language.xml","settings");						
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . G_SETTINGS_LANGUAGE;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$gsl = new G_Settings_Language();					
+					$gsl->setCompanyStructureId($c->getId());		
+					$gsl->setLanguage($subvalue['language']);	
+					$gsl->save();	
+				}
+			}		
+		}
+	}
+	
+	public function loadDefaultSettingsEeoJobCategory($c)
+	{		
+		$arr = self::convertXmlToArray("eeo_job_category.xml","settings");						
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . G_EEO_JOB_CATEGORY;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$g = new G_Eeo_Job_Category();					
+					$g->setCompanyStructureId($c->getId());
+					$g->setCategoryName($subvalue['category_name']);
+					$g->setDescription($subvalue['description']);	
+					$g->save();
+				}
+			}		
+		}
+	}
+	
+	public function loadDefaultSettingsJobSalaryRate($c)
+	{		
+		$arr = self::convertXmlToArray("eeo_job_salary_rate.xml","settings");						
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . G_JOB_SALARY_RATE;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$g = new G_Job_Salary_Rate();					
+					$g->setCompanyStructureId($c->getId());
+					$g->setJobLevel($subvalue['job_level']);	
+					$g->setMinimumSalary($subvalue['minimum_salary']);	
+					$g->setMaximumSalary($subvalue['maximum_salary']);	
+					$g->setStepSalary($subvalue['step_salary']);
+					$g->save();	
+				}
+			}		
+		}
+	}
+	
+	public function loadDefaultSettingsDependentRelationship($c)
+	{		
+		$arr = self::convertXmlToArray("dependent_relationship.xml","settings");						
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . DEPENDENT_RELATIONSHIP;		
+			Model::runSql($sql);
+			
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){
+					$g = new G_Settings_Dependent_Relationship();
+					$g->setCompanyStructureId($c->getId());
+					$g->setRelationship($subvalue['relationship']);	
+					$g->save();
+				}
+			}		
+		}
+	}
+	
+	public function loadDefaultSettingsScheduleGroup($c)
+	{
+		$arr = self::convertXmlToArray("schedule_group.xml","settings");		
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . G_SCHEDULE_GROUP;		
+			Model::runSql($sql);
+						
+			$gsg = new G_Schedule_Group();			
+			$gsg->setName($arr['schedule_name']);
+			$gsg->setPublicId(uniqid());
+			$gsg->setGracePeriod($arr['grace_period']);
+			$gsg->setEffectivityDate(date("Y-m-d"));			
+			$gsg->setAsDefault(G_Schedule_Group::IS_DEFAULT);	
+			$sgid = $gsg->save();
+			
+			$g = G_Schedule_Group_Finder::findById($sgid);
+			if($g){
+				$g->setDefaultGroup();
+			}
+			return $sgid;
+		}
+	}
+	
+	public function loadDefaultSettingsSchedule($c,$sg)
+	{
+		$arr = self::convertXmlToArray("schedule.xml","settings");			
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . G_SCHEDULE;		
+			Model::runSql($sql);
+						
+			$s = new G_Schedule;			
+			$s->setPublicId(uniqid());
+			$s->setScheduleGroupId($sg->getId());
+			$s->setName($arr['schedule_name']);
+			$s->setGracePeriod($arr['grace_period']);
+			$s->setWorkingDays($arr['working_days']);
+			$s->setTimeIn($arr['time_in']);
+			$s->setTimeOut($arr['time_out']);			
+			$sid = $s->save();	
+			
+			$s = G_Schedule_Finder::findById($sid);
+			if($s){
+				$s->setDefaultSchedule();
+				$s->saveToScheduleGroup($sg);
+			}
+		}
+	}
+	
+	public function loadDefaultPagibigTable($c)
+	{
+		$arr = self::convertXmlToArray("pagibig_table.xml","settings");
+		if($arr){			
+			$sql = 'TRUNCATE TABLE ' . G_PAGIBIG;		
+			Model::runSql($sql);
+				
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){				
+					$gpt = new G_Pagibig_Table();					
+					$gpt->setCompanyStructureId($c->getId());
+					$gpt->setSalaryFrom($subvalue['salary_from']);
+					$gpt->setSalaryTo($subvalue['salary_to']);				
+					$gpt->setMultiplierEmployee($subvalue['multiplier_employee']);				
+					$gpt->setMultiplierEmployer($subvalue['multiplier_employer']);	
+					$gpt->save();							
+				}
+			}		
+		}
+	}
+
+	public function loadDefaultPhilhealthTable()
+	{
+		$arr = self::convertXmlToArray("philhealth_table.xml","settings");		
+		if($arr){			
+			$sql = 'TRUNCATE TABLE ' . PHILHEALTH;		
+			Model::runSql($sql);
+				
+			foreach($arr as $key => $value){
+				foreach($value as $keysub => $subvalue){				
+					$gp = new G_Philhealth;					
+					$gp->setCompanyShare($subvalue['company_share']);
+					$gp->setEmployeeShare($subvalue['employee_share']);
+					$gp->setSalaryBase($subvalue['salary_base']);
+					$gp->setSalaryBracket($subvalue['salary_bracket']);
+					$gp->setFromSalary($subvalue['from_salary']);
+					$gp->setToSalary($subvalue['to_salary']);
+					$gp->setMonthlyContribution($subvalue['monthly_contribution']);
+					$gp->save();
+				}
+			}		
+		}
+	}
+	 
+	public function loadDefaultSettingsGracePeriod($c,$sg)
+	{
+		$arr = self::convertXmlToArray("grace_period.xml","settings");				
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . G_SETTINGS_GRACE_PERIOD;		
+			Model::runSql($sql);
+						
+			$gsg = new G_Settings_Grace_Period;			
+			$gsg->setCompanyStructureId($c->getId());
+			$gsg->setTitle($arr['title']);
+			$gsg->setDescription($arr['description']);
+			$gsg->setIsArchive(G_Settings_Grace_Period::NO);
+			$gsg->setIsDefault(G_Settings_Grace_Period::YES);
+			$gsg->setNumberMinuteDefault($arr['number_minute_default']);
+			$gsg->save();
+		}
+	}
+	
+	public function loadDefaultSettingsUser($c)
+	{
+		$arr = self::convertXmlToArray("user.xml","settings");			
+		if($arr){
+			
+			$sql = 'TRUNCATE TABLE ' . G_USER;		
+			Model::runSql($sql);
+			
+			$password = Utilities::encryptPassword($arr['password']);
+						
+			$u = new G_User;			
+			$u->setCompanyStructureId($c->getId());
+			$u->setUserGroupId(0);
+			$u->setEmployeeId(1);
+			$u->setEmploymentStatus($arr['employment_status']);
+			$u->setUsername($arr['username']);
+			$u->setHash("");
+			$u->setPassword($password);
+			$u->setModule($arr['module']);
+			$u->setReceiveNotification(0);
+			$u->setDateEntered(date("Y-m-d"));
+			$u->setDateModified(date("Y-m-d"));
+			$u->setModifiedUserId("");
+			$u->setCreatedBy("");
+			$u->save();
+		}
+	}
+	
+	public function loadDefaultSettingsPayrollPeriod($c)
+	{
+		$date = Tools::getGmtDate('Y-m-d');
+		$cycle = G_Salary_Cycle_Finder::findDefault();
+		$current = Tools::getCutOffPeriod($date, $cycle->getCutOffs());
+		$payout_date = Tools::getPayoutDate($date, $cycle->getCutOffs(), $cycle->getPayoutDays());
+		G_Cutoff_Period_Manager::savePeriod($current['start'], $current['end'], G_Salary_Cycle::TYPE_SEMI_MONTHLY, $payout_date);				
+	}
+	
+	public function loadDefaultValues()
+	{
+		//Company Structure	   		
+			$csid = self::loadDefaultCompanyStructure();			
+			$c 	  = G_Company_Structure_Finder::findById($csid);			
+	   //
+	    
+	   //Company Info
+	   		self::loadDefaultCompanyInfo($c);
+	   //
+	   
+	   //Company Branch
+	   		$bid = self::loadDefaultCompanyBranch($c);
+			$b   = G_Company_Branch_Finder::findById($bid);
+	   //
+
+	   //Department	   
+	   		self::loadDefaultCompanyDepartment($c,$b);
+	   //
+	   
+	   //Loan Deduction Type
+	   		self::loadDefaultSettingsDeductionType($c);
+	   //
+	   
+	   //Loan Type
+	   		self::loadDefaultSettingsLoanType($c);
+	   //
+	   
+	   //Application Status
+	   		self::loadDefaultSettingsApplicationStatus($c);
+	   //
+	   
+	   //Salutation
+	   		self::loadDefaultSettingsSalutation($c);
+	   //
+	   
+	   //Employment Status
+	   		self::loadDefaultSettingsEmploymentStatus($c);
+	   //
+	   
+	   //Leave Type
+	   		self::loadDefaultSettingsLeaveType($c);
+	   //
+	   
+	   //Licenses
+	   		self::loadDefaultSettingsLicenses($c);
+	   //
+	   
+	   //Pay Period
+	   		self::loadDefaultSettingsPayPeriod($c);
+	   //
+		
+		//Jobs
+			self::loadDefaultSettingsJob($c);
+		//
+		
+		//Skills
+			self::loadDefaultSettingsSkills($c);
+		//
+		
+		//Subdivision Type
+			self::loadDefaultSettingsSubdivisionType($c);
+		//
+		
+		//Language
+			self::loadDefaultSettingsLanguages($c);
+		//
+		
+		//EEO Job Category
+			self::loadDefaultSettingsEeoJobCategory($c);
+		//
+		
+		//Job Salary Rate
+			self::loadDefaultSettingsJobSalaryRate($c);
+		//
+		
+		//Dependent Relationship
+			self::loadDefaultSettingsDependentRelationship($c);
+		//
+		
+		//Location
+			self::loadDefaultSettingsLocations($c);
+		//
+		
+		//Schedule Group
+			$schedule_group_id = self::loadDefaultSettingsScheduleGroup($c);
+			$sg 			   = G_Schedule_Group_Finder::findById($schedule_group_id);
+		//
+		
+	   //Schedule
+	   		self::loadDefaultSettingsSchedule($c,$sg);
+	   //
+	   
+	    //Grace Period
+	   		self::loadDefaultSettingsGracePeriod($c);
+	   //
+	   
+	   //User
+	   		self::loadDefaultSettingsUser($c);
+	   //
+	   
+	   //Payroll Period
+	   		self::loadDefaultSettingsPayrollPeriod($c);
+	   //
+	   
+	    //Deductions Table
+	   	//Philhealth
+	   		self::loadDefaultPhilhealthTable();
+	   	//
+	   	
+	   	//Pagibig
+	   		self::loadDefaultPagibigTable($c);
+	   	//
+	   //
+	   
+	   //Employee
+	   		$sql = 'TRUNCATE TABLE ' . EMPLOYEE;		
+			Model::runSql($sql);
+	   //
+	   
+	   return true;
+	}
+}
+?>

@@ -1,0 +1,43 @@
+<?php
+class G_Cutoff_Period_Finder {
+	public static function findAll() {
+		$sql = "
+			SELECT id, period_start, period_end, payout_date
+			FROM ". G_CUTOFF_PERIOD ."
+			ORDER BY period_start DESC
+		";
+		return self::getRecords($sql);
+	}
+	
+	private static function getRecord($sql) {
+		$result = Model::runSql($sql);
+		$total = mysql_num_rows($result);
+		if ($total == 0) {
+			return false;	
+		}		
+		$row = Model::fetchAssoc($result);
+		$records = self::newObject($row);	
+		return $records;
+	}
+	
+	private static function getRecords($sql) {
+		$result = Model::runSql($sql);
+		$total = mysql_num_rows($result);
+		if ($total == 0) {
+			return false;	
+		}
+		while ($row = Model::fetchAssoc($result)) {
+			$records[] = self::newObject($row);
+		}
+		return $records;
+	}
+	
+	private static function newObject($row) {
+		$c = new G_Cutoff_Period;
+		$c->setStartDate($row['period_start']);
+		$c->setEndDate($row['period_end']);
+		$c->setPayoutDate($row['payout_date']);
+		return $c;
+	}	
+}
+?>

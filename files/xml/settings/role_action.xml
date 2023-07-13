@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hr>
+	<Fields>
+		<parent_module>hr</parent_module>
+		<module>schedule</module>
+		<action>View and Edit</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>hr</parent_module>
+		<module>attendance</module>
+		<action>Can Access</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>hr</parent_module>
+		<module>attendance_daily_time_record</module>
+		<action>View and Edit</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>hr</parent_module>
+		<module>attendance_overtime</module>
+		<action>View and Edit</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>hr</parent_module>
+		<module>attendance_leave</module>
+		<action>View and Edit</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>hr</parent_module>
+		<module>official_business</module>
+		<action>View and Edit</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>hr</parent_module>
+		<module>attendance_timesheet</module>
+		<action>View and Edit</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>hr</parent_module>
+		<module>reports</module>
+		<action>No Access</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>hr</parent_module>
+		<module>settings</module>
+		<action>No Access</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>hr</parent_module>
+		<module>employees</module>
+		<action>No Access</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>hr</parent_module>
+		<module>employee_access</module>
+		<action>Both</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>employee</parent_module>
+		<module>employee_dashboard</module>
+		<action>Can Access</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>employee</parent_module>
+		<module>employee_overtime</module>
+		<action>Can Access</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>employee</parent_module>
+		<module>employee_leave</module>
+		<action>Can Access</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>employee</parent_module>
+		<module>employee_official_business</module>
+		<action>Can Access</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>employee</parent_module>
+		<module>employee_reports</module>
+		<action>Can Access</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>employee</parent_module>
+		<module>employee_payslip</module>
+		<action>Can Access</action>
+	</Fields>
+
+	<Fields>
+		<parent_module>employee</parent_module>
+		<module>employee_profile</module>
+		<action>Can Access</action>
+	</Fields>
+</hr>
+
+

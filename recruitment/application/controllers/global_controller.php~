@@ -1,0 +1,112 @@
+<?php
+class Global_Controller 
+{
+	function __construct()
+	{		
+		echo 6;
+		Loader::helper(array('url', 'html'));
+		Loader::sysLibrary('session');		
+		$this->session = $this->var['session'] = new WG_Session(array('namespace' => 'user'));
+		//$this->session = $this->var['session'] = new WG_Session(array('namespace' => 'hr'));
+		
+		$session = new WG_Session(array('namespace' => 'editor'));
+		$session->set('ckfinder_baseUrl', BASE_FOLDER_EDITOR);
+		$session->set('ckfinder_baseDir', BASE_FOLDER_EDITOR);
+		Loader::appMainUtilities();	
+		Loader::appMainLibrary('class_subfolder_loader');
+		Loader::includeScript('init.js');
+		
+		//$is_login = G_User_Helper::isLogin();
+		//if(!$is_login) {
+		//	header("Location:".MAIN_FOLDER."index.php/login");
+		//}
+		
+		if(MOD_HR == false){
+			header("Location:".MAIN_FOLDER."index.php/login");
+		}
+		
+		$this->is_trial_period();		
+		$this->has_access_module();
+		$this->is_evaluation_version();
+		$this->applicant_session_info();
+		$this->count_applicant_total_application();		 
+	}
+	
+	function applicant_session_info() {				
+		if($_SESSION['sprint_applicant']){			
+			$this->var['hdr_email_address']    = $_SESSION['sprint_applicant']['username'];
+			$this->var['hdr_applicant_name']   = $_SESSION['sprint_applicant']['applicant_name'];			
+		}
+	}
+	
+	function count_applicant_total_application() {
+		if($_SESSION['sprint_applicant']['username']){
+			$count = G_Applicant_Helper::countTotalApplicantPendingApplicationByEmailAddress($_SESSION['sprint_applicant']['username']);
+		}else{
+			$count = 0;
+		}
+		$this->var['total_pending_applications'] = $count;
+	}
+	
+	function ajax_get_form_token() {
+		Utilities::createFormToken();
+	}
+	
+	function login()
+	{
+		
+	}
+	
+	function is_trial_period()
+	{
+		if(TRIAL_PERIOD == true){
+			$this->var['is_trial_period'] = true;
+		}else{
+			$this->var['is_trial_period'] = false;
+		}	
+	}
+	
+	function is_evaluation_version()
+	{
+		if(EVALUATION_VERSION == true){
+			$logo = 'evaluation_logo.png';
+		}else{
+			$logo = 'logo.png';
+		}
+		$this->var['sprint_logo'] = $logo;
+	}
+	
+	function has_access_module()
+	{
+		$u = G_User_Finder::findByEmployeeId(Utilities::decrypt($_SESSION['sprint_hr']['employee_id']));
+		
+		if($u) {
+			$mod = explode(',', $u->getModule());	
+		}
+		$has_access_module=false;
+		foreach($mod as $key=>$val) {
+			if($val=='hr') {
+				$has_access_module = true;
+			}
+		}
+		if(!$has_access_module) {
+			//header("Location:".MAIN_FOLDER."index.php/login");
+		}	
+	}
+	
+	function applicant_login()
+	{
+		Loader::appController('applicant_login');	
+		$login = new Applicant_Login_Controller;
+		if (!$login->_isLogin())
+		{
+			redirect('applicant_login');
+		}elseif($login->_isLogin()) {
+			if(!$login->_isAccountValidated()) {
+				redirectMain('index');	
+			}
+		}
+	}
+
+}
+?>

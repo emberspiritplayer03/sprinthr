@@ -1,0 +1,24 @@
+# Listing of ignored files/directories
+
+# Config files -should manually change
+application/config/database.php
+application/config/config.php
+hr/application/config/database.php
+hr/application/config/config.php
+employee/application/config/database.php
+employee/application/config/config.php
+
+
+manual/*.php
+files/version
+clerk/application/config/*.php
+clerk_schedule/application/config/*.php
+payroll/application/config/*.php
+recruitment/application/config/*.php
+tdd/*.php
+tdd/classes/*.php
+tdd/config/*.php
+tdd/simpletest/*.php
+tdd/system/*.php
+db_archives/*.sql
+files/temp/

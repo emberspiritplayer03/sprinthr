@@ -1,0 +1,77 @@
+<?php
+class G_Philhealth_Finder {
+	public static function findBySalary($salary) {
+		$sql = "
+			SELECT id, company_share, employee_share
+			FROM " . PHILHEALTH . "
+			WHERE ". $salary ."
+			BETWEEN from_salary
+			AND to_salary
+			LIMIT 1
+		";
+
+		return self::getRecord($sql);
+	}
+	
+	public static function findByEmployee(IEmployee $e) {
+		$sql = "
+			SELECT id, philhealth_ee as employee_share, philhealth_er as company_share
+			FROM g_employee_contribution
+			WHERE employee_id = ". Model::safeSql($e->getId()) ."
+			LIMIT 1
+		";
+		return self::getRecord($sql);
+	}
+	
+	public static function findAll($order_by = '', $limit = '') {
+		$order_by = ($order_by != '') ? 'ORDER BY ' . $order_by : '';
+		$limit = ($limit!='')? 'LIMIT ' . $limit : '';
+		
+		$sql = "
+			SELECT * 
+			FROM " . PHILHEALTH ." 			
+			".$order_by."
+			".$limit."		
+		";
+		
+		return self::getRecords($sql);
+	}
+	
+	private static function getRecord($sql) {
+		$result = Model::runSql($sql);
+		$total = mysql_num_rows($result);
+		if ($total == 0) {
+			return false;	
+		}		
+		$row = Model::fetchAssoc($result);
+		$records = self::newObject($row);	
+		return $records;
+	}	
+	
+	private static function getRecords($sql) {
+		$result = Model::runSql($sql);
+		$total = mysql_num_rows($result);
+		if ($total == 0) {
+			return false;	
+		}
+		while ($row = Model::fetchAssoc($result)) {
+			$records[$row['id']] = self::newObject($row);
+		}
+		return $records;
+	}
+	
+	private static function newObject($row) {
+		$s = new G_Philhealth;
+		$s->setId($row['id']);
+		$s->setCompanyShare($row['company_share']);
+		$s->setEmployeeShare($row['employee_share']);
+		
+		$s->setSalaryBase($row['salary_base;']);
+		$s->setSalaryBracket($row['salary_bracket']);
+		$s->setFromSalary($row['from_salary']);
+		$s->setToSalary($row['to_salary']);
+		$s->setMonthlyContribution($row['monthly_contribution']);
+		return $s;
+	}
+}
+?>

@@ -1,0 +1,51 @@
+<?php
+class G_Attendance_Log_Manager {
+	/*
+		$ss - Instance of G_Schedule_Specific class
+	*/
+	public static function save($a) {
+		if ($a->getId() > 0) {
+			$action = 'update';
+			$sql_start = "UPDATE ". G_ATTENDANCE_LOG;
+			$sql_end   = " WHERE id = ". Model::safeSql($a->getId());		
+		} else {
+			$action = 'insert';
+			$sql_start = "INSERT INTO ". G_ATTENDANCE_LOG;
+			//$sql_end   = ",public_id = ". Model::safeSql($public_id);
+		}
+		
+		$sql = $sql_start ."
+			SET
+			user_id = ". Model::safeSql($a->getEmployeeId()) .",
+			employee_code = ". Model::safeSql($a->getEmployeeCode()) .",
+			date = ". Model::safeSql($a->getDate()) .",
+			time = ". Model::safeSql($a->getTime()) .",
+			type = ". Model::safeSql($a->getType()) ."
+			". $sql_end ."		
+		";			
+		
+		Model::runSql($sql);
+		if (mysql_errno() > 0) {
+			return false;
+		}
+		if ($action == 'insert') {
+			return mysql_insert_id();
+		} else if ($action == 'update') {
+			return true;
+		}
+	}
+	
+	/*
+		Variables
+		$sf - Instance of G_Schedule_Specific class
+	*/		
+	public static function delete($sf) {
+		$sql = "
+			DELETE FROM ". G_EMPLOYEE_SCHEDULE ."
+			WHERE id = ". Model::safeSql($sf->getId()) ."
+		";
+		Model::runSql($sql);
+		return (mysql_affected_rows() >= 1) ? true : false ;
+	}		
+}
+?>

@@ -1,0 +1,191 @@
+#menu {
+	height:35px;
+	line-height:35px;
+	background:url(themes-images/menu_ulbg.jpg) repeat-x bottom left #065d8b;
+	padding:0 20px;
+}
+#menu ul {
+	margin:0;
+	padding:0;
+	width:auto;
+	float:left;
+}
+#menu ul li {
+	float:left;
+	list-style:none;
+	position:relative;
+	margin:3px 0 0 0;
+	background:url(themes-images/menu_bg.jpg) repeat-x top left #259ddb;
+}
+#menu ul li:hover, 
+#menu ul li.selected {
+	margin:0;
+	background:none;
+}
+#menu ul li a {
+	display:block;
+	color:#ffffff;
+	height:32px;
+	line-height:32px;
+	margin:0;
+	padding:0 0 0 5px;
+	text-decoration:none;
+	background:url(themes-images/menu_separator.jpg) no-repeat left bottom;
+}
+#menu ul li a span {
+	display:block;
+	padding:0 15px 0 10px;
+	background:url(themes-images/menu_separator.jpg) no-repeat right top;
+}
+#menu ul li a:hover, 
+#menu ul li:hover a {
+	display:block;	
+	margin:0;
+	height:35px;
+	line-height:38px;
+	color:#ffffff;
+	background:url(themes-images/menu_hover_bg.png) no-repeat left top;
+}
+#menu ul li a:hover span, 
+#menu ul li a span:hover, 
+#menu ul li:hover a span {
+	background:url(themes-images/menu_hover_bg.png) no-repeat right -35px;
+}
+#menu ul li a img {
+	vertical-align:middle;
+	padding:0 0 0 3px;
+}
+#menu ul li.selected a, 
+#menu ul li.selected a:hover {
+	display:block;	
+	margin:0;
+	height:35px;
+	line-height:38px;
+	color:#606060;
+	font-weight:bold;
+	background:url(themes-images/menu_active_bg.png) no-repeat left top;
+}
+#menu ul li.selected span, 
+#menu ul li.selected:hover span, 
+#menu ul li.selected a:hover span, 
+#menu ul li.selected span:hover {
+	background:url(themes-images/menu_active_bg.png) no-repeat right -35px;
+}
+/*------------- 2nd Level --------------*/
+#menu ul ul.submenu {
+	display:none;
+	position:absolute;
+	left:0; top:100%;
+	background:#035b89;
+	width:200px;
+	padding:10px;
+	-moz-border-radius:0 0 10px 10px;
+	-o-border-radius:0 0 10px 10px;
+	-webkit-border-radius:0 0 10px 10px;
+	-khtml-border-radius:0 0 10px 10px;
+	border-radius:0 0 10px 10px;
+	z-index:1000;
+}
+#menu ul li:hover ul.submenu {
+	display:block;
+}
+ul.submenu li:first-child, ul.submenu li:first-child:hover {
+	border-top:0;
+}
+ul.submenu li:last-child, ul.submenu li:last-child:hover {
+	border-bottom:0;
+}
+ul.submenu li {
+	float:left !important;
+	width:100%;
+	margin:0 !important;
+	padding:0;
+	height:auto;
+	background:none !important;
+	-moz-border-radius:1px;
+	-o-border-radius:1px;
+	-webkit-border-radius:1px;
+	-khtml-border-radius:1px;
+	border-radius:1px;
+	border-top:1px solid #08689a;
+	border-bottom:1px solid #045078;
+}
+#menu ul li ul.submenu li a, 
+#menu ul li ul.submenu li:hover a, 
+#menu ul li.selected:hover ul.submenu li a:hover, 
+#menu ul li.selected:hover ul.submenu li:hover a, 
+#menu ul li.selected:hover ul ul.sub2ndmenu li a {
+	background:url(themes-images/dropdown_listicon.png) no-repeat 7px 12px;
+	height:auto !important;
+	display:block !important;
+	line-height:18px !important;
+	padding:6px 10px 6px 15px !important;
+	font-weight:normal !important;
+}
+ul.submenu li a span, ul.submenu li:hover a span {
+	background:none !important;
+	height:auto !important;
+}
+ul.submenu li:hover {
+	background:url(themes-images/menu_dropdown_hover.jpg) repeat-x top center #004569 !important;
+}
+
+/*------------- 2nd Level Selected --------------*/
+#menu ul li.selected ul.submenu {
+	background:#F7F7F7;
+	border-left:1px solid #cccccc;	
+	border-right:1px solid #cccccc;	
+	border-bottom:1px solid #cccccc;
+}
+#menu ul li.selected ul.submenu li:first-child, 
+#menu ul li.selected ul.submenu li:first-child:hover {
+	border-top:0;
+}
+#menu ul li.selected ul.submenu li:last-child, 
+#menu ul li.selected ul.submenu li:last-child:hover {
+	border-bottom:0;
+}
+#menu ul li.selected ul.submenu li {
+	border-top:1px solid #ffffff;
+	border-bottom:1px solid #cccccc;
+}
+#menu ul li.selected:hover ul.submenu li a {
+	background:url(themes-images/dropdown_selected_listicon.png) no-repeat 7px 12px;
+}
+#menu ul li.selected ul.submenu li:hover a, 
+#menu ul li.selected ul.submenu li a:hover {
+	color:#ffffff;
+}
+#menu ul li.selected ul.submenu li:hover {
+	border-top:1px solid #5c5c5c;
+	background:url(themes-images/menu_selected_dropdown_hover.jpg) repeat-x top center #757575 !important;
+}
+/*------------- 3rd Level Selected --------------*/
+ul.sub2ndmenu {
+	display:none;
+	position:absolute;
+	top:-15px; left:95%;
+	background:#9d9d9d;
+	width:200px !important;
+	z-index:100;
+	padding:10px !important;
+	border:1px solid #7b7b7b;
+	-moz-border-radius:10px;
+	-o-border-radius:10px;
+	-webkit-border-radius:10px;
+	-khtml-border-radius:10px;
+	border-radius:10px;
+}
+ul.submenu li:hover ul.sub2ndmenu {
+	display:block;
+}
+ul.sub2ndmenu li:first-child, ul.sub2ndmenu li:first-child:hover {
+	border-top:0 !important;
+}
+ul.sub2ndmenu li:last-child, ul.sub2ndmenu li:last-child:hover {
+	border-bottom:0 !important;
+}
+ul.sub2ndmenu li {
+	border-top:1px solid #b6b6b6 !important;
+	border-bottom:1px solid #7e7e7e !important;
+}

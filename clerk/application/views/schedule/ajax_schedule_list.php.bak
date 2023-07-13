@@ -1,0 +1,38 @@
+<table id="box-table-a" summary="Most Favorit Movies" style="margin:0px">
+<!--  <thead>
+    <tr>
+      <th scope="col">Comedy</th>
+      <th scope="col">Adventure</th>
+      <th scope="col">Action</th>
+      <th scope="col">Children</th>
+    </tr>
+  </thead>-->
+  <tbody>
+  <?php foreach ($schedules as $s):?>
+  <?php 
+  $style = "";
+  $is_default = false;
+  if ($s->isDefault()) {
+	  $is_default = true;
+	  $style = "style='font-weight:bold'";
+  }	  
+   ?>
+    <tr>
+      <td><a <?php echo $style;?> href="<?php echo url('schedule/show_schedule?id='. $s->getPublicId());?>"><?php echo $s->getName();?></a></td>
+      <td><div <?php echo $style;?>><?php echo $s->getWorkingDays();?></div></td>
+      <td><div <?php echo $style;?>><?php echo Tools::timeFormat($s->getTimeIn());?> - <?php echo Tools::timeFormat($s->getTimeOut());?></div></td>
+      <td>
+          <a class="ui-icon ui-icon-pencil tooltip" href="javascript:void(0)" onclick="javascript:editScheduleFromList(<?php echo $s->getId();?>)" style="float:right" title="Edit"></a>
+          <?php if ($is_default):?>
+            <div class="ui-icon ui-icon-info info" style="float:right" title="This is the default schedule. All employees without assigned schedule will be using this default schedule."></div>
+          <?php endif;?>      
+      </td>
+    </tr>
+  <?php endforeach;?> 
+  </tbody>
+</table>
+
+<script language="javascript">		
+$('.tooltip').tipsy({gravity: 's'});
+$('.info').tipsy({gravity: 's'});
+</script>

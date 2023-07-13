@@ -1,0 +1,267 @@
+<?php
+class G_Company extends Company {
+
+    public $additional_query;
+    public $filtered_employee_id;
+    public $new_payroll_period_id;
+
+    public function generatePayslip($month, $cutoff_number, $year = '', $excluded_employee_deduction = array()) {
+        if ($year == '') {
+            $year = Tools::getGmtDate('Y');
+        }
+
+        $c = new G_Cutoff_Period();
+        $data = $c->expectedCutOffPeriodsByMonthAndYear($month, $year);        
+        
+        if( $cutoff_number == 1 ){
+            $from_date = $data[0]['start_date'];
+            $to_date   = $data[0]['end_date'];
+        }else{
+            $from_date = $data[1]['start_date'];
+            $to_date   = $data[1]['end_date'];
+        }
+
+        //$emp_payslip  = G_Payslip_Helper::sqlGetPayslipIdsByPeriod($from_date,$to_date);
+        $inactive_emp = G_Employee_Finder::findAllInActiveEmployees();
+
+        //Delete inactive employee payslip - Start
+        foreach($inactive_emp as $empkey => $empd) {
+            $employee_id = $empd->getId();
+            if($employee_id) {
+                $e_payslip = G_Payslip_Finder::findByEmployeeIdAndPeriod($employee_id, $from_date, $to_date);
+                if($e_payslip) {
+                    $e_payslip->delete();
+                }
+            }
+        }
+        //Delete inactive employee payslip - End
+
+        $period = G_Cutoff_Period_Finder::findByPeriod($from_date, $to_date);  
+        //$period = G_Cutoff_Period_Finder::findByYearMonthAndCutoffNumber($year, $month, $cutoff_number);        
+        if (!$period) {
+            return false;
+        }
+
+        if(!empty($excluded_employee_deduction)) {
+            //get existing excluded employee deduction 
+            $eed = G_Excluded_Employee_Deduction_Helper::findByPayrollPeriodId($period->getId());
+            foreach($eed as $key => $value) {
+                $employee_id = $value['employee_id'];
+                $variable_name = $value['variable_name'];
+                if(isset($excluded_employee_deduction[$employee_id])) {
+                    //add to existing array data
+                    array_push($excluded_employee_deduction[$employee_id],$variable_name); 
+                }
+            }
+        }else{
+            //reset excluded employee deduction by payroll period
+            if(!empty($this->filtered_employee_id)) {
+                $eed = G_Excluded_Employee_Deduction_Finder::findAllByPayrollPeriodIdAndAction($period->getId(), G_Excluded_Employee_Deduction::MOVE);
+                foreach($eed as $obj) {
+                    $ed = G_Employee_Deductions_Finder::findAllByPayrollPeriodIdAndIsMovedDeduction($obj->getNewPayrollPeriodId());
+                    foreach($ed as $ed_obj) {
+                        $selected_eid = explode(",",$this->filtered_employee_id);
+                        $eid = unserialize($ed_obj->getEmployeeId());
+                        if(in_array($eid[0],$selected_eid)) {
+                            $ed_obj->delete();
+                        }
+                    }
+                    
+                }
+
+                G_Excluded_Employee_Deduction_Manager::deleteByPayrollPeriodIdAndEmployeeId($period->getId(),$this->filtered_employee_id);
+            }else{
+                $eed = G_Excluded_Employee_Deduction_Finder::findAllByPayrollPeriodIdAndAction($period->getId(), G_Excluded_Employee_Deduction::MOVE);
+                foreach($eed as $obj) {
+                    G_Employee_Deductions_Manager::deleteMovedEmployeeDeductionByPayrollPeriodId($obj->getNewPayrollPeriodId());
+                }
+                
+                G_Excluded_Employee_Deduction_Manager::deleteByPayrollPeriodId($period->getId());
+            }
+        }
+
+        $pg = new G_Payslip_Generator($period);
+        if(!empty($this->filtered_employee_id)) {
+            $employees = G_Employee_Finder::findAllActiveInCutoffByIdAndDate($this->filtered_employee_id, $period->getEndDate(), "", $this->additional_query); 
+        }else{
+            $employees = G_Employee_Finder::findAllActiveInCutoff($period->getEndDate(), '', $this->additional_query);   
+        }
+
+        $pg->setEmployees($employees);
+        $pg->setExcludedEmployeeDeduction($excluded_employee_deduction);
+        $payslips = $pg->generate();
+        $pg->save($payslips);
+        return $payslips;
+    }
+    public function generateWeeklyPayslip($month, $cutoff_number, $year = '', $excluded_employee_deduction = array()) {
+        if ($year == '') {
+            $year = Tools::getGmtDate('Y');
+        }
+
+        // $c = new G_Cutoff_Period();
+        // $data = $c->expectedCutOffPeriodsByMonthAndYear($month, $year);            
+        $weekly_periods = new G_Weekly_Cutoff_Period();
+        $expected_weekly_cutoff = $weekly_periods->expectedWeeklyCutOffPeriodsByMonthAndYear($month,$year);
+
+        $from_date = $expected_weekly_cutoff[$cutoff_number - 1]['period_start'];
+        $to_date   = $expected_weekly_cutoff[$cutoff_number - 1]['period_end'];
+
+        //$emp_payslip  = G_Payslip_Helper::sqlGetPayslipIdsByPeriod($from_date,$to_date);
+        $inactive_emp = G_Employee_Finder::findAllInActiveEmployees();
+
+        //Delete inactive employee payslip - Start
+        foreach($inactive_emp as $empkey => $empd) {
+            $employee_id = $empd->getId();
+            if($employee_id) {
+                $e_payslip = G_Weekly_Payslip_Finder::findByEmployeeIdAndPeriod($employee_id, $from_date, $to_date);
+                if($e_payslip) {
+                    $e_payslip->delete();
+                }
+            }
+        }
+        //Delete inactive employee payslip - End
+
+        $period = G_Weekly_Cutoff_Period_Finder::findByPeriod($from_date, $to_date);  
+        //$period = G_Cutoff_Period_Finder::findByYearMonthAndCutoffNumber($year, $month, $cutoff_number);        
+        if (!$period) {
+            return false;
+        }
+
+        if(!empty($excluded_employee_deduction)) {
+            //get existing excluded employee deduction 
+            $eed = G_Excluded_Employee_Deduction_Helper::findByPayrollPeriodId($period->getId());
+            foreach($eed as $key => $value) {
+                $employee_id = $value['employee_id'];
+                $variable_name = $value['variable_name'];
+                if(isset($excluded_employee_deduction[$employee_id])) {
+                    //add to existing array data
+                    array_push($excluded_employee_deduction[$employee_id],$variable_name); 
+                }
+            }
+        }else{
+            //reset excluded employee deduction by payroll period
+            if(!empty($this->filtered_employee_id)) {
+                $eed = G_Excluded_Employee_Deduction_Finder::findAllByPayrollPeriodIdAndAction($period->getId(), G_Excluded_Employee_Deduction::MOVE);
+                foreach($eed as $obj) {
+                    $ed = G_Employee_Deductions_Finder::findAllByPayrollPeriodIdAndIsMovedDeduction($obj->getNewPayrollPeriodId());
+                    foreach($ed as $ed_obj) {
+                        $selected_eid = explode(",",$this->filtered_employee_id);
+                        $eid = unserialize($ed_obj->getEmployeeId());
+                        if(in_array($eid[0],$selected_eid)) {
+                            $ed_obj->delete();
+                        }
+                    }
+                    
+                }
+
+                G_Excluded_Employee_Deduction_Manager::deleteByPayrollPeriodIdAndEmployeeId($period->getId(),$this->filtered_employee_id);
+            }else{
+                $eed = G_Excluded_Employee_Deduction_Finder::findAllByPayrollPeriodIdAndAction($period->getId(), G_Excluded_Employee_Deduction::MOVE);
+                foreach($eed as $obj) {
+                    G_Employee_Deductions_Manager::deleteMovedEmployeeDeductionByPayrollPeriodId($obj->getNewPayrollPeriodId());
+                }
+                
+                G_Excluded_Employee_Deduction_Manager::deleteByPayrollPeriodId($period->getId());
+            }
+        }
+
+        $pg = new G_Weekly_Payslip_Generator($period);
+
+        $frequency_id = 2;
+
+        $s = G_Employee_Basic_Salary_History_Finder::findByDateAndFrequency($period->getEndDate(), $frequency_id);
+
+        $employee_ids = array();
+        $employee_ids_qry = "";
+
+        foreach ($s as $key => $data) {
+            $employee_ids[] = $data->employee_id;
+        }
+
+        if (count($employee_ids) > 0) {
+            $employee_ids_qry = " e.id IN (".implode (",", $employee_ids).") AND ";
+        }
+
+        if(!empty($this->filtered_employee_id)) {
+            $employees = G_Employee_Finder::findAllActiveInCutoffByIdAndDate($this->filtered_employee_id, $period->getEndDate(), "", $this->additional_query, $employee_ids_qry); 
+        }else{
+            $employees = G_Employee_Finder::findAllActiveInCutoff($period->getEndDate(), '', $this->additional_query, $employee_ids_qry);   
+        }
+
+        $pg->setEmployees($employees);
+        $pg->setExcludedEmployeeDeduction($excluded_employee_deduction);
+        $payslips = $pg->generate();
+        // echo "<pre>";
+        // var_dump($payslips);
+        // echo "</pre>";
+        $pg->save($payslips);
+        return $payslips;
+    }
+
+    /*
+     * Generates payslip of employee
+     *
+     * @param IEmployee $e
+     * @param int $year
+     * @param int $month
+     * @param int $cutoff_number
+     * @return G_Payslip
+     */
+    public function generatePayslipByEmployee(IEmployee $e, $year, $month, $cutoff_number) {        
+        $period = G_Cutoff_Period_Finder::findByYearMonthAndCutoffNumber($year, $month, $cutoff_number);
+        if (!$e || !$period) {
+            return false;
+        }
+        return $this->_generatePayslipByEmployee($e, $period);
+    }
+
+    /*
+     * Generates payslip of employee
+     *
+     * @param IEmployee $e
+     * @param G_Cutoff_Period $period
+     * @return G_Payslip
+     */
+    private function _generatePayslipByEmployee(IEmployee $e, $period) {
+        $pg = new G_Payslip_Generator($period);
+        $pg->setEmployee($e);
+        $p = $pg->generate();
+        $p->save();
+        return $p;
+    }
+
+    public function addNewCutoffPeriod() {
+        G_Cutoff_Period_Helper::addNewPeriod();
+    }
+
+    /*
+     * Adds holiday to company calendar
+     *
+     * @param string $title
+     * @param int $year (ex: 2014)
+     * @param int $month (1 to 12)
+     * @param int $day (1 to 31)
+     * @param const $holiday_type G_Holiday::LEGAL or G_Holiday::SPECIAL
+     * @return bool true if successfully added
+     */
+    public function addHoliday($title, $year, $month, $day, $holiday_type) {
+        return G_Holiday_Helper::addHoliday($title, $year, $month, $day, $holiday_type);
+    }
+
+    public function addCutoffPeriodByDate($date) {
+        return G_Cutoff_Period_Helper::addPeriodByDate($date);
+    }
+
+    public function setAdditionalQuery($value) {
+        $this->additional_query = $value;
+    }
+
+    public function setFilteredEmployeeId($value) {
+        $this->filtered_employee_id = $value;
+    }
+
+    public function setNewPayrollPeriodId($value) {
+        $this->new_payroll_period_id = $value;
+    }
+}
+?>

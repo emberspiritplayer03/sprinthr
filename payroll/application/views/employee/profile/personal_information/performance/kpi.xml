@@ -1,0 +1,29 @@
+
+<xml>
+	<kpis>
+		<kpi>
+			<id>1</id>
+			<desc>Can handle people easily</desc>
+			<min>0</min>
+			<max>10</max>
+			<rate>7</rate>
+			<comment> </comment>
+		</kpi>
+		<kpi>
+			<id>2</id>
+			<desc>Can create a task</desc>
+			<min>0</min>
+			<max>10</max>
+			<rate>8</rate>
+			<comment> </comment>
+		</kpi>
+		<kpi>
+			<id>3</id>
+			<desc>Can finish the task</desc>
+			<min>0</min>
+			<max>10</max>
+			<rate>10</rate>
+			<comment> </comment>
+		</kpi>
+	</kpis>
+</xml>

@@ -1,0 +1,106 @@
+<?php
+class G_Attendance_Manager {	
+	public static function recordToEmployee(IEmployee $e, G_Attendance $a) {		
+		$h = $a->getHoliday();
+		if ($h) {			
+			$a->setAsHoliday();
+			$holiday_id = $h->getId();
+			$holiday_title = $h->getTitle();
+			$holiday_type = $h->getType();	
+		} else {			
+			$a->setAsNotHoliday();
+			$holiday_id = '';
+			$holiday_title = '';
+			$holiday_type = '';	
+		}
+		$t = $a->getTimesheet();		
+		if ($t) {			
+			$actual_time_in = $t->getTimeIn();
+			$actual_time_out = $t->getTimeOut();
+			$actual_date_in = $t->getDateIn();
+			$actual_date_out = $t->getDateOut();			
+			$total_hours_worked = $t->getTotalHoursWorked();
+			$scheduled_time_in = $t->getScheduledTimeIn();
+			$scheduled_time_out = $t->getScheduledTimeOut();
+			$night_shift_hours = $t->getNightShiftHours();
+			$night_shift_overtime_hours = $t->getNightShiftOvertimeHours();	
+			$night_shift_overtime_excess_hours = $t->getNightShiftOvertimeExcessHours();
+			$night_shift_hours_special = $t->getNightShiftHoursSpecial();
+			$night_shift_hours_legal = $t->getNightShiftHoursLegal();
+			$holiday_hours_special = $t->getHolidayHoursSpecial();
+			$holiday_hours_legal = $t->getHolidayHoursLegal();
+			$overtime_hours = $t->getOvertimeHours();
+			$overtime_excess_hours = $t->getOvertimeExcessHours();
+			$late_hours = $t->getLateHours();
+			$undertime_hours = $t->getUndertimeHours();
+			$overtime_time_in = $t->getOverTimeIn();
+			$overtime_time_out = $t->getOverTimeOut();
+		}
+		
+		if ($a->getId() > 0) { //old >
+			$action = 'update';
+			$sql_start = "UPDATE ". G_EMPLOYEE_ATTENDANCE;
+			$sql_end   = " WHERE id = ". Model::safeSql($a->getId());		
+		} else {
+			$action = 'insert';
+			$sql_start = "INSERT INTO ". G_EMPLOYEE_ATTENDANCE;
+			$sql_end   = ", employee_id = ". Model::safeSql($e->getId());
+		}
+		
+		$sql = $sql_start ."
+			SET
+			date_attendance = ". Model::safeSql($a->getDate()) .",
+			is_present     	= ". Model::safeSql($a->isPresent()) .",
+			is_paid  		= ". Model::safeSql($a->isPaid()) .",
+			is_restday		= ". Model::safeSql($a->isRestday()) .",
+			is_holiday		= ". Model::safeSql($a->isHoliday()) .",
+			is_leave		= ". Model::safeSql($a->isLeave()) .",
+			leave_id		= ". Model::safeSql($a->getLeaveId()) .",
+			is_suspended	= ". Model::safeSql($a->isSuspended()) .",
+			holiday_id		= ". Model::safeSql($holiday_id) .",
+			holiday_title	= ". Model::safeSql($holiday_title) .",
+			holiday_type	= ". Model::safeSql($holiday_type) .",
+			actual_time_in	= ". Model::safeSql($actual_time_in) .",
+			actual_time_out	= ". Model::safeSql($actual_time_out) .",
+			actual_date_in	= ". Model::safeSql($actual_date_in) .",
+			actual_date_out	= ". Model::safeSql($actual_date_out) .",			
+			total_hours_worked	= ". Model::safeSql($total_hours_worked) .",
+			scheduled_time_in	= ". Model::safeSql($scheduled_time_in) .",
+			scheduled_time_out	= ". Model::safeSql($scheduled_time_out) .",
+			night_shift_hours	= ". Model::safeSql($night_shift_hours) .",
+			night_shift_overtime_hours	= ". Model::safeSql($night_shift_overtime_hours) .",
+			night_shift_overtime_excess_hours	= ". Model::safeSql($night_shift_overtime_excess_hours) .",			
+			night_shift_hours_special	= ". Model::safeSql($night_shift_hours_special) .",
+			night_shift_hours_legal	= ". Model::safeSql($night_shift_hours_legal) .",
+			holiday_hours_special	= ". Model::safeSql($holiday_hours_special) .",
+			holiday_hours_legal		= ". Model::safeSql($holiday_hours_legal) .",
+			overtime_hours	= ". Model::safeSql($overtime_hours) .",
+			overtime_excess_hours	= ". Model::safeSql($overtime_excess_hours) .",			
+			late_hours	= ". Model::safeSql($late_hours) .",
+			undertime_hours	= ". Model::safeSql($undertime_hours) .",
+			overtime_time_in = ". Model::safeSql($overtime_time_in) .",
+			overtime_time_out = ". Model::safeSql($overtime_time_out) ."
+			". $sql_end ."		
+		";			
+		
+		Model::runSql($sql);
+		if (mysql_errno() > 0) {
+			return false;
+		}
+		if ($action == 'insert') {
+			return mysql_insert_id();
+		} else if ($action == 'update') {
+			return true;
+		}	
+	}
+	
+	public static function delete(G_Attendance $a) {
+		$sql = "
+			DELETE FROM ". G_EMPLOYEE_ATTENDANCE ."
+			WHERE id = ". Model::safeSql($a->getId()) ."
+		";
+		Model::runSql($sql);
+		return (mysql_affected_rows() >= 1) ? true : false;
+	}
+}
+?>

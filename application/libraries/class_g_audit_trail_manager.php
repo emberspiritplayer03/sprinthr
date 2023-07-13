@@ -1,0 +1,36 @@
+<?php
+class G_Audit_Trail_Manager {
+	public static function save(G_Audit_Trail $at) {
+		
+		if (G_Audit_Trail_Helper::isIdExist($at) > 0 ) {
+			$sql_start = "UPDATE ". AUDIT_TRAIL . " ";
+			$sql_end   = "WHERE id = ". Model::safeSql($at->getId());		
+		}else{
+			$sql_start = "INSERT INTO ". AUDIT_TRAIL . " ";
+			$sql_end  = "";		
+		}
+				
+		$sql = $sql_start ."
+			SET
+			user			=" . Model::safeSql($at->getUser()) . ",
+			action			=" . Model::safeSql($at->getAction()) . ",
+			event_status	=" . Model::safeSql($at->getEventStatus()) . ",
+			details			=" . Model::safeSql($at->getDetails()) . ",
+			audit_date		=" . Model::safeSql($at->getAuditDate()) . ",
+			ip_address 		=" . Model::safeSql($at->getIpAddress()) . " "				
+			. $sql_end ."	
+		";			
+		Model::runSql($sql);
+		return mysql_insert_id();		
+	}
+		
+	public static function delete(G_Audit_Trail $al){
+		if(G_Audit_Trail_Helper::isIdExist($al) > 0){
+			$sql = "
+				DELETE FROM ". AUDIT_TRAIL ."
+				WHERE id =" . Model::safeSql($al->getId());
+			Model::runSql($sql);
+		}	
+	}
+}
+?>

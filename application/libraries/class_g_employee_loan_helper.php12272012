@@ -1,0 +1,283 @@
+<?php
+class G_Employee_Loan_Helper {
+	public static function isIdExist(G_Employee_Loan $gel) {
+		$sql = "
+			SELECT COUNT(*) as total
+			FROM " . G_EMPLOYEE_LOAN ."
+			WHERE id = ". Model::safeSql($gel->getId()) ."
+		";
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+	
+	public static function getLoanNewBalance(G_Employee_Loan $gel,$new_amount) {
+		$new_balance = (float) $new_amount;
+		$details     = G_Employee_Loan_Details_Finder::findAllByLoanId($gel->getId());
+		foreach($details as $d){
+			if($d->getIsPaid() == G_Employee_Loan_Details::YES){
+				$new_balance -= $d->getAmount();
+			}
+		}
+		return $new_balance;
+	}
+	
+	public static function appendLoanPaymentByMonthly(G_Employee_Loan $gel){
+		$n_installment = $gel->getNoOfInstallment();
+		$n_start_date  = strtotime(date("Y-m-d", strtotime($gel->getStartDate())));	
+						
+		for($x=1;$x<=$n_installment;$x++){	
+			$cdate        = date("F d, o",$n_start_date);									
+			$n_start_date = Tools::convertDate1530($cdate);								
+			$start_date   = date("Y-m-d",$n_start_date);		
+			//Insert payment
+				$payment = self::computePayment($gel);
+				$geld    = new G_Employee_Loan_Details();
+				$geld->setCompanyStructureId($gel->getCompanyStructureId());
+				$geld->setEmployeeId($gel->getEmployeeId());
+				$geld->setLoanId($gel->getId());	
+				$geld->setDateOfPayment($start_date);				
+				$geld->setAmount($payment);	
+				$geld->setAmountPaid(0.00);		
+				$geld->setIsPaid(G_Employee_Loan::NO);
+				$geld->setRemarks('');					
+				$geld->setDateCreated($gel->getDateCreated());
+				$geld->appendPayement();				
+			//	
+			$n_start_date =  strtotime(date("Y-m-d", $n_start_date) . "+1 month");		
+		}		
+	}
+	
+	public static function appendLoanPaymentByBiMonthly(G_Employee_Loan $gel){
+		$n_installment = $gel->getNoOfInstallment();		
+		$n_start_date  =  Tools::convertDate1530($gel->getStartDate());				
+		for($x=1;$x<=$n_installment;$x++){													
+			$start_date   = date("Y-m-d",$n_start_date);	
+			//Insert payment
+				$payment = self::computePayment($gel);
+				$geld    = new G_Employee_Loan_Details();
+				$geld->setCompanyStructureId($gel->getCompanyStructureId());
+				$geld->setEmployeeId($gel->getEmployeeId());
+				$geld->setLoanId($gel->getId());	
+				$geld->setDateOfPayment($start_date);				
+				$geld->setAmount($payment);	
+				$geld->setAmountPaid(0.00);		
+				$geld->setIsPaid(G_Employee_Loan::NO);
+				$geld->setRemarks('');					
+				$geld->setDateCreated($gel->getDateCreated());
+				$geld->appendPayement();				
+			//	
+				$n_start_date =  strtotime(date("Y-m-d", strtotime($start_date)) . "+15 day");
+				$cdate        = date("F d, o",$n_start_date);		
+				$n_start_date = Tools::convertDate1530($cdate);	
+		}
+	}
+	
+	public static function appendLoanPaymentByQuarterly(G_Employee_Loan $gel){
+		$n_installment = $gel->getNoOfInstallment();		
+		$prev_quarter  = 0;
+		$n_start_date  = Tools::convertDate1530($gel->getStartDate());				
+		
+		for($x=1;$x<=$n_installment;$x++){												
+			$day 		  = date("j",$n_start_date);	
+			$month 		  = date("n",$n_start_date);							
+			$quarter      = Tools::getQuarterByMonth($month);
+			$n_start_date = date("Y-m-d",$n_start_date);		
+			//Deduct 2x every quarter
+			if($quarter != $prev_quarter){	
+				$prev_quarter = $quarter;	
+				$pperiod 	  = 0;	
+				//Insert payment
+					$payment = self::computePayment($gel);
+					$geld    = new G_Employee_Loan_Details();
+					$geld->setCompanyStructureId($gel->getCompanyStructureId());
+					$geld->setEmployeeId($gel->getEmployeeId());
+					$geld->setLoanId($gel->getId());	
+					$geld->setDateOfPayment($n_start_date);				
+					$geld->setAmount($payment);	
+					$geld->setAmountPaid(0.00);		
+					$geld->setIsPaid(G_Employee_Loan::NO);
+					$geld->setRemarks('');					
+					$geld->setDateCreated($gel->getDateCreated());
+					$geld->appendPayement();				
+				//					
+				$pperiod++;									
+			}else{
+				if($pperiod < 2){
+					//Insert payment
+						$payment = self::computePayment($gel);
+						$geld    = new G_Employee_Loan_Details();
+						$geld->setCompanyStructureId($gel->getCompanyStructureId());
+						$geld->setEmployeeId($gel->getEmployeeId());
+						$geld->setLoanId($gel->getId());	
+						$geld->setDateOfPayment($n_start_date);				
+						$geld->setAmount($payment);	
+						$geld->setAmountPaid(0.00);		
+						$geld->setIsPaid(G_Employee_Loan::NO);
+						$geld->setRemarks('');					
+						$geld->setDateCreated($gel->getDateCreated());
+						$geld->appendPayement();				
+					//					
+					$pperiod++;
+				}else{$x--;}
+			}
+			
+			$n_start_date =  strtotime(date("Y-m-d", strtotime($n_start_date)) . "+15 day");
+			$cdate        = date("F d, o",$n_start_date);		
+			$n_start_date = Tools::convertDate1530($cdate);					
+		}
+		return $end_date = date("Y-m-d",$n_start_date);
+	}
+	
+	public static function getLoanEndDateByMonthly($n_installment,$n_start_date){
+		$n_start_date =  strtotime(date("Y-m-d", strtotime($n_start_date)));					
+		for($x=1;$x<=$n_installment;$x++){							
+			$n_start_date =  strtotime(date("Y-m-d", $n_start_date) . "+1 month");		
+		}
+		return $end_date = date("Y-m-d",$n_start_date);
+	}
+	
+	public static function getLoanEndDateByBiMonthly($n_installment,$n_start_date){												
+		for($x=1;$x<=$n_installment;$x++){										
+			$n_start_date =  Tools::convertDate1530($n_start_date);
+			$day 		  = date("j",$n_start_date);		
+			$n_start_date = strtotime(date("Y-m-d", $n_start_date) . "+15 day");
+			$n_start_date = date("Y-m-d",$n_start_date);							
+		}
+		
+		$n_start_date = date("Y-m-d",strtotime(date("Y-m-d", strtotime($n_start_date)) . "-15 day"));
+		$n_start_date =  Tools::convertDate1530($n_start_date);
+		$n_start_date = date("Y-m-d",$n_start_date);			
+		return $end_date = $n_start_date;
+	}
+	
+	public static function getLoanEndDateByQuarterly($n_installment,$n_start_date){
+		$prev_quarter   = 0;
+		$n_start_date   =  Tools::convertDate1530($n_start_date);		
+		
+		for($x=1;$x<=$n_installment;$x++){												
+			$day 		  = date("j",$n_start_date);	
+			$month 		  = date("n",$n_start_date);							
+			$quarter      = Tools::getQuarterByMonth($month);
+			$n_start_date = date("F d, o",$n_start_date);		
+			//Deduct 2x every quarter
+			if($quarter != $prev_quarter){	
+				$prev_quarter = $quarter;	
+				$pperiod 	  = 0;	
+				$pperiod++;									
+			}else{
+				if($pperiod < 2){
+					$pperiod++;
+				}else{$x--;}
+			}
+			
+			$n_start_date =  strtotime(date("Y-m-d", strtotime($n_start_date)) . "+15 day");
+			$cdate        = date("F d, o",$n_start_date);		
+			$n_start_date = Tools::convertDate1530($cdate);					
+		}
+		return $end_date = date("Y-m-d",$n_start_date);
+	}
+
+	public static function getLoanEndDate($n_installment,$n_start_date,$n_type_of_deduction) {		
+		if($n_type_of_deduction == G_Employee_Loan::MONTHLY){
+			return self::getLoanEndDateByMonthly($n_installment,$n_start_date);			
+		}elseif($n_type_of_deduction == G_Employee_Loan::BI_MONTHLY){
+			return self::getLoanEndDateByBiMonthly($n_installment,$n_start_date);			
+		}elseif($n_type_of_deduction == G_Employee_Loan::QUARTERLY){
+			return self::getLoanEndDateByQuarterly($n_installment,$n_start_date);	
+		}
+	}
+	
+	public static function computeInterestPaid(G_Employee_Loan $gel) {
+		//$interest  = ceil(($gel->getLoanAmount() / $gel->getNoOfInstallment()) * ($gel->getInterestRate() /100));	
+		
+		$interest = ceil($gel->getLoanAmount() * ($gel->getNoOfInstallment() * ($gel->getInterestRate()/100)));
+		$with_interest = $interest;
+		return $with_interest; 
+	}
+	
+	
+	public static function computeTotalAmountWithInterest(G_Employee_Loan $gel) {
+		$interest 	   = ceil($gel->getLoanAmount() * ($gel->getNoOfInstallment() * ($gel->getInterestRate()/100)));
+		$with_interest = $gel->getLoanAmount() + $interest;
+		return $with_interest; 
+	}
+	
+	public static function computePayment(G_Employee_Loan $gel) {
+		$total_amount_with_interest = self::computeTotalAmountWithInterest($gel);
+		$payment = $total_amount_with_interest / $gel->getNoOfInstallment();
+		return $payment; 
+	}
+	
+	
+	
+	public static function getTotalLoanPayments(G_Employee_Loan $gel) {		
+		$details        = G_Employee_Loan_Details_Finder::findAllByLoanId($gel->getId());
+		$total_payments = 0;
+		foreach($details as $d){			
+			$total_payments += $d->getAmountPaid();
+		}
+		return $total_payments;
+	}
+	
+	public static function countTotalRecordsByIsArchive($is_archive) {
+		$sql = "
+			SELECT COUNT(*) as total
+			FROM " . G_EMPLOYEE_LOAN ."
+			WHERE is_archive = ". Model::safeSql($is_archive) ."
+		";		
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+	
+	public static function countTotalRecordsByStatus($status) {
+		$sql = "
+			SELECT COUNT(*) as total
+			FROM " . G_EMPLOYEE_LOAN ."
+			WHERE status = ". Model::safeSql($status) ."
+		";		
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+	
+	public static function getAllLoansByCompanyStructureIdAndEmployeeId($company_structure_id,$employee_id) {
+		$sql = "
+			SELECT gel.id, loan_type,balance,loan_amount,deduction_type,no_of_installment  
+			FROM " . G_EMPLOYEE_LOAN ." gel
+			LEFT JOIN g_employee e ON gel.employee_id = e.id 
+			LEFT JOIN g_loan_type gl ON gel.type_of_loan_id = gl.id 
+			LEFT JOIN g_loan_deduction_type gld ON gel.type_of_deduction_id = gld.id 
+			WHERE
+				 gel.is_archive = 'No' AND 
+				 gel.company_structure_id = " . Model::safeSql($company_structure_id) . " AND 
+				 employee_id=" . Model::safeSql($employee_id) . " 
+			ORDER BY loan_type ASC
+		";
+		return Model::runSql($sql,true);
+	}
+	
+	public static function getLoanDeductionIsNotArchiveByEmployeeIdAndCompanyStructureIdAndPayDate($employee_id,$company_structure_id,$pay_date) {
+		$sql = "
+			SELECT gel.id AS loan_id, gel.company_structure_id,gel.employee_id,gel.status,gel.is_archive,
+				   geld.id AS loan_detail_id,geld.amount,geld.amount_paid,
+				   CONCAT(e.lastname, ', ', e.firstname, ' ', e.middlename) AS employee_name,
+				   glt.loan_type 
+			FROM " . G_EMPLOYEE_LOAN ." gel
+				LEFT JOIN " . EMPLOYEE . " e ON gel.employee_id = e.id 
+				LEFT JOIN " . G_EMPLOYEE_LOAN_DETAILS . " geld on gel.id = geld.loan_id 
+				LEFT JOIN " . G_LOAN_TYPE . " glt ON gel.type_of_loan_id = glt.id
+			WHERE
+				 gel.status = " . Model::safeSql(G_Employee_Loan::IN_PROGRESS) . " AND 
+				 gel.is_archive = " . Model::safeSql(G_Employee_Loan::NO) . " AND 
+				 geld.company_structure_id = " . Model::safeSql($company_structure_id) . " AND 
+				 geld.employee_id = " . Model::safeSql($employee_id) . " AND 
+				 geld.date_of_payment = " . Model::safeSql($pay_date) . "
+			ORDER BY geld.loan_id ASC
+		";	
+		echo $sql;	
+		return Model::runSql($sql,true);
+	}
+}
+?>

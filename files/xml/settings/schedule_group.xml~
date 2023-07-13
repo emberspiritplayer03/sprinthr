@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fields>
+	<schedule_name>Default</schedule_name>	
+	<grace_period>10</grace_period>
+</Fields>

@@ -1,0 +1,1450 @@
+function _load_no_error_tab(element, events) {
+	if (events) {
+		events.onLoading();	
+	}
+	$.get(base_url + 'project_site/no_error', function(data) {
+		$(element).html(data);
+		if (events) {
+			events.onSuccess();	
+		}
+	});
+}
+
+function _load_incomplete_logs_tab(element, events) {
+	if (events) {
+		events.onLoading();	
+	}
+	$.get(base_url + 'project_site/incomplete_logs', function(data) {
+		$(element).html(data);
+		if (events) {
+			events.onSuccess();	
+		}
+	});
+}
+
+function _load_multiple_in_tab(element, events) {
+	if (events) {
+		events.onLoading();	
+	}
+	$.get(base_url + 'project_site/multiple_in', function(data) {
+		$(element).html(data);
+		if (events) {
+			events.onSuccess();	
+		}
+	});
+}
+
+function _load_multiple_out_tab(element, events) {
+	if (events) {
+		events.onLoading();	
+	}
+	$.get(base_url + 'project_site/multiple_out', function(data) {
+		$(element).html(data);
+		if (events) {
+			events.onSuccess();	
+		}
+	});
+}
+
+function _load_no_sched_tab(element, events) {
+	if (events) {
+		events.onLoading();	
+	}
+	$.get(base_url + 'project_site/no_sched', function(data) {
+		$(element).html(data);
+		if (events) {
+			events.onSuccess();	
+		}
+	});
+}
+
+function _load_conflict_sched_tab(element, events) {
+	if (events) {
+		events.onLoading();	
+	}
+	$.get(base_url + 'project_site/conflict_sched', function(data) {
+		$(element).html(data);
+		if (events) {
+			events.onSuccess();	
+		}
+	});
+}
+
+function _load_leave_tab(element, events) {
+	if (events) {
+		events.onLoading();	
+	}
+	$.get(base_url + 'project_site/leave', function(data) {
+		$(element).html(data);
+		if (events) {
+			events.onSuccess();	
+		}
+	});
+}
+
+function _load_rd_tab(element, events) {
+	if (events) {
+		events.onLoading();	
+	}
+	$.get(base_url + 'project_site/rd', function(data) {
+		$(element).html(data);
+		if (events) {
+			events.onSuccess();	
+		}
+	});
+}
+
+function _load_ob_tab(element, events) {
+	if (events) {
+		events.onLoading();	
+	}
+	$.get(base_url + 'project_site/ob', function(data) {
+		$(element).html(data);
+		if (events) {
+			events.onSuccess();	
+		}
+	});
+}
+
+function _editActualTime(employee_id, date, events) {
+    var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+    var title = 'Edit Actual Time ';
+    var width = 300;
+    var height = 'auto';
+
+    if (typeof events.onLoading == "function") {
+        events.onLoading();
+    }
+
+    $.get(base_url + 'project_site/ajax_edit_actual_time_form', {employee_id:employee_id, date:date}, function(data) {
+        closeDialog(dialog_id);
+        $(dialog_id).html(data);
+        dialogGeneric(dialog_id, {
+            title: title,
+            resizable: false,
+            width: width,
+            height: height,
+            modal: true,
+            form_id: '#edit_actual_time_form'
+        });
+
+        $('#edit_actual_time_form').ajaxForm({
+            success:function(o) {
+                if (o.is_saved) {
+                    if (typeof events.onSaved == "function") {
+                        events.onSaved(o);
+                    }
+                } else {
+                    if (typeof events.onError == "function") {
+                        events.onError(o);
+                    }
+                }
+            },
+            dataType:'json',
+            beforeSubmit: function() {
+                if (typeof events.onSaving == "function") {
+                    events.onSaving();
+                }
+                return true;
+            }
+        });
+    });
+}
+
+function _updateAttendanceByEmployee(employee_id, from, to, events) {
+	if (typeof events.onUpdating == "function") {
+		events.onUpdating();
+	}
+	$.get(base_url + 'project_site/_update_attendance_by_employee', {employee_id:employee_id, from:from, to:to}, function(o) {
+		if (o.is_updated) {
+			if (typeof events.onUpdated == "function") {
+				events.onUpdated(o);
+			}				
+		} else {
+			if (typeof events.onError == "function") {
+				events.onError(o);
+			}		
+		}
+	},'json');
+}
+
+function _updateSiteAttendance(from, to, events, frequency_id = 1) {
+	if (typeof events.onUpdating == "function") {
+		events.onUpdating();
+	}
+	$.get(base_url + 'project_site/_update_attendance', {from:from, to:to, frequency_id:frequency_id}, function(o) {
+		if (o.is_updated) {
+			if (typeof events.onUpdated == "function") {
+				events.onUpdated(o);
+			}				
+		} else {
+			if (typeof events.onError == "function") {
+				events.onError(o);
+			}		
+		}
+	},'json');
+}
+
+function _deleteOvertimeByEmployeeAndDate(employee_id, date, events) {
+	var ans = true;
+	if (typeof events.onBeforeDelete == "function") {
+		ans = events.onBeforeDelete();
+	}	
+	if (ans) {
+		if (typeof events.onDeleting == "function") {
+			events.onDeleting();
+		}
+		$.post(base_url + 'project_site/_delete_overtime_by_employee_and_date', {employee_id:employee_id, date:date}, function(o) {
+			if (o.is_deleted) {
+				if (typeof events.onDeleted == "function") {
+					events.onDeleted(o);
+				}				
+			} else {
+				if (typeof events.onError == "function") {
+					events.onError(o);
+				}		
+			}
+		},'json');
+	}
+}
+
+function _deleteOvertime(overtime_id, events) {
+	var ans = true;
+	if (typeof events.onBeforeDelete == "function") {
+		ans = events.onBeforeDelete();
+	}	
+	if (ans) {
+		if (typeof events.onDeleting == "function") {
+			events.onDeleting();
+		}
+		$.post(base_url + 'project_site/_delete_overtime', {overtime_id:overtime_id}, function(o) {
+			if (o.is_deleted) {
+				if (typeof events.onDeleted == "function") {
+					events.onDeleted(o);
+				}				
+			} else {
+				if (typeof events.onError == "function") {
+					events.onError(o);
+				}		
+			}
+		},'json');
+	}
+}
+
+function _importOvertime(events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Import Overtime';
+	var width = 330;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	$.get(base_url + 'project_site/ajax_import_overtime', {}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});
+		$('#import_overtime_form').validationEngine({scroll:false});		
+		$('#import_overtime_form').ajaxForm({
+			success:function(o) {
+				//if(o.no_html){
+					if (o.is_imported) {
+
+						if (typeof events.onImported == "function") {
+							events.onImported(o);
+						}
+					} else {
+						if (typeof events.onError == "function") {
+							events.onError(o);
+						}
+					}
+				//}
+				//else{
+				//	assignApproverSubModal(o);
+				//}
+			},
+			error:function(o){			
+				assignApproverSubModal(o.responseText);
+			},
+			dataType:'json',
+			beforeSubmit: function() {
+				if ($('#overtime_file').val() == '') {
+					return false;	
+				}
+				if (typeof events.onImporting == "function") {
+					events.onImporting();
+				}				
+				return true;
+			}
+		});		
+	});
+}
+
+function assignApproverSubModal(html) {
+	closeTheDialog();
+	closeDialog('#_new_dialog_');
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Assign Approver';
+	var width = 530;
+	var height = 'auto';
+	closeDialog(dialog_id);
+	$(dialog_id).html(html);
+	dialogGeneric(dialog_id, {
+		title: title,
+		resizable: false,
+		width: width,
+		height: height,
+		modal: true
+	});
+
+	$('#assign-approver-form').validationEngine({scroll:false});   
+	$('#assign-approver-form').ajaxForm({
+	  success:function(o) { 
+	  	closeTheDialog();
+		closeDialog('#_new_dialog_');       
+	    if( o.is_success ){ 
+
+	    }
+	    
+	    var current_location = window.location.search;
+		dialogOkBox(o.message,{ok_url: "overtime/period"+current_location});
+	  },
+	  dataType:'json',     
+	  beforeSubmit: function() {        
+	    showLoadingDialog('Saving...');
+	  }
+	});
+
+	$(".btn-assign-approver").click(function(){
+		var id = $(this).attr("id");
+		$(".hide-wrapper").hide();
+		if($(this).hasClass("active")) {
+			$(this).removeClass("active");
+			$("#wrapper-"+id).fadeOut(500);
+		}else{
+			$(".btn-assign-approver").removeClass("active");
+			$(this).addClass("active");
+			$("#wrapper-"+id).fadeIn(500);
+		}
+		
+	});
+}
+
+function _importOvertimePending(h_employee_id,events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Import Overtime';
+	var width = 330;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	$.get(base_url + 'project_site/ajax_import_overtime_pending', {h_employee_id:h_employee_id}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});
+		$('#import_overtime_form').validationEngine({scroll:false});		
+		$('#import_overtime_form').ajaxForm({
+			success:function(o) {
+				if (o.is_imported) {
+					if (typeof events.onImported == "function") {
+						events.onImported(o);
+					}
+				} else {
+					if (typeof events.onError == "function") {
+						events.onError(o);
+					}
+				}
+			},
+			dataType:'json',
+			beforeSubmit: function() {
+				if ($('#overtime_file').val() == '') {
+					return false;	
+				}
+				if (typeof events.onImporting == "function") {
+					events.onImporting();
+				}				
+				return true;
+			}
+		});		
+	});
+}
+
+function _addAttendanceLog(events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Add Attendance Log';
+	var width = 400;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	$.get(base_url + 'project_site/ajax_add_attendance_log', {}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});
+		$('#add_attendance_log').validationEngine({scroll:false});		
+		$('#add_attendance_log').ajaxForm({
+			 success:function(o) {
+                if (o.is_saved) {
+                    if (typeof events.onSaved == "function") {
+                        events.onSaved(o);
+                    }
+                } else {
+                    if (typeof events.onError == "function") {
+                        events.onError(o);
+                    }
+                }
+            },
+            dataType:'json',
+            beforeSubmit: function() {
+                if (typeof events.onSaving == "function") {
+                    events.onSaving();
+                }
+                return true;
+            }
+		});		
+	});
+}
+
+function _importTimesheet(events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Import Timesheet';
+	var width = 330;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	$.get(base_url + 'project_site/ajax_import_timesheet', {}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});
+		$('#import_timesheet_form').validationEngine({scroll:false});		
+		$('#import_timesheet_form').ajaxForm({
+			success:function(o) {
+				if (o.is_imported) {
+					if (typeof events.onImported == "function") {
+						events.onImported(o);
+					}
+				} else {
+					if (typeof events.onError == "function") {
+						events.onError(o);
+					}
+				}
+			},
+			dataType:'json',
+			beforeSubmit: function() {
+				if ($('#timesheet_file').val() == '') {
+					return false;	
+				}
+				if (typeof events.onImporting == "function") {
+					events.onImporting();
+				}				
+				return true;
+			}
+		});		
+	});
+}
+
+function _showTimesheet(date, employee_id, events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Details - ' + date;
+	var width = 'auto';
+	var height = 450;
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	$.get(base_url + 'project_site/ajax_show_timesheet', {date:date, employee_id:employee_id}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});	
+	});
+}
+
+function _editTimesheet(date, employee_id, events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Edit Details - ' + date;
+	var width = 320;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	$.get(base_url + 'project_site/ajax_edit_timesheet', {date:date, employee_id:employee_id}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});
+		$('#edit_timesheet').validationEngine({scroll:false});		
+		$('#edit_timesheet').ajaxForm({
+			success:function(o) {
+				if (o.is_saved) {
+					if (typeof events.onSaved == "function") {
+						events.onSaved(o);
+					}
+				} else {
+					if (typeof events.onError == "function") {
+						events.onError(o);
+					}
+				}
+			},
+			dataType:'json',
+			beforeSubmit: function() {
+				if (typeof events.onSaving == "function") {
+					events.onSaving();
+				}				
+				return true;
+			}
+		});		
+	});
+}
+
+function _filterTimeSheetBreakDown(date_from,date_to, events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Filter Timesheet Breakdown: ' + date_from + ' - ' + date_to;
+	var width = 450;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	$.post(base_url + 'project_site/ajax_fiter_timesheet_breakdown', {date_from:date_from,date_to:date_to}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});
+		$('#filter_timesheet_breakdown_form').validationEngine({scroll:false});	
+		
+	});
+}
+
+function _downloadAdvancedFilteringAttendance(events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Advanced Filtering';
+	var width = 600;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	closeDialog(dialog_id);
+	dialogGeneric("#advance_filter_dialog_wrapper", {
+		title: title,
+		resizable: false,
+		width: width,
+		height: height,
+		form: "#advance_filtering_attendance",
+		modal: true
+	});
+}
+
+function _editAttendanceLogErrorTab(eid, incomplete, events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Edit Attendance Log';
+	var width = 390;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	$.get(base_url + 'project_site/ajax_edit_attendance_log_error_tab', {eid:eid, incomplete:incomplete}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});
+		$('#edit_attendance_log').validationEngine({scroll:false});		
+		$('#edit_attendance_log').ajaxForm({
+			success:function(o) {
+				if (o.is_saved) {
+					if (typeof events.onSaved == "function") {
+						events.onSaved(o);
+					}
+				} else {
+					if (typeof events.onError == "function") {
+						events.onError(o);
+					}
+				}
+			},
+			dataType:'json',
+			beforeSubmit: function() {
+				if (typeof events.onError == "function") {
+					events.onSaving();
+				}				
+				return true;
+			}
+		});		
+	});
+}
+
+function _editAttendanceLog(eid, type, events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Edit Attendance Log';
+	var width = 390;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	$.get(base_url + 'project_site/ajax_edit_attendance_log', {eid:eid, type:type}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});
+		$('#edit_attendance_log').validationEngine({scroll:false});		
+		$('#edit_attendance_log').ajaxForm({
+			success:function(o) {
+				if (o.is_saved) {
+					if (typeof events.onSaved == "function") {
+						events.onSaved(o);
+					}
+				} else {
+					if (typeof events.onError == "function") {
+						events.onError(o);
+					}
+				}
+			},
+			dataType:'json',
+			beforeSubmit: function() {
+				if (typeof events.onError == "function") {
+					events.onSaving();
+				}				
+				return true;
+			}
+		});		
+	});
+}
+
+function _editAttendanceLogV2(eid_in, events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Edit Attendance Log';
+	var width = 390;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	$.get(base_url + 'project_site/ajax_edit_site_attendance_log', {eid_in:eid_in}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});
+		$('#edit_attendance_log').validationEngine({scroll:false});		
+		$('#edit_attendance_log').ajaxForm({
+			success:function(o) {
+				if (o.is_saved) {
+					if (typeof events.onSaved == "function") {
+						events.onSaved(o);
+					}
+				} else {
+					if (typeof events.onError == "function") {
+						events.onError(o);
+					}
+				}
+			},
+			dataType:'json',
+			beforeSubmit: function() {
+				if (typeof events.onError == "function") {
+					events.onSaving();
+				}				
+				return true;
+			}
+		});		
+	});
+}
+
+function _editAttendanceLogTimeInTimeOut(eid_in, eid_out, type_in, type_out, events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Edit Attendance Log';
+	var width = 390;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	$.get(base_url + 'project_site/ajax_edit_site_attendance_log', {eid_in:eid_in, eid_out:eid_out, type_in:type_in, type_out:type_out}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});
+		$('#edit_attendance_log').validationEngine({scroll:false});		
+		$('#edit_attendance_log').ajaxForm({
+			success:function(o) {
+				if (o.is_saved) {
+					if (typeof events.onSaved == "function") {
+						events.onSaved(o);
+					}
+				} else {
+					if (typeof events.onError == "function") {
+						events.onError(o);
+					}
+				}
+			},
+			dataType:'json',
+			beforeSubmit: function() {
+				if (typeof events.onError == "function") {
+					events.onSaving();
+				}				
+				return true;
+			}
+		});		
+	});
+}
+
+function _editAttendance(date, employee_id, events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Edit Attendance';
+	var width = 390;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	$.get(base_url + 'project_site/ajax_edit_attendance', {date:date, employee_id:employee_id}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});
+		$('#edit_attendance').validationEngine({scroll:false});		
+		$('#edit_attendance').ajaxForm({
+			success:function(o) {
+				if (o.is_saved) {
+					if (typeof events.onSaved == "function") {
+						events.onSaved(o);
+					}
+				} else {
+					if (typeof events.onError == "function") {
+						events.onError(o);
+					}
+				}
+			},
+			dataType:'json',
+			beforeSubmit: function() {
+				if (typeof events.onError == "function") {
+					events.onSaving();
+				}				
+				return true;
+			}
+		});		
+	});
+}
+
+function _showAttendance(element, employee_id, start_date, end_date, frequency_id,events) {	
+	// if (typeof events.onLoading == "function") {
+	// 	events.onLoading();
+	// }
+	$.get(base_url + 'project_site/ajax_show_attendance', {employee_id:employee_id, start_date:start_date, end_date:end_date,frequency_id:frequency_id }, function(data) {
+		$(element).html(data);
+		if (typeof events.onLoaded == "function") {
+			events.onLoaded();
+		}
+	});	
+}
+
+function _showAttendanceOtherDetails(date, eid, events) {		
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Other Details';
+	var width = 850;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+
+	$.get(base_url + 'project_site/ajax_attendance_more_details', {date:date, eid:eid}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});
+		
+		/*if (typeof events.onClosed == "function") {
+			events.onClosed();
+		}*/
+	});
+}
+
+function _editTimesheetInOut(date, eid,events) {	
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Timesheet In/Out';
+	var width = 350;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	$.get(base_url + 'project_site/_load_edit_timesheet_inout', {date:date,eid:eid}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});
+		$('#editTimesheetInOut').validationEngine({scroll:false});		
+		$('#editTimesheetInOut').ajaxForm({
+			success:function(o) {
+				/*if (o.is_success == 1) {
+					
+				} */
+				
+				if (typeof events.onSaved == "function") {
+					events.onSaved(o);					
+				}
+			},
+			dataType:'json',
+			beforeSubmit: function() {
+				if (typeof events.onError == "function") {
+					events.onSaving();
+				}				
+				return true;
+			}
+		});		
+	});
+}
+
+function _editTimeInOut(date, employee_id, events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Edit Time In/Out';
+	var width = 320;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	$.get(base_url + 'project_site/ajax_edit_time_in_out', {date:date, employee_id:employee_id}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});
+		$('#edit_time_in_out').validationEngine({scroll:false});		
+		$('#edit_time_in_out').ajaxForm({
+			success:function(o) {
+				if (o.is_saved) {
+					if (typeof events.onSaved == "function") {
+						events.onSaved(o);
+					}
+				} else {
+					if (typeof events.onError == "function") {
+						events.onError(o);
+					}
+				}
+			},
+			dataType:'json',
+			beforeSubmit: function() {
+				if (typeof events.onError == "function") {
+					events.onSaving();
+				}				
+				return true;
+			}
+		});		
+	});
+}
+
+function _editOvertimeInOut(date, employee_id, events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var title = 'Edit Overtime In/Out';
+	var width = 320;
+	var height = 'auto';
+	
+	if (typeof events.onLoading == "function") {
+		events.onLoading();
+	}	
+	
+	$.get(base_url + 'project_site/ajax_edit_overtime_in_out', {date:date, employee_id:employee_id}, function(data) {
+		closeDialog(dialog_id);
+		$(dialog_id).html(data);
+		dialogGeneric(dialog_id, {
+			title: title,
+			resizable: false,
+			width: width,
+			height: height,
+			modal: true
+		});
+		$('#edit_overtime_in_out').validationEngine({scroll:false});		
+		$('#edit_overtime_in_out').ajaxForm({
+			success:function(o) {
+				if (o.is_saved) {
+					if (typeof events.onSaved == "function") {
+						events.onSaved(o);
+					}
+				} else {
+					if (typeof events.onError == "function") {
+						events.onError(o);
+					}
+				}
+			},
+			dataType:'json',
+			beforeSubmit: function() {
+				if (typeof events.onError == "function") {
+					events.onSaving();
+				}				
+				return true;
+			}
+		});		
+	});
+}
+
+function _deleteDTRLog(id, type, events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var width = 350 ;
+	var height = 180
+	var title = 'Notice';
+	var message = 'Delete selected log?';
+	
+	blockPopUp();
+	$(dialog_id).html(message);
+	$dialog = $(dialog_id);
+	$dialog.dialog({
+		title: 'Notice',
+		resizable: false,
+		width: width,
+		height: height,
+		modal: true,
+		close: function() {
+			$dialog.dialog("destroy");
+			$dialog.hide();
+			disablePopUp();
+		},		
+		buttons: {
+			'Yes' : function(){
+				$dialog.dialog("destroy");
+				$dialog.hide();
+				disablePopUp();
+				$.post(base_url+'project_site/_load_delete_logs',{id:id, type: type},
+					function(o){													
+					
+					if (typeof events.onYes == "function") {
+						events.onYes(o);
+					}				
+															   
+				},"json");		
+			},
+			'No' : function(){
+				$dialog.dialog("destroy");
+				$dialog.hide();
+				disablePopUp();
+				if (typeof events.onNo == "function") {
+					events.onNo(o);
+				}
+			}				
+		}
+	}).show().parent().find('.ui-dialog-titlebar-close').hide();
+}
+
+function _deleteDTRLogTimeInTimeOut(eid_in, eid_out, type_in, type_out, events) {
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var width = 350 ;
+	var height = 180
+	var title = 'Notice';
+	var message = 'Delete selected log?';
+	
+	blockPopUp();
+	$(dialog_id).html(message);
+	$dialog = $(dialog_id);
+	$dialog.dialog({
+		title: 'Notice',
+		resizable: false,
+		width: width,
+		height: height,
+		modal: true,
+		close: function() {
+			$dialog.dialog("destroy");
+			$dialog.hide();
+			disablePopUp();
+		},		
+		buttons: {
+			'Yes' : function(){
+				$dialog.dialog("destroy");
+				$dialog.hide();
+				disablePopUp();
+				$.post(base_url+'project_site/_load_delete_site_attendance_logs',{eid_in:eid_in, eid_out:eid_out, type_in:type_in, type_out:type_out},
+					function(o){													
+					
+					if (typeof events.onYes == "function") {
+						events.onYes(o);
+					}				
+															   
+				},"json");		
+			},
+			'No' : function(){
+				$dialog.dialog("destroy");
+				$dialog.hide();
+				disablePopUp();
+				if (typeof events.onNo == "function") {
+					events.onNo(o);
+				}
+			}				
+		}
+	}).show().parent().find('.ui-dialog-titlebar-close').hide();
+}
+
+/* For progress bar */
+
+function showLoadingDialogProgressBar(message, params) {
+
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var width = 400;
+	var height = 'auto';
+	var title = message;
+
+	if (params) {
+		width = (params.width) ? params.width : width ;
+		height = (params.height) ? params.height : height ;
+		title = (params.title) ? params.title : title ;
+	}	
+		
+	blockPopUp();
+	$(dialog_id).html('<div id="myProgressUpdateAttendance"><div id="updateAttendanceProgressBar">1%</div></div><div>Processing...</div>');
+	$dialog = $(dialog_id);
+	$dialog.dialog({
+		title: title,
+		resizable: false,
+		width: width,
+		height: height,
+		modal: true
+	}).show().parent().find('.ui-dialog-titlebar-close').hide();	
+
+	function move_progress_bar_update_attendance() {
+
+		var elem     = document.getElementById("updateAttendanceProgressBar");   
+	  	var width    = 1;
+	  	var interval = 5500;
+	  	//var interval = Math.floor(Math.random() * 2000) + 500; //500;
+
+	  	var id = setInterval(function(){
+	                frameProgressSync();
+	              }, interval);
+
+	  	function frameProgressSync() {
+	    	if (width >= 100) {
+	      		clearInterval(id);
+	    	} else {
+	      		width++; 
+
+		      	var limit_percentage = Math.floor(Math.random() * (92 - 88 + 1) ) + 83;
+
+			    if( width <= limit_percentage ) {
+			    	if(width <= 5) {
+				    	elem.style.width = 5 + '%'; 
+				        elem.innerHTML = width * 1  + '%';
+			    	} else {
+				    	elem.style.width = width + '%'; 
+				        elem.innerHTML = width * 1  + '%';			    		
+			    	}
+
+			    } else {
+
+			    }
+	    	}
+
+	  	}
+
+	}
+
+	$(function(){
+	  move_progress_bar_update_attendance();
+	});	
+
+}
+
+function showLoadingDialogProgressBarFull(message, params) {
+
+	var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+	var width = 400;
+	var height = 'auto';
+	var title = message;
+
+	if (params) {
+		width = (params.width) ? params.width : width ;
+		height = (params.height) ? params.height : height ;
+		title = (params.title) ? params.title : title ;
+	}	
+		
+	blockPopUp();
+	$(dialog_id).html('<div id="myProgressUpdateAttendanceFull"><div id="updateAttendanceProgressBarFull">100%</div></div><div>Completed...</div>');
+	$dialog = $(dialog_id);
+	$dialog.dialog({
+		title: title,
+		resizable: false,
+		width: width,
+		height: height,
+		modal: true
+	}).show().parent().find('.ui-dialog-titlebar-close').hide();	
+
+	function move_progress_bar_update_attendance_full() {
+
+		var elem     = document.getElementById("updateAttendanceProgressBarFull");   
+	  	var width    = 100;
+	  	var interval = 100;
+
+	  	var id = setInterval(function(){
+	                frameProgressSync();
+	              }, interval);
+
+	  	function frameProgressSync() {
+	    	if (width >= 100) {
+	      		clearInterval(id);
+	    	} else {
+	      		width = 100; 
+		    	elem.style.width = width + '%'; 
+		        elem.innerHTML = width * 1  + '%';
+	    	}
+
+	  	}
+
+	}
+
+	$(function(){
+	  move_progress_bar_update_attendance_full();
+	});	
+
+}
+
+//Project Site
+function _withSelectedLogs(logs, action, events) {
+	if (action == 'update') {
+		var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+		var title = 'Batch Update';
+		var width = 'auto';
+		var height = 'auto';
+		
+		if (typeof events.onLoading == "function") {
+			events.onLoading();
+		}	
+		
+		$.post(base_url + 'project_site/ajax_batch_edit_site_attendance_logs', {logs:logs}, function(data) {
+			closeDialog(dialog_id);
+			$(dialog_id).html(data);
+			dialogGeneric(dialog_id, {
+				title: title,
+				resizable: false,
+				width: width,
+				height: height,
+				modal: true
+			});
+			$('#batch_edit_attendance_log').validationEngine({scroll:false});		
+			$('#batch_edit_attendance_log').ajaxForm({
+				success:function(o) {
+					if (o.is_saved) {
+						if (typeof events.onSaved == "function") {
+							events.onSaved(o);
+						}
+					} else {
+						if (typeof events.onError == "function") {
+							events.onError(o);
+						}
+					}
+				},
+				dataType:'json',
+				beforeSubmit: function() {
+					if (typeof events.onError == "function") {
+						events.onSaving();
+					}				
+					return true;
+				}
+			});		
+		});
+	}
+	else if(action == 'delete'){
+		
+
+		var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+		var width = 350 ;
+		var height = 180
+		var title = 'Notice';
+		var message = 'Delete selected logs?';
+	
+			blockPopUp();
+			$(dialog_id).html(message);
+			$dialog = $(dialog_id);
+			$dialog.dialog({
+				title: 'Notice',
+				resizable: false,
+				width: width,
+				height: height,
+				modal: true,
+				close: function() {
+					$dialog.dialog("destroy");
+					$dialog.hide();
+					disablePopUp();
+				},		
+				buttons: {
+					'Yes' : function(){
+						$dialog.dialog("destroy");
+						$dialog.hide();
+						disablePopUp();
+						$.post(base_url+'project_site/ajax_batch_delete_attendance_log', {logs:logs},
+							function(o){													
+							
+							if (typeof events.onYes == "function") {
+								events.onYes(o);
+							}				
+																	   
+						},"json");		
+					},
+					'No' : function(){
+						$dialog.dialog("destroy");
+						$dialog.hide();
+						disablePopUp();
+						if (typeof events.onNo == "function") {
+							events.onNo(o);
+						}
+					}				
+				}
+			}).show().parent().find('.ui-dialog-titlebar-close').hide();
+
+
+	}
+}
+
+function _withSelectedLogsAllErrors(logs, action, events) {
+	if (action == 'update') {
+		var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+		var title = 'Batch Update';
+		var width = 'auto';
+		var height = 'auto';
+		
+		if (typeof events.onLoading == "function") {
+			events.onLoading();
+		}	
+		
+		$.post(base_url + 'project_site/ajax_batch_edit_site_attendance_logs', {logs:logs}, function(data) {
+			closeDialog(dialog_id);
+			$(dialog_id).html(data);
+			dialogGeneric(dialog_id, {
+				title: title,
+				resizable: false,
+				width: width,
+				height: height,
+				modal: true
+			});
+			$('#batch_edit_attendance_log').validationEngine({scroll:false});		
+			$('#batch_edit_attendance_log').ajaxForm({
+				success:function(o) {
+					if (o.is_saved) {
+						if (typeof events.onSaved == "function") {
+							events.onSaved(o);
+						}
+					} else {
+						if (typeof events.onError == "function") {
+							events.onError(o);
+						}
+					}
+				},
+				dataType:'json',
+				beforeSubmit: function() {
+					if (typeof events.onError == "function") {
+						events.onSaving();
+					}				
+					return true;
+				}
+			});		
+		});
+	}
+	else if(action == 'delete'){
+		
+
+		var dialog_id = '#' + DIALOG_CONTENT_HANDLER;
+		var width = 350 ;
+		var height = 180
+		var title = 'Notice';
+		var message = 'Delete selected logs?';
+	
+			blockPopUp();
+			$(dialog_id).html(message);
+			$dialog = $(dialog_id);
+			$dialog.dialog({
+				title: 'Notice',
+				resizable: false,
+				width: width,
+				height: height,
+				modal: true,
+				close: function() {
+					$dialog.dialog("destroy");
+					$dialog.hide();
+					disablePopUp();
+				},		
+				buttons: {
+					'Yes' : function(){
+						$dialog.dialog("destroy");
+						$dialog.hide();
+						disablePopUp();
+						$.post(base_url+'project_site/ajax_batch_delete_attendance_log', {logs:logs},
+							function(o){													
+							
+							if (typeof events.onYes == "function") {
+								events.onYes(o);
+							}				
+																	   
+						},"json");		
+					},
+					'No' : function(){
+						$dialog.dialog("destroy");
+						$dialog.hide();
+						disablePopUp();
+						if (typeof events.onNo == "function") {
+							events.onNo(o);
+						}
+					}				
+				}
+			}).show().parent().find('.ui-dialog-titlebar-close').hide();
+
+
+	}
+}
+
+function _removeAllStaggeredScheduleMemberEmployees(schedule_group_public_id, events) {
+	var ans = true;
+	if (events) {
+		ans = events.onBeforeRemove();
+	}
+	if (ans) {
+		if (events) {
+			events.onLoading();
+		}
+		$.post(base_url + 'project_site/_remove_all_staggered_schedule_member_employees', {schedule_group_public_id:schedule_group_public_id}, function(o) {
+			if (o.is_removed) {
+				if (events) { events.onRemoved(o.message);}
+			} else {
+				if (events) { events.onError(o.message);}
+			}
+		},'json');
+	}
+}
+
+function _removeSchedule(schedule_template, events) {
+	var ans = true;
+	if (events) {
+		ans = events.onBeforeRemove();
+	}
+	if (ans) {
+		if (events) {
+			events.onLoading();
+		}
+		$.post(base_url + 'project_site/_remove_schedule', {schedule_template:schedule_template}, function(o) {
+			if (o.is_removed) {
+				if (events) { events.onRemoved(o.message);}
+			} else {
+				if (events) { events.onError(o.message);}
+			}
+		},'json');
+	}
+}
+
+function _removeAllCompressScheduleMemberEmployees(schedule_group_public_id, events) {
+	var ans = true;
+	if (events) {
+		ans = events.onBeforeRemove();
+	}
+	if (ans) {
+		if (events) {
+			events.onLoading();
+		}
+		$.post(base_url + 'project_site/_remove_all_staggered_schedule_member_employees', {schedule_group_public_id:schedule_group_public_id}, function(o) {
+			if (o.is_removed) {
+				if (events) { events.onRemoved(o.message);}
+			} else {
+				if (events) { events.onError(o.message);}
+			}
+		},'json');
+	}
+}
+
+function _showStaggeredScheduleMembersList(element, schedule_id, events) {
+	if (events) {
+		events.onLoading();	
+	}
+}

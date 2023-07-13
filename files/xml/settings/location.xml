@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<code>PH</code>
+		<location>Philippines</location>
+	</Fields>
+	
+	<Fields>
+		<code>AU</code>
+		<location>Australia</location>
+	</Fields>
+	
+	<Fields>
+		<code>AF</code>
+		<location>Afghanistan</location>
+	</Fields>
+	
+	<Fields>
+		<code>AL</code>
+		<location>Albania</location>
+	</Fields>
+	
+	<Fields>
+		<code>DZ</code>
+		<location>Algeria</location>
+	</Fields>
+	
+	<Fields>
+		<code>AS</code>
+		<location>American Samoa</location>
+	</Fields>
+	
+	<Fields>
+		<code>AD</code>
+		<location>Andorra</location>
+	</Fields>
+	
+	<Fields>
+		<code>AO</code>
+		<location>Angola</location>
+	</Fields>
+	
+	<Fields>
+		<code>AI</code>
+		<location>Anguilla</location>
+	</Fields>
+	
+	<Fields>
+		<code>AQ</code>
+		<location>Antarctica</location>
+	</Fields>
+	
+	<Fields>
+		<code>AG</code>
+		<location>Antigua and Barbuda</location>
+	</Fields>
+	
+	<Fields>
+		<code>AR</code>
+		<location>Argentina</location>
+	</Fields>
+	
+	<Fields>
+		<code>AM</code>
+		<location>Armenia</location>
+	</Fields>
+	
+	<Fields>
+		<code>AW</code>
+		<location>Aruba</location>
+	</Fields>
+	
+	<Fields>
+		<code>AT</code>
+		<location>Austria</location>
+	</Fields>
+	
+	<Fields>
+		<code>AZ</code>
+		<location>Azerbaijan</location>
+	</Fields>
+	
+	<Fields>
+		<code>BS</code>
+		<location>Bahamas</location>
+	</Fields>
+	
+	<Fields>
+		<code>BH</code>
+		<location>Bahrain</location>
+	</Fields>
+	
+	<Fields>
+		<code>BD</code>
+		<location>Bangladesh</location>
+	</Fields>
+	
+	<Fields>
+		<code>BB</code>
+		<location>Barbados</location>
+	</Fields>
+	
+	<Fields>
+		<code>BY</code>
+		<location>Belarus</location>
+	</Fields>
+	
+	<Fields>
+		<code>BE</code>
+		<location>Belgium</location>
+	</Fields>
+	
+	<Fields>
+		<code>BZ</code>
+		<location>Belize</location>
+	</Fields>
+	
+	<Fields>
+		<code>BJ</code>
+		<location>Benin</location>
+	</Fields>
+	
+	<Fields>
+		<code>BM</code>
+		<location>Bermuda</location>
+	</Fields>
+	
+	<Fields>
+		<code>BT</code>
+		<location>Bhutan</location>
+	</Fields>
+	
+	<Fields>
+		<code>BO</code>
+		<location>Bolivia</location>
+	</Fields>
+	
+	<Fields>
+		<code>BA</code>
+		<location>Bosnia and Herzegovina</location>
+	</Fields>
+	
+	<Fields>
+		<code>BW</code>
+		<location>Botswana</location>
+	</Fields>
+	
+	<Fields>
+		<code>BR</code>
+		<location>Brazil</location>
+	</Fields>
+	
+	<Fields>
+		<code>IO</code>
+		<location>British Indian Ocean Territory</location>
+	</Fields>
+	
+	<Fields>
+		<code>VG</code>
+		<location>British Virgin Islands</location>
+	</Fields>
+	
+	<Fields>
+		<code>BN</code>
+		<location>Brunei</location>
+	</Fields>
+	
+	<Fields>
+		<code>BG</code>
+		<location>Bulgaria</location>
+	</Fields>
+	
+	<Fields>
+		<code>BF</code>
+		<location>Burkina Faso</location>
+	</Fields>
+	
+	<Fields>
+		<code>MM</code>
+		<location>Burma (Myanmar)</location>
+	</Fields>
+	
+	<Fields>
+		<code>BI</code>
+		<location>Burundi</location>
+	</Fields>
+	
+	<Fields>
+		<code>KH</code>
+		<location>Cambodia</location>
+	</Fields>
+	
+	<Fields>
+		<code>CM</code>
+		<location>Cameroon</location>
+	</Fields>
+	
+	<Fields>
+		<code>CA</code>
+		<location>Canada</location>
+	</Fields>
+	
+	<Fields>
+		<code>CV</code>
+		<location>Cape Verde</location>
+	</Fields>
+	
+	<Fields>
+		<code>KY</code>
+		<location>Cayman Islands</location>
+	</Fields>
+
+	<Fields>
+		<code>CF</code>
+		<location>Central African Republic</location>
+	</Fields>
+	
+	<Fields>
+		<code>TD</code>
+		<location>Chad</location>
+	</Fields>
+	
+	<Fields>
+		<code>CL</code>
+		<location>Chile</location>
+	</Fields>
+	
+	<Fields>
+		<code>CN</code>
+		<location>China</location>
+	</Fields>
+	
+	<Fields>
+		<code>CX</code>
+		<location>Christmas Island</location>
+	</Fields>
+
+	<Fields>
+		<code>CC</code>
+		<location>Cocos (Keeling) Islands</location>
+	</Fields>
+	
+	<Fields>
+		<code>CO</code>
+		<location>Colombia</location>
+	</Fields>
+	
+	<Fields>
+		<code>KM</code>
+		<location>Comoros</location>
+	</Fields>
+	
+	<Fields>
+		<code>CK</code>
+		<location>Cook Islands</location>
+	</Fields>
+	
+	<Fields>
+		<code>CR</code>
+		<location>Costa Rica</location>
+	</Fields>
+
+	<Fields>
+		<code>HR</code>
+		<location>Croatia</location>
+	</Fields>
+	
+	<Fields>
+		<code>CU</code>
+		<location>Cuba</location>
+	</Fields>
+	
+	<Fields>
+		<code>CY</code>
+		<location>Cyprus</location>
+	</Fields>
+	
+	<Fields>
+		<code>CZ</code>
+		<location>Czech Republic</location>
+	</Fields>
+	
+	<Fields>
+		<code>CD</code>
+		<location>Democratic Republic of the Congo</location>
+	</Fields>
+
+	<Fields>
+		<code>DK</code>
+		<location>Denmark</location>
+	</Fields>
+	
+	<Fields>
+		<code>DJ</code>
+		<location>Djibouti</location>
+	</Fields>
+	
+	<Fields>
+		<code>DM</code>
+		<location>Dominica</location>
+	</Fields>
+	
+	<Fields>
+		<code>DO</code>
+		<location>Dominican Republic</location>
+	</Fields>
+	
+	<Fields>
+		<code>EC</code>
+		<location>Ecuador</location>
+	</Fields>
+
+	<Fields>
+		<code>EG</code>
+		<location>Egypt</location>
+	</Fields>
+	
+	<Fields>
+		<code>SV</code>
+		<location>El Salvador</location>
+	</Fields>
+	
+	<Fields>
+		<code>GQ</code>
+		<location>Equatorial Guinea</location>
+	</Fields>
+	
+	<Fields>
+		<code>ER</code>
+		<location>Eritrea</location>
+	</Fields>
+	
+	<Fields>
+		<code>EE</code>
+		<location>Estonia</location>
+	</Fields>
+	
+	<Fields>
+		<code>ET</code>
+		<location>Ethiopia</location>
+	</Fields>
+	
+	<Fields>
+		<code>FK</code>
+		<location>Falkland Islands</location>
+	</Fields>
+	
+	<Fields>
+		<code>FO</code>
+		<location>Faroe Islands</location>
+	</Fields>
+	
+	<Fields>
+		<code>FJ</code>
+		<location>Fiji</location>
+	</Fields>
+	
+	<Fields>
+		<code>FI</code>
+		<location>Finland</location>
+	</Fields>
+	
+	<Fields>
+		<code>FR</code>
+		<location>France</location>
+	</Fields>
+	
+	<Fields>
+		<code>PF</code>
+		<location>French Polynesia</location>
+	</Fields>
+	
+	<Fields>
+		<code>GA</code>
+		<location>Gabon</location>
+	</Fields>
+	
+	<Fields>
+		<code>GM</code>
+		<location>Gambia</location>
+	</Fields>
+	
+	<Fields>
+		<code>GE</code>
+		<location>Georgia</location>
+	</Fields>
+
+	<Fields>
+		<code>DE</code>
+		<location>Germany</location>
+	</Fields>
+	
+	<Fields>
+		<code>GH</code>
+		<location>Ghana</location>
+	</Fields>
+	
+	<Fields>
+		<code>GI</code>
+		<location>Gibraltar</location>
+	</Fields>
+	
+	<Fields>
+		<code>GR</code>
+		<location>Greece</location>
+	</Fields>
+	
+	<Fields>
+		<code>GL</code>
+		<location>Greenland</location>
+	</Fields>
+
+	<Fields>
+		<code>GD</code>
+		<location>Grenada</location>
+	</Fields>
+	
+	<Fields>
+		<code>GU</code>
+		<location>Guam</location>
+	</Fields>
+	
+	<Fields>
+		<code>GT</code>
+		<location>Guatemala</location>
+	</Fields>
+	
+	<Fields>
+		<code>GN</code>
+		<location>Guinea</location>
+	</Fields>
+	
+	<Fields>
+		<code>GW</code>
+		<location>Guinea-Bissau</location>
+	</Fields>
+
+	<Fields>
+		<code>GY</code>
+		<location>Guyana</location>
+	</Fields>
+	
+	<Fields>
+		<code>HT</code>
+		<location>Haiti</location>
+	</Fields>
+	
+	<Fields>
+		<code>VA</code>
+		<location>Holy See (Vatican City)</location>
+	</Fields>
+	
+	<Fields>
+		<code>HN</code>
+		<location>Honduras</location>
+	</Fields>
+	
+	<Fields>
+		<code>HK</code>
+		<location>Hong Kong</location>
+	</Fields>
+
+	<Fields>
+		<code>HU</code>
+		<location>Hungary</location>
+	</Fields>
+	
+	<Fields>
+		<code>IS</code>
+		<location>Iceland</location>
+	</Fields>
+	
+	<Fields>
+		<code>IN</code>
+		<location>India</location>
+	</Fields>
+	
+	<Fields>
+		<code>ID</code>
+		<location>Indonesia</location>
+	</Fields>
+	
+	<Fields>
+		<code>IR</code>
+		<location>Iran</location>
+	</Fields>
+
+	<Fields>
+		<code>IQ</code>
+		<location>Iraq</location>
+	</Fields>
+	
+	<Fields>
+		<code>IE</code>
+		<location>Ireland</location>
+	</Fields>
+	
+	<Fields>
+		<code>IM</code>
+		<location>Isle of Man</location>
+	</Fields>
+	
+	<Fields>
+		<code>IL</code>
+		<location>Israel</location>
+	</Fields>
+	
+	<Fields>
+		<code>IT</code>
+		<location>Italy</location>
+	</Fields>
+
+	<Fields>
+		<code>CI</code>
+		<location>Ivory Coast</location>
+	</Fields>
+	
+	<Fields>
+		<code>JM</code>
+		<location>Jamaica</location>
+	</Fields>
+	
+	<Fields>
+		<code>JP</code>
+		<location>Japan</location>
+	</Fields>
+	
+	<Fields>
+		<code>JE</code>
+		<location>Jersey</location>
+	</Fields>
+	
+	<Fields>
+		<code>JO</code>
+		<location>Jordan</location>
+	</Fields>
+
+	<Fields>
+		<code>KZ</code>
+		<location>Kazakhstan</location>
+	</Fields>
+	
+	<Fields>
+		<code>KE</code>
+		<location>Kenya</location>
+	</Fields>
+	
+	<Fields>
+		<code>KI</code>
+		<location>Kiribati</location>
+	</Fields>
+	
+	<Fields>
+		<code>KW</code>
+		<location>Kuwait</location>
+	</Fields>
+	
+	<Fields>
+		<code>KG</code>
+		<location>Kyrgyzstan</location>
+	</Fields>
+
+	<Fields>
+		<code>LA</code>
+		<location>Laos</location>
+	</Fields>
+	
+	<Fields>
+		<code>LV</code>
+		<location>Latvia</location>
+	</Fields>
+</Main>

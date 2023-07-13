@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<job_level>Officials and managers</job_level>
+		<minimum_salary>15000</minimum_salary>
+		<maximum_salary>100000</maximum_salary>
+		<step_salary></step_salary>
+	</Fields>
+	
+	<Fields>
+		<job_level>Professionals</job_level>
+		<minimum_salary>12000</minimum_salary>
+		<maximum_salary>50000</maximum_salary>
+		<step_salary></step_salary>
+	</Fields>
+	
+	<Fields>
+		<job_level>Technicians</job_level>
+		<minimum_salary>10000</minimum_salary>
+		<maximum_salary>20000</maximum_salary>
+		<step_salary></step_salary>
+	</Fields>
+	
+	<Fields>
+		<job_level>Sales</job_level>
+		<minimum_salary>10000</minimum_salary>
+		<maximum_salary>18000</maximum_salary>
+		<step_salary></step_salary>
+	</Fields>
+	
+	<Fields>
+		<job_level>Office and clerical</job_level>
+		<minimum_salary>12000</minimum_salary>
+		<maximum_salary>18000</maximum_salary>
+		<step_salary></step_salary>		
+	</Fields>
+	
+	<Fields>
+		<job_level>Craft Workers (skilled)</job_level>
+		<minimum_salary>12000</minimum_salary>
+		<maximum_salary>18000</maximum_salary>
+		<step_salary></step_salary>
+	</Fields>
+	
+	<Fields>
+		<job_level>Operatives (semiskilled)</job_level>
+		<minimum_salary>10000</minimum_salary>
+		<maximum_salary>18000</maximum_salary>
+		<step_salary></step_salary>
+	</Fields>
+	
+	<Fields>
+		<job_level>Laborers (unskilled)</job_level>
+		<minimum_salary>10000</minimum_salary>
+		<maximum_salary>14000</maximum_salary>
+		<step_salary></step_salary>
+	</Fields>	
+	
+	<Fields>
+		<job_level>Service workers</job_level>
+		<minimum_salary>10000</minimum_salary>
+		<maximum_salary>14000</maximum_salary>
+		<step_salary></step_salary>		
+	</Fields>	
+</Main>

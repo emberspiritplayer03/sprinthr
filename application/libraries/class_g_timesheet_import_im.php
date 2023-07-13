@@ -1,0 +1,296 @@
+<?php
+/*
+ *  DEPRECATED - use Timesheet_Raw_Converter_IM
+ *
+	$file = BASE_PATH . 'files/files/import_dtr_im.xlsx';
+	$time = new G_Timesheet_Import_IM($file);
+	$time->import();
+*/
+class G_Timesheet_Import_IM {
+	protected $employee_codes;
+	protected $file_to_import;
+	protected $obj_reader;
+	
+	protected $current_employee_code;
+	protected $current_type;
+	protected $current_time_in;
+	protected $current_time_out;
+	protected $current_date_in;
+	protected $current_date_out;
+	
+	protected $involved_dates = array();
+	
+	public function __construct($file) {
+		$this->file_to_import = $file;
+		$inputFileType = PHPExcel_IOFactory::identify($this->file_to_import);
+		$objReader = PHPExcel_IOFactory::createReader($inputFileType); 				
+		$this->obj_reader = $objReader->load($this->file_to_import);
+		$this->employee_codes = $this->getAllEmployeeCodes();
+	}
+	
+	private function getAllEmployeeCodes() {
+		return G_Employee_Helper::getAllEmployeeCodes();
+	}
+	
+	private function isValidEmployeeCode($value) {
+		$value = trim($value);
+		if (in_array($value, $this->employee_codes)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public function import() {
+		$is_imported = false;						
+		$read_sheet = $this->obj_reader->getActiveSheet();
+		$counter = 1;
+		foreach ($read_sheet->getRowIterator() as $row) {			
+			$this->emptyValues();
+			$cellIterator = $row->getCellIterator();
+		   	foreach ($cellIterator as $cell) {
+				$current_row = $cell->getRow();
+				$cell_value = $cell->getFormattedValue();	
+				$column = $cell->getColumn();
+				$current_column = PHPExcel_Cell::columnIndexFromString($cell->getColumn());
+		
+				if (trim($cell_value) != '') {
+					$this->process($cell_value);
+				}
+			}
+
+			$data[$counter]['employee_code'] = $this->current_employee_code;
+			$data[$counter]['type'] = $this->current_type;
+			$data[$counter]['time_in'] = $this->current_time_in;
+			$data[$counter]['date_in'] = $this->current_date_in;
+			$data[$counter]['time_out'] = $this->current_time_out;
+			$data[$counter]['date_out'] = $this->current_date_out;
+			
+			if ($this->current_type == 'in') {
+				$log = new G_Attendance_Log;
+				$log->setEmployeeCode($this->current_employee_code);
+				$log->setDate($this->current_date_in);
+				$log->setTime($this->current_time_in);
+				$log->setType($this->current_type);
+				$log->save();
+			} else if ($this->current_type == 'out') {
+				$log = new G_Attendance_Log;
+				$log->setEmployeeCode($this->current_employee_code);
+				$log->setDate($this->current_date_out);
+				$log->setTime($this->current_time_out);
+				$log->setType($this->current_type);	
+				$log->save();
+			}
+								
+			$counter++;		
+		}
+
+		$total = count($data);
+		for ($i = 1; $i <= $total; $i++) {
+			$date_1 = $data[$i];
+			$date_2 = $data[$i + 1];
+
+			if ($date_1 && $date_2) {
+				if ($date_1['type'] == 'in' && $date_2['type'] == 'out') {				
+					if ($date_1['employee_code'] == $date_2['employee_code']) {
+						$this->addInvolvedDate($date_1['date_in']);
+						$this->addInvolvedDate($date_2['date_out']);
+						
+						$first_employee_time_in = $first_time_in[$date_1['employee_code']];
+						$first_employee_date_in = $first_date_in[$date_1['employee_code']];
+						if ($first_employee_time_in && $first_employee_date_in) {
+							$final_time_in = $first_employee_time_in;
+							$final_date_in = $first_employee_date_in;
+							$final_time_out = $date_2['time_out'];
+							$final_date_out = $date_2['date_out'];
+							
+							$first_time_in[$date_1['employee_code']] = '';
+							$first_date_in[$date_1['employee_code']] = '';
+						} else {
+							$final_time_in = $date_1['time_in'];
+							$final_date_in = $date_1['date_in'];
+							$final_time_out = $date_2['time_out'];
+							$final_date_out = $date_2['date_out'];
+						}
+						
+						$is_true = $this->addTimesheet($date_1['employee_code'], $final_time_in, $final_time_out, $final_date_in, $final_date_out);
+						if ($is_true) {
+							$is_imported = true;	
+						}
+						$i = $i + 1;
+					} else {
+						$this->addInvolvedDate($date_1['date_in']);						
+						$this->addErrorNoOut($date_1['employee_code'], $date_1['time_in'], $date_1['date_in']);
+					}
+				} else if ($date_1['type'] == 'in' && $date_2['type'] == 'in') {
+					if ($date_1['employee_code'] == $date_2['employee_code']) {
+						$first_time_in[$date_1['employee_code']] = $date_1['time_in'];
+						$first_date_in[$date_1['employee_code']] = $date_1['date_in'];
+					} else {
+						$this->addInvolvedDate($date_1['date_in']);
+						$this->addErrorNoOut($date_1['employee_code'], $date_1['time_in'], $date_1['date_in']);
+					}
+				} else if ($date_1['type'] == 'out' && $date_2['type'] == 'in') {
+					$this->addInvolvedDate($date_1['date_out']);
+					$this->addErrorNoIn($date_1['employee_code'], $date_1['time_out'], $date_1['date_out']);
+				} else if ($date_1['type'] == 'out' && $date_2['type'] == 'out') {
+					if ($date_1['employee_code'] == $date_2['employee_code']) {
+						$last_time_out[$date_1['employee_code']] = $date_2['time_out'];
+						$last_time_out[$date_1['employee_code']] = $date_2['date_out'];
+					} else {
+						$this->addInvolvedDate($date_1['date_out']);
+						$this->addErrorNoIn($date_1['employee_code'], $date_1['time_out'], $date_1['date_out']);
+					}
+				}				
+			} else {
+				if ($date_1['type'] == 'in') {
+					$this->addInvolvedDate($date_1['date_in']);
+					$this->addErrorNoOut($date_1['employee_code'], $date_1['time_in'], $date_1['date_in']);
+				}
+				if ($date_1['type'] == 'out') {
+					$this->addInvolvedDate($date_1['date_out']);
+					$this->addErrorNoIn($date_1['employee_code'], $date_1['time_out'], $date_1['date_out']);
+				}				
+			}
+		}			
+		return $is_imported;
+	}
+	
+	private function addInvolvedDate($date) {
+		$this->involved_dates[$date] = $date;
+	}
+	
+	public function getInvolvedDates() {
+		return $this->involved_dates;	
+	}
+	
+	private function addTimesheet($employee_code, $time_in, $time_out, $date_in, $date_out) {
+		$e = G_Employee_Finder::findByEmployeeCode($employee_code);
+		if ($e) {
+			$is_true = G_Attendance_Helper::recordTimecard($e, $date_in, $time_in, $time_out, $date_in, $date_out);
+			if ($is_true) {
+				return G_Attendance_Helper::updateAttendance($e, $date_in);
+			}
+		} else {
+			$error = new G_Attendance_Error;			
+			$error->setMessage("Employee code can't find: {$employee_code}");
+			$error->setErrorTypeId(G_Attendance_Error::ERROR_INVALID_EMPLOYEE_ID);
+			$error->setDate($date_in);
+			$error->setEmployeeCode($employee_code);
+			$error->addError();
+		}
+	}
+	
+	private function addErrorNoIn($employee_code, $time_out, $date_out) {
+		$e = G_Employee_Finder::findByEmployeeCode($employee_code);
+		if ($e) {
+			$name = $e->getName();
+			$employee_id = $e->getId();
+		}
+		$time = $date_out .' '. date('g:i a', strtotime($time_out));
+		
+		$error = G_Attendance_Error_Finder::findNotFixedByEmployeeCodeAndDateAndErrorType($employee_code, $date_out, G_Attendance_Error::ERROR_NO_IN);
+		if (!$error) {
+			$error = new G_Attendance_Error;
+		}				
+		$error->setMessage("No Time In: {$name}<br>OUT: {$time}");
+		$error->setErrorTypeId(G_Attendance_Error::ERROR_NO_IN);
+		$error->setDate($date_out);
+		$error->setEmployeeId($employee_id);
+		$error->setEmployeeCode($employee_code);
+		$error->addError();
+	}
+	
+	private function addErrorNoOut($employee_code, $time_in, $date_in) {
+		$e = G_Employee_Finder::findByEmployeeCode($employee_code);
+		if ($e) {
+			$name = $e->getName();
+			$employee_id = $e->getId();
+		}
+		$time = $date_in .' '. date('g:i a', strtotime($time_in));
+		
+		$error = G_Attendance_Error_Finder::findNotFixedByEmployeeCodeAndDateAndErrorType($employee_code, $date_in, G_Attendance_Error::ERROR_NO_OUT);
+		if (!$error) {
+			$error = new G_Attendance_Error;
+		}				
+		$error->setMessage("No Time Out: {$name}<br>IN: {$time}");
+		$error->setErrorTypeId(G_Attendance_Error::ERROR_NO_OUT);
+		$error->setDate($date_in);
+		$error->setEmployeeId($employee_id);
+		$error->setEmployeeCode($employee_code);
+		$error->addError();
+	}	
+	
+	public function process($value) {
+		if ($this->isValidEmployeeCode($value)) {
+			$this->current_employee_code = $value;				
+		}		
+		
+		if ($this->isIn($value)) {
+			$this->current_type = 'in';
+		}
+		
+		if ($this->isOut($value)) {
+			$this->current_type = 'out';
+		}
+		
+		if ($this->current_type == 'in' && $this->isValidTime($value)) {
+			$this->current_time_in = $this->getTime($value);
+			$this->current_date_in = $this->getDate($value);
+		}
+		
+		if ($this->current_type == 'out' && $this->isValidTime($value)) {
+			$this->current_time_out = $this->getTime($value);
+			$this->current_date_out = $this->getDate($value);
+		}
+	}
+	
+	private function getTime($value) {
+		$time = strtotime($value);
+		return date('H:i:s', $time);
+	}
+	
+	private function getDate($value) {
+		$date = strtotime($value);
+		return date('Y-m-d', $date);
+	}
+	
+	private function isValidTime($value) {		
+		$time = strtotime($value);
+		if ($time) {
+			return true;
+		} else {
+			return false;	
+		}
+	}
+	
+	private function isIn($value) {
+		$value = trim($value);
+		if (strtolower($value) == 'in') {
+			return true;
+		} else {
+			return false;	
+		}
+	}
+	
+	private function isOut($value) {
+		$value = trim($value);
+		if (strtolower($value) == 'out') {
+			return true;
+		} else {
+			return false;	
+		}
+	}	
+	
+	private function emptyValues() {
+		$this->current_employee_code = '';
+		$this->current_type = '';
+		$this->current_time_in = '';
+		$this->current_time_out = '';
+		$this->current_date_in = '';
+		$this->current_date_out = '';
+		$this->is_valid_in = false;
+		$this->is_valid_out = false;
+	}	
+}
+?>

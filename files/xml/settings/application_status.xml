@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<status>Application</status>
+	</Fields>
+	
+	<Fields>
+		<status>Submitted</status>
+	</Fields>
+	
+	<Fields>
+		<status>1st Interview</status>
+	</Fields>
+	
+	<Fields>
+		<status>2nd Interview</status>
+	</Fields>
+	
+	<Fields>
+		<status>Offer Job</status>
+	</Fields>
+	
+	<Fields>
+		<status>Declined offer</status>
+	</Fields>
+	
+	<Fields>
+		<status>Failed Exam</status>
+	</Fields>
+	
+	<Fields>
+		<status>Backout</status>
+	</Fields>
+	
+	<Fields>
+		<status>Reject</status>
+	</Fields>
+	
+	<Fields>
+		<status>Hired</status>
+	</Fields>
+</Main>
+
+
+
+	 
+	 	
+	 	
+		
+	 	
+	  	
+	 	
+		
+	 	
+	 	
+	

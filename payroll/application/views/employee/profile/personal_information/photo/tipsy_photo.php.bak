@@ -1,0 +1,76 @@
+
+<?php 
+$next_id = G_Employee_Helper::getNextId(Utilities::decrypt($employee_id));
+$next_applicant = G_Employee_Finder::findById($next_id);
+$next_hash = G_Employee_Helper::getNextHash(Utilities::decrypt($employee_id));
+	
+$e = G_Employee_Finder::findById($next_id);
+
+$file = PHOTO_FOLDER.$e->photo;
+
+if(Tools::isFileExist($file)==1 && $e->photo!='') {
+	$filemtime_next = md5($e->photo).date("His");
+	$filename_next = $file;
+	
+}else {
+	$filename_next = BASE_FOLDER. 'images/profile_noimage.gif';
+	
+}			
+$tipsy_next = '<table width=185 border=0 cellpadding=0 cellspacing=0>
+  <tr>
+    <td width=53 rowspan=4><img width=50 src='.$filename_next.'?'.$filemtime_next.'></td>
+    <td width=132><font size=-2>Name: '.$e->lastname .' ' . $e->firstname.'</font></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>';
+
+$prev_id = G_Employee_Helper::getPreviousId(Utilities::decrypt($employee_id));
+$prev_applicant = G_Employee_Finder::findById($prev_id);
+$prev_hash = G_Employee_Helper::getPreviousHash(Utilities::decrypt($employee_id));
+
+$e = G_Employee_Finder::findById($prev_id);
+
+$file = PHOTO_FOLDER.$e->photo;
+
+if(Tools::isFileExist($file)==1 && $e->photo!='') {
+	$filemtime_prev = md5($e->photo).date("His");
+	$filename_prev = $file;
+	
+}else {
+	$filename_prev = BASE_FOLDER. 'images/profile_noimage.gif';
+	
+}
+			
+			
+$tipsy_prev = '<table width=185 border=0 cellpadding=0 cellspacing=0>
+  <tr>
+    <td width=53 rowspan=4><img width=50 src='.$filename_prev.'?'.$filemtime_prev.'></td>
+    <td width=132><font size=-2>Name: '.$e->lastname .' ' . $e->firstname.'</font></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>';
+if($prev_id) {
+	$previous_record = '<a title="'.$tipsy_prev.'" class="tooltip_prev" href="'. url('employee/profile?eid='.Utilities::encrypt($prev_id).'&hash='.$prev_hash.'#personal_details') .'"><< Previous Record </a>';	
+}
+if($next_id) {
+	$next_record  = '<a title="'.$tipsy_next.'" class="tooltip_next" href="'. url('employee/profile?eid='.Utilities::encrypt($next_id).'&hash='.$next_hash.'#personal_details') .'">Next Record >></a>';	
+}
+
+
+?>

@@ -1,0 +1,1 @@
+<img src="<?php echo BASE_FOLDER;?>/application/views/schedule/html/import_restday_schedule.png" />

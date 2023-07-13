@@ -1,0 +1,30 @@
+
+<?php include('includes/_wrappers.php'); ?>
+
+<div class="break-bottom inner_top_option">
+	<div id="detailscontainer" class="detailscontainer_blue details_highlights">
+        <div class="earnings_period_selected">
+            <div class="overtime_title_period"><?php echo $period_selected; ?></div>
+        </div>
+    </div>
+    <div class="select_dept display-inline-block right-space">
+        <strong>Select Department:</strong> <select id="cmb_dept_id" onchange="javascript:load_approved_leave_list_dt(this.value);">
+            <option value="" selected="selected">All</option>
+            <?php foreach($departments as $d){ ?>
+                <option value="<?php echo $d->getId(); ?>"><?php echo $d->getTitle(); ?></option>
+            <?php } ?>
+        </select>
+    </div>
+    <?php if($download_url){ ?>
+        <a id="import_undertime" class="gray_button vertical-middle" href="<?php echo $download_url; ?>"><i class="icon-excel icon-custom"></i> <b>Download Leave</b></a>
+    <?php } ?>
+    <div class="clear"></div>
+</div>
+<div id="leave_list_dt_wrapper" class="dtContainer"></div>
+
+<div id="import_leave_wrapper" style="display:none">
+<?php include 'form/import_leave.php'; ?>
+</div>
+<script>
+	$(function() { load_approved_leave_list_dt(0); });
+</script>

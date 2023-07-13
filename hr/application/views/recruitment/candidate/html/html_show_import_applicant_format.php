@@ -1,0 +1,1 @@
+<img src="<?php echo BASE_FOLDER;?>/application/views/recruitment/candidate/html/import_applicant_screenshot.jpg" />

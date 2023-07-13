@@ -1,0 +1,34 @@
+<?php
+/*
+	Usage:
+		$e = Employee_Factory::get(7);
+		$s = new G_Philhealth;
+		$s->setCompanyShare(500);
+		$s->setEmployeeShare(200);
+		$s->saveToEmployee($e);
+		return $s;
+*/
+class G_Philhealth extends Philhealth {
+	protected $id;
+	
+	public function __construct() {
+	
+	}
+	
+	public function setId($value) {
+		$this->id = $value;	
+	}
+	
+	public function getId() {
+		return $this->id;	
+	}
+	
+	public function save() {
+		return G_Philhealth_Manager::save($this);	
+	}
+	
+	public function saveToEmployee(IEmployee $e) {
+		return G_Philhealth_Manager::saveToEmployee($e, $this);	
+	}
+}
+?>

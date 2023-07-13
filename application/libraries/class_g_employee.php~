@@ -1,0 +1,83 @@
+<?php
+/*
+$e = Employee_Factory::get(1);
+
+$e->getFirstname();*/
+
+class G_Employee extends Employee implements IEmployee {
+
+	public $hash;
+	public $employee_device_id;
+	public $is_archive;
+	
+	const NO  = 'No';
+	const YES = 'Yes';
+
+	public function __construct() {}
+	
+	public function getName() {
+		return $this->lastname .', '. $this->firstname;	
+	}
+	
+	public function getHash() {
+		return $this->hash;
+	}
+	
+	public function setHash($value) {
+		$this->hash = $value;	
+	}
+	
+	public function setEmployeeDeviceId($value) {
+		$this->employee_device_id = $value;
+	}
+	
+	public function getEmployeeDeviceId() {
+		return $this->employee_device_id;
+	}
+	
+	public function setIsArchive($value) {
+		$this->is_archive = $value;
+	}
+	
+	public function getIsArchive() {
+		return $this->is_archive;
+	}
+	
+	public function goToWorkOnRestday($date, $time_in, $time_out) {
+		//$this->goToWork($date, $time_in, $time_out, YES);
+	}
+	
+	public function goToWork($date, $time_in, $time_out, $is_restday = '') {
+
+	}
+	
+	public function absentToWork($date) {
+
+	}
+	
+	public function activeToTerminated($data) {		
+		return G_Employee_Helper::activeToTerminated($data,$this);
+	}	
+	
+	public function save() {
+		return G_Employee_Manager::save($this);
+	}
+	
+	public function updateEmployeeStatus() {
+		return G_Employee_Manager::updateEmployeeStatus($this);
+	}
+	
+	public function archive() {
+		return G_Employee_Manager::archive($this);
+	}
+	
+	public function restore() {
+		return G_Employee_Manager::restore($this);
+	}
+	
+	public function addHash($hash) {
+		return G_Employee_Manager::addHash($this,$hash);
+	}
+}
+
+?>

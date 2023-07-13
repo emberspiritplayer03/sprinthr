@@ -1,0 +1,88 @@
+<?php
+class Break_Time_Schedule_Details {
+	protected $id;
+	protected $header_id;	
+	protected $obj_id;
+	protected $obj_type;
+	protected $break_in;
+	protected $break_out;
+	protected $to_deduct;	
+	protected $to_required_logs;
+	
+	public function __construct() {
+		
+	}
+	
+	public function setId($value) {
+		$this->id = (int) $value;
+	}
+	
+	public function getId() {
+		return $this->id;
+	}
+	
+    public function setHeaderId($value) {    	
+		$this->header_id = $value;
+	}
+	
+	public function getHeaderId() {
+		return $this->header_id;
+	}
+
+	public function setObjId($value) {
+		$this->obj_id = $value;
+	}
+
+	public function getObjId() {
+		return $this->obj_id;
+	}
+
+	public function setObjType($value) {
+		$this->obj_type = $value;
+	}
+
+	public function getObjType() {
+		return $this->obj_type;
+	}
+
+	public function setBreakIn($value) {
+		$new_value = date("H:i:s",strtotime($value));
+		$this->break_in = $new_value;
+	}
+
+	public function getBreakIn() {
+		return $this->break_in;
+	}
+
+	public function setBreakOut($value) {
+		$new_value = date("H:i:s",strtotime($value));
+		$this->break_out = $new_value;
+	}
+
+	public function getBreakOut() {
+		return $this->break_out;
+	}
+
+	public function setToDeduct($value) {
+		$this->to_deduct = isset($value) && !empty($value) ? $value : 0;
+	}
+
+	public function getToDeduct() {
+		return $this->to_deduct;
+	}
+
+
+	public function setToRequiredLogs($to_required_logs)
+	{
+		$this->to_required_logs = isset($to_required_logs) && !empty($to_required_logs) ? $to_required_logs : 0;
+	}
+
+	public function getToRequiredLogs()
+	{
+		return $this->to_required_logs;
+	}
+
+
+
+}
+?>

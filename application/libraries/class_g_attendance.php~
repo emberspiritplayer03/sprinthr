@@ -1,0 +1,81 @@
+<?php
+class G_Attendance extends Attendance {
+	protected $day_type_string; // Legal, Special, Restday, Regular
+		
+	public function __construct() {
+		
+	}
+	
+	public function getDayTypeString() {
+		if ($this->is_restday) {
+			return "Rest Day";	
+		} else if ($this->is_holiday) {
+			if ($this->holiday_type == Holiday::LEGAL) {
+				return "Legal Holiday";
+			} else if ($this->holiday_type == Holiday::SPECIAL) {
+				return "Special Holiday";
+			}
+		} else {
+			return "Regular";	
+		}
+	}
+	
+	/*
+	Usage:
+		Insert:
+		$a = new G_Attendance;
+		$a->setDate('2011-01-10');
+		$a->setAsPaid();
+		$a->setAsPresent();
+		$a->setAsRestday();
+		$a->setLeaveId(Leave::MATERNITY);
+		$a->setAsSuspended();
+		$h = G_Holiday_Finder::findById(9);
+		$a->setHoliday($h);
+		
+		$t = new G_Timesheet;
+		$t->setScheduledTimeIn('9:00:00');
+		$t->setScheduledTimeOut('18:00:00');
+		$t->setTimeIn('09:00:00');
+		$t->setTimeOut('18:00:00');
+		$t->setOverTimeIn('18:00:00');
+		$t->setOverTimeOut('19:00:00');
+		$t->setTotalHoursWorked(8);
+		
+		$t->setNightShiftHours(23);
+		$t->setNightShiftHoursSpecial(23);
+		$t->setNightShiftHoursLegal(23);
+		$t->setHolidayHoursSpecial(23);
+		$t->setHolidayHoursLegal(23);
+		$t->setOvertimeHours(23);
+		$t->setLateHours(23);
+		$t->setUndertimeHours(23);		
+		
+		$a->setTimesheet($t);
+		
+		$e = G_Employee_Finder::findById(1);
+		$a->recordToEmployee($e);
+		
+		Update:
+		$e = G_Employee_Finder::findById(1);
+		$a = G_Attendance_Finder::findByEmployeeAndDate($e, '2011-01-11');
+		$a->setAsPresent();
+		$t = $a->getTimesheet();
+		$t->setTotalHoursWorked(20);
+		$a->setTimesheet($t);
+		$a->recordToEmployee($e);
+	*/
+	public function recordToEmployee(IEmployee $e) {
+		return G_Attendance_Manager::recordToEmployee($e, $this);
+	}
+	
+	/*
+		Usage:
+		$a = G_Attendance_Finder::findById(1);
+		$a->delete();
+	*/
+	public function delete() {
+		return G_Attendance_Manager::delete($this);	
+	}
+}
+?>

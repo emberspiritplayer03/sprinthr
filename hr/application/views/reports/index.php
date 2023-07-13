@@ -1,0 +1,101 @@
+<div id="sss_r1a_wrapper"></div>
+<div id="philhealth_wrapper"></div>
+<div id="pagibig_wrapper"></div>
+<div id="tax_wrapper"></div>
+<div id="annual_tax_wrapper"></div>
+<div id="alphalist_wrapper"></div>
+<div id="bir_2316_wrapper"></div>
+<div id="yearly_bonus_wrapper"></div>
+<div id="contribution_wrapper"></div>
+<div id="payslip_wrapper"></div>
+<div id="payroll_register_wrapper"></div>
+<div id="cost_center_wrapper"></div>
+<div id="cash_file_wrapper"></div>
+<div id="payable_wrapper"></div>
+<div id="bank_wrapper"></div>
+<div id="other_earnings_wrapper"></div>
+
+<div id="applicant_list_wrapper"></div>
+<div id="applicant_by_schedule_wrapper"></div>
+<div id="applicants_education_training_wrapper"></div>
+<div id="applications_received_wrapper"></div>
+<div id="applicants_statistics_wrapper"></div>
+<div id="planned_activities_wrapper"></div>
+<div id="pending_applicants_wrapper"></div>
+<div id="job_advertisements_wrapper"></div>
+
+<div id="task_overview_wrapper"></div>
+<div id="anniversaries_wrapper"></div>
+<div id="power_of_attorney_wrapper"></div>
+<div id="education_wrapper"></div>
+<div id="employee_entered_left_wrapper"></div>
+<div id="family_members_wrapper"></div>
+<div id="birthday_list_wrapper"></div>
+<div id="vehicle_list_wrapper"></div>
+<div id="telephone_directory_wrapper"></div>
+<div id="time_spend_pay_scale_wrapper"></div>
+<div id="hr_master_data_sheet_wrapper"></div>
+<div id="flexible_employee_data_wrapper"></div>
+<div id="list_of_employees_wrapper"></div>
+<div id="leave_overview_wrapper"></div>
+<div id="leave_converted_wrapper"></div>
+<div id="headcount_development_wrapper"></div>
+<div id="nationalities_wrapper"></div>
+<div id="salary_list_wrapper"></div>
+<div id="certificate_of_employment_wrapper"></div>
+
+<div id="profile_matchup_wrapper"></div>
+<div id="profile_evaluation_wrapper"></div>
+<div id="qualification_wrapper"></div>
+
+<div id="development_plan_wrapper"></div>
+<div id="development_item_wrapper"></div>
+<div id="appraisal_evaluation_wrapper"></div>
+<div id="qualification_template_wrapper"></div>
+
+<div id="development_plan_template_wrapper"></div>
+<div id="appraisal_template_wrapper"></div>
+<div id="careers_wrapper"></div>
+<div id="vacant_obselete_position_wrapper"></div>
+<div id="qualification_overview_wrapper"></div>
+
+<div id="eligible_employee_wrapper"></div>
+<div id="participation_wrapper"></div>
+<div id="total_compensation_statement_wrapper"></div>
+<div id="job_salary_rate_wrapper"></div>
+<div id="plan_labor_cost_wrapper"></div>
+
+<div id="personal_work_schedule_wrapper"></div>
+<div id="daily_work_schedule_wrapper"></div>
+<div id="attendance_absence_data_wrapper"></div>
+<div id="display_absence_quota_information_wrapper"></div>
+
+<div id="display_manpower_count_wrapper"></div>
+<div id="display_end_of_contract_wrapper"></div>
+<div id="display_daily_time_record_wrapper"></div>
+<div id="display_incomplete_time_in_out_wrapper"></div>
+<div id="display_incorrect_shift_wrapper"></div>
+<div id="display_timesheet_wrapper"></div>
+<div id="display_final_pay_wrapper"></div>
+<div id="display_disciplinary_action_wrappers"></div>
+<div id="display_loans_wrapper"></div>
+<div id="display_overtime_wrapper"></div>
+<div id="display_undertime_wrapper"></div>
+<div id="display_leave_wrapper"></div>
+<div id="display_incentive_leave_wrapper"></div>
+<div id="display_leave_balance_wrapper"></div>
+<div id="display_employment_status_wrapper"></div>
+<div id="display_employee_details_wrapper"></div>
+<div id="display_ee_er_contribution_wrapper"></div>
+<div id="display_resigned_employees_wrapper"></div>
+<div id="display_terminated_employees_wrapper"></div>
+<div id="display_birthday_wrapper"></div>
+<div id="display_shift_schedule_wrapper"></div>
+<div id="display_coe_wrapper"></div>
+<div id="display_perfect_attendance_wrapper"></div>
+<div id="display_actual_hours_wrapper"></div>
+<div id="display_required_shift_wrapper"></div>
+<div id="display_government_remittances_wrapper"></div>
+<div id="display_last_pay_wrapper"></div>
+
+<div id="audit_trail_data_wrapper"></div>

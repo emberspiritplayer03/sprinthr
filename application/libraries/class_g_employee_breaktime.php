@@ -1,0 +1,110 @@
+<?php
+class G_Employee_Breaktime extends Employee_Breaktime {
+	
+	public function __construct() {
+		
+	}
+	
+	public function save() {		
+		return G_Employee_Breaktime_Manager::save($this);
+	}
+	
+	public function delete() {
+		return G_Employee_Breaktime_Manager::delete($this);
+	}
+
+	public function validateBreaktime(G_Attendance $a) {
+		$return['update_attendance'] = true;		
+		$timesheet = $a->getTimesheet();
+
+		// Get Breaktime schedule
+		$e = G_Employee_Finder::findById($a->getEmployeeId());
+		$schedule['schedule_in']  = $timesheet->getScheduledTimeIn();
+        $schedule['schedule_out'] = $timesheet->getScheduledTimeOut();
+        $day_type = array();
+
+        if( $a->isHoliday() == 1 && $a->getHoliday() != '' ){
+            $h = $a->getHoliday();
+            if( $h->getType() == Holiday::LEGAL ){
+                $day_type[] = "applied_to_legal_holiday";
+            }else{
+                $day_type[] = "applied_to_special_holiday";
+            }
+        }elseif( $a->isRestday() == 1 ){
+            if( $timesheet->getTotalScheduleHours() > 0 ){                   
+                $day_type[] = "applied_to_restday";
+            }else{                    
+                $day_type[] = "applied_to_regular_day";
+            }
+        }else{
+            $day_type[] = "applied_to_regular_day";
+        }
+		$breaktime_schedule_array = (isset($e) && $e != false) ? $e->getEmployeeBreakTimeBySchedule($schedule, $day_type) : [];
+
+		if(empty($breaktime_schedule_array)) {
+			return $return;
+		}
+
+		$breaktime_schedule = explode(" to ", $breaktime_schedule_array[0]);	
+		$breaktime_in_schedule = date("H:i:s", strtotime($breaktime_schedule[0]));
+		$breaktime_out_schedule = date("H:i:s", strtotime($breaktime_schedule[1]));
+
+		// SAVE BREAK TIME IN
+		$breaktime_in_schedule_less_15mins = date("H:i:s", strtotime($breaktime_in_schedule . " -15 minutes"));
+
+		if(Tools::isWithinTime($breaktime_in_schedule_less_15mins, $breaktime_out_schedule, $timesheet->getTimeOut())) 
+		{
+			$late_hours = 0;
+			if(strtotime($timesheet->getTimeOut()) < strtotime($breaktime_in_schedule)) {
+				$late_hours = Tools::newComputeHoursDifferenceByDateTime($a->getDate() . " " . $timesheet->getTimeOut(), $a->getDate() . " " . $breaktime_in_schedule);
+				if($late_hours <= 0) {
+					$late_hours = Tools::computeHoursDifferenceByDateTime($a->getDate() . " " . $timesheet->getTimeOut(), $a->getDate() . " " . $breaktime_in_schedule);
+				}			
+			}
+
+			$eb = G_Employee_Breaktime_Finder::findByEmployeeIdAndDate($a->getEmployeeId(), $a->getDate());
+			if(!$eb) {
+				$eb = new G_Employee_Breaktime();
+			}
+			$eb->setEmployeeId($a->getEmployeeId());
+			$eb->setDate($a->getDate());
+			$eb->setTimeIn($timesheet->getTimeOut());
+			$eb->setLateHours($late_hours);
+			$eb->save();                                                      
+		}
+
+		// SAVE BREAK TIME OUT
+		$breaktime_out_schedule_plus_1hr = date("H:i:s", strtotime($breaktime_out_schedule . " +1 hour"));
+
+		if(Tools::isWithinTime($breaktime_in_schedule, $breaktime_out_schedule_plus_1hr, $timesheet->getTimeIn())) 
+		{
+			$late_hours = 0;
+
+			if(strtotime($timesheet->getTimeIn()) > strtotime($breaktime_out_schedule)) {
+				$late_hours = Tools::newComputeHoursDifferenceByDateTime($a->getDate() . " " . $timesheet->getTimeIn(), $a->getDate() . " " . $breaktime_out_schedule ); 	
+				if($late_hours <= 0 ) {
+					$late_hours = Tools::computeHoursDifferenceByDateTime($a->getDate() . " " . $timesheet->getTimeIn(), $a->getDate() . " " . $breaktime_out_schedule ); 	
+				}
+			}
+
+			$eb = G_Employee_Breaktime_Finder::findByEmployeeIdAndDate($a->getEmployeeId(), $a->getDate());
+			if(!$eb) {
+				$eb = new G_Employee_Breaktime();
+				$eb->setLateHours($late_hours);
+			}else{
+				$eb->setLateHours($eb->getLateHours() + $late_hours);
+			}
+			$eb->setEmployeeId($a->getEmployeeId());
+			$eb->setDate($a->getDate());
+			$eb->setTimeOut($timesheet->getTimeIn());
+			$eb->save(); 
+
+			//$return['update_attendance'] = false;                                                     
+		}
+
+		return $return;
+
+	}
+
+}
+?>

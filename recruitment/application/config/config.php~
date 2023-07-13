@@ -1,0 +1,58 @@
+<?php
+// leave '/' if you don't have base folder. http://example.com/<This is my base folder>/index.php
+// example: '/my_folder/my_another_folder/'
+
+define('MAIN_FOLDER','/internal-projects/products/development/sprint_hr/');
+
+define('BASE_FOLDER', '/internal-projects/products/development/sprint_hr/recruitment/');
+
+define('HR_BASE_FOLDER', '/internal-projects/products/development/sprint_hr/hr/');
+
+define('CLERK_BASE_FOLDER', '/internal-projects/products/development/sprint_hr/clerk/');
+
+define('CLERK_SCHEDULE_BASE_FOLDER', '/internal-projects/products/development/sprint_hr/clerk_schedule/');
+
+define('EMPLOYEE_BASE_FOLDER', '/internal-projects/products/development/sprint_hr/employee/');
+
+define('PAYROLL_BASE_FOLDER', '/internal-projects/products/development/sprint_hr/payroll/');
+
+//leave '/' if you don't have folder
+define('LIBRARY_FOLDER', '/'); //this is for folder library in root directory
+
+define('BASE_FOLDER_EDITOR', 'internal-projects/products/development/sprint_hr/recruitment/files/'); //this is for ckeditor// upload image
+
+define('HIDE_INDEX_PAGE', false);
+
+define('MAINTENANCE_MODE', false); 	// Maintenance Mode
+
+define('INDEX_PAGE', 'index.php');
+
+define('THEME', 'default');
+
+define('MAIN_THEME','hr'); // this is for css
+
+define('ENCRYPTION_KEY', 'webgroundz');
+
+define('PHOTO_FOLDER',BASE_FOLDER.'files/photo/');
+
+define('FILES_FOLDER',BASE_FOLDER.'files/files/');
+
+
+// ==================================================
+
+define('DEFAULT_CONTROLLER', 'menu');
+
+define('DEFAULT_METHOD', 'index');
+
+define('IF_INVALID_CONTROLLER', 'page'); // use this controller if the controller supplied in the url is invalid
+
+define('CONTROLLER_VAR', 'controller');
+
+define('METHOD_VAR', 'method');
+
+// ====================================================
+// Reflected to _init.js
+
+define('CONTENT_BODY_ID', '_content-body_'); // The content handler. Must be seen in template.php
+
+?>

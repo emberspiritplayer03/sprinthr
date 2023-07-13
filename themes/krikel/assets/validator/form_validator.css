@@ -1,0 +1,96 @@
+/* = Validation error
+-----------------------------------------------------------------------------------------------------*/
+
+/* Unsupported browsers */
+
+.orange_rbcontent { padding: 0.4em; }
+.orange_rbroundbox { width: 100%; }
+
+#unsupported {
+  font-weight: bold;
+  text-align: left;
+}
+
+/*#content {
+  padding-top: 15px;
+}*/
+
+/* Signup form */
+
+.validationForm table {
+  border-spacing: 0px;
+  border-collapse: collapse;
+  empty-cells: show;
+}
+
+.validationForm .label {
+  padding-top: 2px;
+  padding-right: 8px;
+  vertical-align: top;
+  text-align: right;
+  width: 125px;
+  white-space: nowrap;
+}
+
+.validationForm .field {
+  padding-bottom: 10px;
+  white-space: nowrap;
+}
+
+.validationForm .status {
+  padding-top: 2px;
+  padding-left: 8px;
+  vertical-align: top;
+  width: 246px;
+  white-space: nowrap;
+}
+
+.validationForm .textfield {
+  width: 150px;
+}
+
+.validationForm div.error {
+  background:url(unchecked.gif) no-repeat 0px 0px;
+  padding-left: 16px;
+  padding-bottom: 2px;
+  font-weight: bold;
+  color: #EA5200;
+}
+
+.validationForm label.error {
+	font-weight: normal;
+	margin-left:5px;
+	background:#f4d2dc url(unchecked.gif) no-repeat 5px 5px;
+	padding:3px 10px 3px 22px;
+	text-align:left;
+	border:1px solid #d3899e;
+	color:#333333;
+	min-width:220px;
+	position:absolute;
+}
+div.form_holder2 label.error {
+	font-weight: normal;
+	margin-left:-35px;
+	text-align:left;
+	padding:0px;
+	background-position:left;
+	background-color:#f0ebe5;
+	border:0;
+	color:#333333;
+	min-width:15px;
+	max-width:15px;
+	position:absolute;
+}
+
+.validationForm label.checked {
+  background:url(checked.gif) no-repeat 0px 5px;
+  margin-left:5px;
+  border:0;
+  position:absolute;
+}
+
+.validationForm .success_msg {
+  font-weight: bold;
+  color: #0060BF;
+  margin-left: 19px;
+}

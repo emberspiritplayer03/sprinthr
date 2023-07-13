@@ -1,0 +1,35 @@
+<h2 class="field_title"><?php echo $title; ?></h2>
+
+<?php 
+include 'form/compensation_edit.php';
+?>
+<table id="compensation_table_wrapper" class="table_form" width="498" border="0" cellpadding="3" cellspacing="3">
+  <tr>
+    <td width="156" align="right" valign="top">Pay Rate:</td>
+    <td valign="top"><?php echo $employee_rate->job_level; ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Minimum Salary:</td>
+    <td width="241" valign="top"><?php echo $employee_rate->minimum_salary; ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Maximum Salary:</td>
+    <td valign="top"><?php echo $employee_rate->maximum_salary; ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Basic Salary:</td>
+    <td valign="top"><?php echo $employee_salary->basic_salary; ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Pay Frequency:</td>
+    <td valign="top"><?php echo $employee_pay_period->pay_period_name; ?></td>
+  </tr>
+  <tr>
+    <td align="right" valign="top">Cut Off</td>
+    <td valign="top"><?php echo $employee_pay_period->cut_off; ?></td>
+  </tr>
+  <tr>
+    <td align="right" valign="top">&nbsp;</td>
+    <td valign="top"><input type="submit" name="button" id="button" value="Edit" onclick="javascript:loadCompensationForm();"  /></td>
+  </tr>
+</table>

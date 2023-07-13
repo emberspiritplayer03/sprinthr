@@ -1,0 +1,45 @@
+<style>
+/*div.button-container{ margin:10px 0;}*/
+</style>
+<script type="text/javascript">
+//	$(function() {
+//		$("#tabs").tabs();
+//	});
+</script>
+
+<!--<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Subdivision Type</a></li>       		
+	</ul>
+	<div id="tabs-1">
+    	<div class="button-container" align="right">
+        	<a href="javascript:void(0);" onclick="javascript:load_add_new_subdivision_type();">Add New</a>
+        </div>
+		<div id="subdivsion-list"></div>
+	</div>    
+</div>-->
+<?php 
+	//chdir(dirname(__FILE__));
+	//include_once('../includes/modal_forms.php'); 
+?>
+<script>
+//load_subdivision_list();
+</script>
+
+<div class="ui-state-highlight ui-corner-all">
+<span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-info"></span>
+Subdivision Type: <a href="javascript:void(0);" onclick="javascript:load_add_new_subdivision_type();">Add New</a>
+</div>
+<br />
+<div class="yui-skin-sam">
+	<div id="subdivision_type_datatable"></div>
+</div>
+
+<script>					  
+load_subdivision_type_datatable();
+</script>
+
+<?php 
+	chdir(dirname(__FILE__));
+	include_once('../includes/modal_forms.php'); 
+?>

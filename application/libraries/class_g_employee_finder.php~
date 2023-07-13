@@ -1,0 +1,544 @@
+<?php
+class G_Employee_Finder {
+	public static function findAllByGroup(IGroup $g) {
+		$sql = "
+			SELECT e.id, e.employee_code, e.firstname, e.lastname
+			FROM ". EMPLOYEE ." e, ". G_EMPLOYEE_SUBDIVISION_HISTORY ." g
+			WHERE g.company_structure_id = ". Model::safeSql($g->getId()) ."
+			AND e.id = g.employee_id
+			ORDER BY e.lastname
+		";
+
+		return self::getRecords($sql);
+	}
+	
+	public static function findAllInArrayId($array_id) {
+		//$array_id = "1,3,4"; <- coma separated
+		$sql = "
+			SELECT e.id,
+			e.hash, 
+			e.employee_code, 
+			e.photo,
+			e.salutation, 
+			e.firstname, 
+			e.lastname, 
+			e.middlename,
+			e.extension_name, 
+			e.nickname, 
+			e.birthdate, 
+			e.gender, 
+			e.marital_status, 
+			e.nationality,
+			e.number_dependent, 
+			e.sss_number, 
+			e.tin_number,
+			e.pagibig_number,
+			e.philhealth_number,
+			e.hired_date,
+			e.terminated_date,
+			e.employment_status_id,
+			e.eeo_job_category_id,
+			e.e_is_archive
+			FROM g_employee e
+			WHERE e.id IN(". $array_id .") AND e.e_is_archive =" . Model::safeSql(G_Employee::NO) . "			
+		";		
+		return self::getRecords($sql);
+	}
+	
+	public static function findAllByHiredDateRange($start_date, $end_date) {
+		$sql = "
+			SELECT e.id, e.hash, e.employee_code, e.photo, e.firstname, e.salutation,e.lastname, e.middlename,e.extension_name, e.nickname, e.birthdate, e.gender, e.marital_status, e.nationality, e.number_dependent,e.sss_number, e.tin_number,e.pagibig_number,e.philhealth_number,e.hired_date,e.terminated_date,e.employment_status_id,e.e_is_archive
+			FROM g_employee e			
+			WHERE (e.hired_date >= ". Model::safeSql($start_date) ." AND e.hired_date <= ". Model::safeSql($end_date) .")
+			ORDER BY e.lastname
+		";		
+
+		return self::getRecords($sql);
+	}
+	
+	public static function findByPayslipPeriod($start_date, $end_date) {
+		$sql = "
+			SELECT e.id, e.hash, e.employee_code, e.photo, e.firstname, e.salutation,e.lastname, e.middlename,e.extension_name, e.nickname, e.birthdate, e.gender, e.marital_status, e.nationality,e.number_dependent, e.sss_number, e.tin_number,e.pagibig_number,e.philhealth_number,e.hired_date,e.terminated_date,e.employment_status_id,e.e_is_archive
+			FROM g_employee_payslip p, g_employee e			
+			WHERE (p.period_start = ". Model::safeSql($start_date) ." AND p.period_end = ". Model::safeSql($end_date) .")
+			AND p.employee_id = e.id
+			ORDER BY e.lastname
+		";
+		return self::getRecords($sql);
+	}
+	
+	public static function findByPayslipPeriodAndIsNotArchive($start_date, $end_date) {
+		$sql = "
+			SELECT e.id, e.e_is_archive, e.hash, e.employee_code, e.photo, e.firstname, e.salutation,e.lastname, e.middlename,e.extension_name, e.nickname, e.birthdate, e.gender, e.marital_status, e.nationality,e.number_dependent, e.sss_number, e.tin_number,e.pagibig_number,e.philhealth_number,e.hired_date,e.terminated_date,e.employment_status_id,e.e_is_archive
+			FROM g_employee_payslip p, g_employee e			
+			WHERE (p.period_start = ". Model::safeSql($start_date) ." AND p.period_end = ". Model::safeSql($end_date) .")
+			AND p.employee_id = e.id
+			AND e.e_is_archive =" . Model::safeSql(G_Employee::NO) . "
+			ORDER BY e.lastname
+		";
+		return self::getRecords($sql);
+	}
+	
+	public static function findByPayslipDateRange($start_date, $end_date,$limit = '') {
+		$limit = ($limit!='')? 'LIMIT ' . $limit : '';
+		$sql = "
+			SELECT e.id, e.hash, e.employee_code, e.photo, e.firstname, e.salutation,e.lastname, e.middlename,e.extension_name, e.nickname, e.birthdate, e.gender, e.marital_status, e.nationality,e.number_dependent, e.sss_number, e.tin_number,e.pagibig_number,e.philhealth_number,e.hired_date,e.terminated_date,e.employment_status_id,e.e_is_archive
+			FROM g_employee_payslip p, g_employee e			
+			WHERE (p.period_start >= " . Model::safeSql($start_date) . " AND p.period_end <= " . Model::safeSql($end_date) . ") 
+			AND (p.employee_id = e.id)
+			GROUP BY e.id 
+			ORDER BY e.lastname ASC 			 
+			" . $limit . "
+		";						
+		return self::getRecords($sql);
+	}
+	
+	public static function findByPayslipDateRangeIsNotArchive($start_date, $end_date,$limit = '') {
+		$limit = ($limit!='')? 'LIMIT ' . $limit : '';
+		$sql = "
+			SELECT e.id, e.e_is_archive, e.hash, e.employee_code, e.photo, e.firstname, e.salutation,e.lastname, e.middlename,e.extension_name, e.nickname, e.birthdate, e.gender, e.marital_status, e.nationality,e.number_dependent, e.sss_number, e.tin_number,e.pagibig_number,e.philhealth_number,e.hired_date,e.terminated_date,e.employment_status_id,e.e_is_archive
+			FROM g_employee_payslip p, g_employee e			
+			WHERE (p.period_start >= " . Model::safeSql($start_date) . " AND p.period_end <= " . Model::safeSql($end_date) . ") 
+			AND (p.employee_id = e.id)
+			AND e.e_is_archive =" . Model::safeSql(G_Employee::NO) . "
+			GROUP BY e.id 
+			ORDER BY e.lastname ASC 			 
+			" . $limit . "
+		";						
+		return self::getRecords($sql);
+	}	
+	
+	public static function findByEmployeeCode($employee_code) {
+		if (!$employee_code) {
+			return false;	
+		}
+		
+		$sql = "
+			SELECT e.id, e.hash, e.employee_code, e.photo, e.firstname, e.salutation,e.lastname, e.middlename,e.extension_name, e.nickname, e.birthdate, e.gender, e.marital_status, e.nationality,e.number_dependent, e.sss_number, e.tin_number,e.pagibig_number,e.philhealth_number,e.hired_date,e.terminated_date,e.employment_status_id,e.e_is_archive
+			FROM g_employee e
+			WHERE e.employee_code = ". Model::safeSql($employee_code) ."	
+			LIMIT 1		
+		";		
+		return self::getRecord($sql);
+	}
+	
+	public static function searchActiveByExactFirstnameAndLastnameAndEmployeeCode($query) {
+		$sql = "
+			SELECT e.id, e.hash, e.firstname, e.lastname, e.employee_code,e.middlename,e.extension_name
+			FROM g_employee e, g_employee_job_history eh		
+			WHERE (e.firstname =" . Model::safeSql($query) . " OR e.lastname =" . Model::safeSql($query) . " OR e.employee_code =" . Model::safeSql($query) . ")
+			AND (e.e_is_archive =" . Model::safeSql(G_Employee::NO) . ") 
+			AND (e.employee_status_id <> " . Model::safeSql(G_Settings_Employee_Status::RESIGNED) . " 
+				  AND  e.employee_status_id <> " . Model::safeSql(G_Settings_Employee_Status::TERMINATED) . 
+				 ")
+			AND e.id = eh.employee_id
+			AND 
+			(
+				(
+					". Model::safeSql(Tools::getGmtDate('Y-m-d')) ." >= eh.start_date
+					AND
+					". Model::safeSql(Tools::getGmtDate('Y-m-d')) ." <= eh.end_date
+				)
+				OR
+				(
+					". Model::safeSql(Tools::getGmtDate('Y-m-d')) ." >= eh.start_date
+					AND
+					eh.end_date = ''
+				)
+			)
+			ORDER BY e.lastname		
+		";	
+		
+		return self::getRecords($sql);	
+	}	
+	
+	public static function findAllActiveByPeriod($from, $to) {
+		$sql = "
+			SELECT e.id, e.hash, e.employee_code, e.photo, e.firstname, e.salutation, e.lastname, e.middlename,e.extension_name, e.nickname, e.birthdate, e.gender, e.marital_status, e.nationality,e.number_dependent, e.sss_number, e.tin_number,e.pagibig_number,e.philhealth_number,e.hired_date,e.terminated_date,e.employment_status_id,e.e_is_archive
+			FROM g_employee e, g_employee_job_history eh
+			WHERE e.id = eh.employee_id 
+			AND 
+			e.e_is_archive =" . Model::safeSql(G_Employee::NO) . " 
+			AND 
+			(
+				(
+					eh.start_date >= ". Model::safeSql($from) ."
+					AND
+					eh.end_date <= ". Model::safeSql($to) ."
+				)
+				OR
+				(
+					eh.start_date >= ". Model::safeSql($from) ."
+					AND
+					eh.end_date = ''
+				)
+			)
+			ORDER BY e.lastname
+		";
+		
+		return self::getRecords($sql);
+	}
+	
+	public static function findAllActive($date = '',$limit="") {
+		if ($date == '') {
+			$date = Tools::getGmtDate('Y-m-d');
+		}
+		$limit = ($limit!='')? 'LIMIT ' . $limit : '';
+		$sql = "
+			SELECT e.id, e.hash, e.employee_code, e.photo, e.firstname, e.salutation, e.lastname, e.middlename,e.extension_name, e.nickname, e.birthdate, e.gender, e.marital_status, e.nationality,e.number_dependent, e.sss_number, e.tin_number,e.pagibig_number,e.philhealth_number,e.hired_date,e.terminated_date,e.employment_status_id,e.e_is_archive
+			FROM g_employee e, g_employee_job_history eh
+			WHERE  (e.e_is_archive =" . Model::safeSql(G_Employee::NO) . ") 
+			AND (e.employee_status_id <> " . Model::safeSql(G_Settings_Employee_Status::TERMINATED) . " 
+				 AND e.employee_status_id <> " . Model::safeSql(G_Settings_Employee_Status::RESIGNED) . ")
+			AND (e.id = eh.employee_id 
+			OR
+			(
+				(
+					". Model::safeSql($date) ." >= eh.start_date
+					AND
+					". Model::safeSql($date) ." <= eh.end_date
+				)
+				OR
+				(
+					". Model::safeSql($date) ." >= eh.start_date
+					AND
+					eh.end_date = ''
+				)
+			))
+			ORDER BY e.lastname
+			" . $limit . "
+			
+		";	
+
+		return self::getRecords($sql);
+	}
+	
+	public static function findAllActiveByDate($date) {
+		return self::findAllActive($date);
+	}	
+	
+	public static function searchByFirstnameAndLastname($query) {
+		$sql = "
+			SELECT e.id, e.hash, e.firstname,e.middlename,e.extension_name, e.lastname, e.employee_code
+			FROM g_employee e
+			WHERE (e.e_is_archive =" . Model::safeSql(G_Employee::NO) . ") 
+			AND (e.firstname LIKE '%{$query}%' OR e.lastname LIKE '%{$query}%') 
+		";		
+		return self::getRecords($sql);	
+	}
+	
+	public static function searchActiveEmployeeByFirstnameAndLastname($query) {
+		$sql = "
+			SELECT e.id, e.hash, e.firstname,e.middlename,e.extension_name, e.lastname, e.employee_code
+			FROM g_employee e
+			WHERE (e.e_is_archive =" . Model::safeSql(G_Employee::NO) . ") 
+			AND (e.employee_status_id <> " . Model::safeSql(G_Settings_Employee_Status::RESIGNED) . "
+				  AND e.employee_status_id <> " . Model::safeSql(G_Settings_Employee_Status::TERMINATED). " 
+			    )
+			AND (e.firstname LIKE '%{$query}%' OR e.lastname LIKE '%{$query}%') 
+		";		
+		return self::getRecords($sql);	
+	}
+	
+	public static function searchByFirstnameMiddlenameLastnameEmployeeCode($query) {
+		$sql = "
+			SELECT e.id, e.hash, e.firstname,e.middlename,e.extension_name, e.lastname, e.employee_code
+			FROM g_employee e
+			WHERE e.e_is_archive =" . Model::safeSql(G_Employee::NO) . " 
+			AND  (e.firstname LIKE '%{$query}%' OR e.lastname LIKE '%{$query}%' OR e.employee_code LIKE '%{$query}%' OR e.middlename LIKE '%{$query}%')
+		";	
+	
+		return self::getRecords($sql);	
+	}
+	
+	public static function findByFirstnameLastnameBirthdate($eAr,$company_structure_id) {
+		$sql = "
+			SELECT e.id, e.hash, e.firstname,e.middlename,e.extension_name, e.lastname, e.employee_code
+			FROM g_employee e
+			WHERE (e.e_is_archive =" . Model::safeSql(G_Employee::NO) . " AND e.company_structure_id =" . Model::safeSql($company_structure_id) . ")
+				AND(e.firstname =" . Model::safeSql($eAr['firstname']) . "
+					AND e.lastname =" . Model::safeSql($eAr['lastname']) . "
+					AND e.birthdate =" . Model::safeSql($eAr['birthdate']) . "
+					)				
+			LIMIT 1	
+		";	
+	
+		return self::getRecord($sql);	
+	}
+	
+	public static function searchActiveByFirstnameAndLastnameAndEmployeeCode($query) {
+		$sql = "
+			SELECT e.id, e.hash, e.firstname, e.lastname, e.employee_code, e.middlename, e.extension_name
+			FROM g_employee e, g_employee_job_history eh		
+			WHERE (e.firstname LIKE '%{$query}%' OR e.lastname LIKE '%{$query}%' OR e.employee_code LIKE '%{$query}%')
+			AND (e.e_is_archive =" . Model::safeSql(G_Employee::NO) . ")
+			AND (e.employee_status_id <> " . Model::safeSql(G_Settings_Employee_Status::TERMINATED) . "
+				  AND e.employee_status_id <> " . Model::safeSql(G_Settings_Employee_Status::RESIGNED) . " 
+				 )  
+			AND (e.id = eh.employee_id) 
+			AND 
+			(
+				(
+					". Model::safeSql(Tools::getGmtDate('Y-m-d')) ." >= eh.start_date
+					AND
+					". Model::safeSql(Tools::getGmtDate('Y-m-d')) ." <= eh.end_date
+				)
+				OR
+				(
+					". Model::safeSql(Tools::getGmtDate('Y-m-d')) ." >= eh.start_date
+					AND
+					eh.end_date = ''
+				)
+			)
+			ORDER BY e.lastname		
+		";		
+		return self::getRecords($sql);	
+	}	
+	
+	public static function searchById($id) {
+		$sql = "
+			SELECT e.id, e.hash, e.firstname, e.lastname, e.employee_code
+			FROM g_employee e
+			WHERE e.id = ". Model::safeSql($id) ."
+		";		
+		return self::getRecords($sql);	
+	}
+	
+	public static function findById($id) {
+		$sql = "
+			SELECT e.id,
+			e.hash, 
+			e.employee_code, 
+			e.photo,
+			e.salutation, 
+			e.firstname, 
+			e.lastname, 
+			e.middlename,
+			e.extension_name, 
+			e.nickname, 
+			e.birthdate, 
+			e.gender, 
+			e.marital_status, 
+			e.nationality,
+			e.number_dependent, 
+			e.sss_number, 
+			e.tin_number,
+			e.pagibig_number,
+			e.philhealth_number,
+			e.hired_date,
+			e.terminated_date,
+			e.employment_status_id,
+			e.eeo_job_category_id,
+			e.e_is_archive
+			FROM g_employee e
+			WHERE e.id = ". Model::safeSql($id) ." AND e.e_is_archive =" . Model::safeSql(G_Employee::NO) . "
+			LIMIT 1		
+		";
+		//echo $sql;
+		return self::getRecord($sql);
+	}
+	
+	public static function findByIdBothArchiveAndNot($id) {
+		$sql = "
+			SELECT e.id,
+			e.hash, 
+			e.employee_code, 
+			e.employee_device_id,
+			e.photo,
+			e.salutation, 
+			e.firstname, 
+			e.lastname, 
+			e.middlename,
+			e.extension_name, 
+			e.nickname, 
+			e.birthdate, 
+			e.gender, 
+			e.marital_status, 
+			e.nationality,
+			e.number_dependent, 
+			e.sss_number, 
+			e.tin_number,
+			e.pagibig_number,
+			e.philhealth_number,
+			e.hired_date,
+			e.terminated_date,
+			e.employment_status_id,
+			e.eeo_job_category_id,
+			e.e_is_archive
+			FROM g_employee e
+			WHERE e.id = ". Model::safeSql($id) ." 
+			LIMIT 1		
+		";
+		//echo $sql;
+		return self::getRecord($sql);
+	}
+	
+	public static function findByIdIsArchive($id) {
+		$sql = "
+			SELECT e.id,
+			e.hash, 
+			e.employee_code, 
+			e.photo,
+			e.salutation, 
+			e.firstname, 
+			e.lastname, 
+			e.middlename,
+			e.extension_name, 
+			e.nickname, 
+			e.birthdate, 
+			e.gender, 
+			e.marital_status, 
+			e.nationality,
+			e.number_dependent, 
+			e.sss_number, 
+			e.tin_number,
+			e.pagibig_number,
+			e.philhealth_number,
+			e.hired_date,
+			e.terminated_date,
+			e.employment_status_id,
+			e.eeo_job_category_id,
+			e.e_is_archive
+			FROM g_employee e
+			WHERE e.id = ". Model::safeSql($id) ." AND e.e_is_archive =" . Model::safeSql(G_Employee::YES) . "
+			LIMIT 1		
+		";
+		return self::getRecord($sql);
+	}
+	
+	public static function findBySchedule(G_Schedule $s) {
+		define('AS_EMPLOYEE', 1);
+		$sql = "
+			SELECT e.id, e.hash, e.employee_code,e.photo,e.salutation, e.firstname, e.lastname, e.middlename, e.extension_name,e.nickname, e.birthdate, e.gender, e.marital_status, e.nationality,e.number_dependent, e.sss_number, e.tin_number,e.pagibig_number,e.philhealth_number, e.hired_date,e.terminated_date,e.employment_status_id,e.e_is_archive
+			FROM g_employee e, ". G_EMPLOYEE_GROUP_SCHEDULE ." s
+			WHERE e.id = s.employee_group_id
+			AND s.employee_group = ". Model::safeSql(AS_EMPLOYEE) ."
+			AND s.schedule_id = ". Model::safeSql($s->getId()) ."
+			ORDER BY e.lastname
+		";
+		return self::getRecords($sql);
+	}
+	
+	/*
+		$sg - Instance of G_Schedule_Group class
+	*/
+	public static function findByScheduleGroup($sg) {
+		$sql = "
+			SELECT e.id, e.hash, e.employee_code,e.photo,e.salutation, e.firstname, e.lastname, e.middlename, e.extension_name,e.nickname, e.birthdate, e.gender, e.marital_status, e.nationality,e.number_dependent, e.sss_number, e.tin_number,e.pagibig_number,e.philhealth_number, e.hired_date,e.terminated_date,e.employment_status_id,e.e_is_archive
+			FROM g_employee e, ". G_EMPLOYEE_GROUP_SCHEDULE ." s
+			WHERE e.id = s.employee_group_id
+			AND s.employee_group = ". Model::safeSql(ENTITY_EMPLOYEE) ."
+			AND s.schedule_group_id  = ". Model::safeSql($sg->getId()) ."
+			ORDER BY e.lastname
+		";
+		return self::getRecords($sql);
+	}	
+	
+	/*public static function findByCompanyStructureId(G_Company_Structure $csid, $order_by = '', $limit = '') {
+		
+		$order_by = ($order_by != '') ? 'ORDER BY ' . $order_by : '';
+		$limit = ($limit!='')? 'LIMIT ' . $limit : '';
+		
+		$sql = "
+			SELECT 
+			a.id, a.employee_id,a.job_id, a.company_structure_id, a.job_vacancy_id, a.application_status_id, a.lastname, a.firstname, a.middlename,a.gender,a.marital_status,a.birthdate,a.birth_place, a.address, a.city, a.province, a.zip_code, a.country, a.home_telephone, a.mobile, a.email_address, a.qualification, a.applied_date_time, a.resume_name, a.resume_path,sas.status as application_status,j.title as position_applied
+			 FROM g_employee a,  g_settings_application_status sas ,g_job as j
+			 WHERE a.company_structure_id=".Model::safeSql($csid->getId())." AND a.job_id=j.id GROUP BY a.id
+			".$order_by."
+			".$limit."		
+		";	
+		echo $sql;	
+		return self::getRecords($sql);
+	}
+	*/
+	
+	public static function searchEmployeeNotInTheSameGroup($query,$conditional_statment = "") {
+		$sql = "
+			SELECT e.id, e.firstname, e.lastname
+			FROM g_employee e
+			LEFT JOIN " . G_EMPLOYEE_SUBDIVISION_HISTORY . " s
+			ON e.id = s.employee_id
+			WHERE (e.firstname LIKE '%{$query}%' OR e.lastname LIKE '%{$query}%') 
+			$conditional_statment
+			GROUP BY e.firstname, e.lastname
+		";
+		return self::getRecords($sql);	
+	}
+	
+	public static function findAllActiveEmployeeAttendanceUsingCustomWhereStatement($where_string) {
+		$sql = "
+			SELECT e.id, e.hash, e.employee_code, e.photo, e.firstname, e.salutation, e.lastname, e.middlename,e.extension_name, e.nickname, e.birthdate, e.gender, e.marital_status, e.nationality,e.number_dependent, e.sss_number, e.tin_number,e.pagibig_number,e.philhealth_number,e.hired_date,e.terminated_date,e.employment_status_id,e.e_is_archive
+			FROM " . EMPLOYEE . " e
+			LEFT JOIN " . G_EMPLOYEE_JOB_HISTORY . " eh ON e.id = eh.employee_id
+			LEFT JOIN " . G_EMPLOYEE_ATTENDANCE . " ea ON e.id = ea.employee_id
+			WHERE 
+				eh.end_date = ''
+				" . $where_string . "
+			GROUP BY e.id
+			ORDER BY e.lastname
+		";
+		//echo $sql;
+		//exit;
+		return self::getRecords($sql);
+	}
+	
+	private static function getRecord($sql) {
+		$result = Model::runSql($sql);
+		$total = mysql_num_rows($result);
+		if ($total == 0) {
+			return false;	
+		}		
+		$row = Model::fetchAssoc($result);
+		$records = self::newObject($row);	
+		return $records;
+		//print_r($records);
+		//echo $records->getId();
+	
+	}
+	
+	private static function getRecords($sql) {
+		$result = Model::runSql($sql);
+		$total = mysql_num_rows($result);
+		if ($total == 0) {
+			return false;	
+		}
+		while ($row = Model::fetchAssoc($result)) {
+			$records[$row['id']] = self::newObject($row);
+		}
+		return $records;
+	}
+	
+	private static function newObject($row) {
+		
+		$e = new G_Employee;
+		$e->setId($row['id']);
+		$e->setHash($row['hash']);
+		$e->setEmployeeDeviceId($row['employee_device_id']);
+		$e->setEmployeeCode($row['employee_code']);
+		$e->setSalutation($row['salutation']);
+		$e->setFirstname($row['firstname']);
+		$e->setLastname($row['lastname']);
+		$e->setMiddlename($row['middlename']);
+		$e->setExtensionName($row['extension_name']);
+		$e->setNickname($row['nickname']);
+		$e->setBirthdate($row['birthdate']);
+		$e->setGender($row['gender']);
+		$e->setMaritalStatus($row['marital_status']);
+		$e->setNationality($row['nationality']);
+		$e->setNumberDependent($row['number_dependent']);
+		$e->setSssNumber($row['sss_number']);
+		$e->setTinNumber($row['tin_number']);
+		$e->setPagibigNumber($row['pagibig_number']);
+		$e->setPhilhealthNumber($row['philhealth_number']);
+		$e->setPhoto($row['photo']);
+		$e->setHiredDate($row['hired_date']);
+		$e->setTerminatedDate($row['terminated_date']);
+		$e->setEeoJobCategoryId($row['eeo_job_category_id']);
+		$e->setIsArchive($row['e_is_archive']);
+	//	print_r($e);
+		return $e;
+	}
+	
+	
+}
+?>

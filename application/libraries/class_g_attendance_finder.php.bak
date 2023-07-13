@@ -1,0 +1,133 @@
+<?php
+class G_Attendance_Finder {
+	public static function findByEmployeeAndDate(IEmployee $e, $date) {
+		$sql = "
+			SELECT a.*
+			FROM ". G_EMPLOYEE_ATTENDANCE ." a
+			WHERE a.employee_id = ". Model::safeSql($e->getId()) ."
+			AND a.date_attendance = ". Model::safeSql($date) ."
+			LIMIT 1		
+		";
+		return self::getRecord($sql);
+	}
+	
+	public static function findById($id) {
+		$sql = "
+			SELECT a.*
+			FROM ". G_EMPLOYEE_ATTENDANCE ." a
+			WHERE a.id = ". Model::safeSql($id) ."
+			LIMIT 1		
+		";
+		return self::getRecord($sql);
+	}
+	
+	public static function findByDate($date)
+	{
+		$sql = "
+			SELECT a.*
+			FROM ". G_EMPLOYEE_ATTENDANCE ." a
+			WHERE
+					a.date_attendance = ". Model::safeSql($date) ."
+		";
+		return self::getRecords($sql);
+	}
+	
+	public static function findByEmployeeAndPeriod(IEmployee $e, $start, $end) {
+		$sql = "
+			SELECT a.*
+			FROM ". G_EMPLOYEE_ATTENDANCE ." a
+			WHERE a.employee_id = ". Model::safeSql($e->getId()) ."
+			AND 
+				(
+					a.date_attendance >= ". Model::safeSql($start) ."
+					AND
+					a.date_attendance <= ". Model::safeSql($end) ."
+				)
+			ORDER BY a.date_attendance
+		";
+		return self::getRecords($sql);
+	}
+	
+	public static function findByEmployeeAndPeriodFilterByTerminatedDate(IEmployee $e, $start, $end) {
+		if($e->getTerminatedDate() <= $end){
+			$sql = "
+				SELECT a.*
+				FROM ". G_EMPLOYEE_ATTENDANCE ." a
+				WHERE a.employee_id = ". Model::safeSql($e->getId()) ."
+				AND 
+					(
+						a.date_attendance >= ". Model::safeSql($start) ."
+						AND
+						a.date_attendance <= ". Model::safeSql($e->getTerminatedDate()) ."
+					)
+				ORDER BY a.date_attendance
+			";
+			return self::getRecords($sql);		
+		}
+	}
+		
+	private static function getRecord($sql) {
+		$result = Model::runSql($sql);
+		$total = mysql_num_rows($result);
+		if ($total == 0) {
+			return false;	
+		}		
+		$row = Model::fetchAssoc($result);
+		$records = self::newObject($row);	
+		return $records;
+	}
+	
+	private static function getRecords($sql) {
+		$result = Model::runSql($sql);
+		$total = mysql_num_rows($result);
+		if ($total == 0) {
+			return false;	
+		}
+		while ($row = Model::fetchAssoc($result)) {
+			$records[$row['id']] = self::newObject($row);
+		}
+		return $records;
+	}
+	
+	private static function newObject($row) {		
+		$a = new G_Attendance;
+		$a->setId($row['id']);
+		$a->setDate($row['date_attendance']);
+		if ($row['is_paid']) { $a->setAsPaid(); }
+		if ($row['is_present']) { $a->setAsPresent(); }
+		if ($row['is_restday']) { $a->setAsRestday(); }
+		if ($row['is_holiday']) { $a->setAsHoliday(); $a->setHolidayType($row['holiday_type']); }
+		if ($row['is_leave']) { $a->setAsLeave(); }
+		if ($row['leave_id']) { $a->setLeaveId($row['leave_id']); }
+		if ($row['is_suspended']) { $a->setAsSuspended(); }
+		
+		$h = G_Holiday_Finder::findById($row['holiday_id']);
+		if ($h) { $a->setHoliday($h); }
+		
+		$t = new G_Timesheet;
+		$t->setScheduledTimeIn($row['scheduled_time_in']);
+		$t->setScheduledTimeOut($row['scheduled_time_out']);
+		$t->setTimeIn($row['actual_time_in']);
+		$t->setTimeOut($row['actual_time_out']);
+		$t->setDateIn($row['actual_date_in']);
+		$t->setDateOut($row['actual_date_out']);		
+		$t->setOverTimeIn($row['overtime_time_in']);
+		$t->setOverTimeOut($row['overtime_time_out']);
+		$t->setTotalHoursWorked($row['total_hours_worked']);		
+		$t->setNightShiftHours($row['night_shift_hours']);
+		$t->setNightShiftOvertimeHours($row['night_shift_overtime_hours']);	
+		$t->setNightShiftOvertimeExcessHours($row['night_shift_overtime_excess_hours']);
+		//$t->setNightShiftHoursSpecial($row['night_shift_hours_special']);
+		//$t->setNightShiftHoursLegal($row['night_shift_hours_legal']);
+		//$t->setHolidayHoursSpecial($row['holiday_hours_special']);
+		//$t->setHolidayHoursLegal($row['holiday_hours_legal']);
+		$t->setOvertimeHours($row['overtime_hours']);
+		$t->setOvertimeExcessHours($row['overtime_excess_hours']);
+		$t->setLateHours($row['late_hours']);
+		$t->setUndertimeHours($row['undertime_hours']);		
+		
+		$a->setTimesheet($t);	
+		return $a;
+	}
+}
+?>

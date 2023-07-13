@@ -1,0 +1,113 @@
+.cssguycomments {background:#eee;border:#ddd;padding:8px;margin-bottom:40px;}
+.cssguycomments p {font:normal 12px/18px verdana;}
+
+a img {border:0;vertical-align:text-bottom;}
+table {border-collapse:collapse;}
+th.side {
+	background: transparent url(i/bg_th_side.gif) no-repeat bottom left;
+}
+td.side {
+	text-align:right;
+	background: transparent url(i/bg_td_side.gif) no-repeat bottom left;
+	width:180px;
+	font:bold 12px/15px verdana;
+	color:#6e6f37;
+	padding-right:8px;
+}
+
+th {
+	height:64px;
+	border-right:1px solid #fff;
+	vertical-align:bottom;
+	color:#fff;
+	font:normal 21px/27px arial;
+	letter-spacing:2px;
+	background:transparent url(i/bg_th.gif) no-repeat bottom left;
+	}
+td {
+	text-align:center;
+	background:transparent url(i/bg_td.gif) no-repeat bottom left;
+	border-right:1px solid #fff;
+	color:#fff;
+	width:108px;
+	height:40px;
+	font:bold 12px/18px verdana;
+}
+td.on {background:transparent url(i/bg_td_on.gif) no-repeat bottom left;}
+th.on {
+	background:transparent url(i/bg_th_on.gif) no-repeat bottom left;
+	padding-bottom:9px;
+	width:148px;
+}
+
+tfoot td {
+	background:transparent url(i/bg_foot_td.gif) no-repeat top left;
+	height:64px;
+	vertical-align:top;
+	padding-top:8px;
+}
+tfoot td.on {
+	background:transparent url(i/bg_foot_td_on.gif) no-repeat top left;
+	padding-top:16px;
+}
+tfoot td.side {background: transparent url(i/bg_foot_td_side.gif) no-repeat top left;}
+
+#formcontainer {
+	width:443px;
+	height:239px;
+	background:transparent url(i/bg_form.gif) no-repeat top left;
+	position:absolute;
+	top:24px;
+	left:341px;
+}
+#formcontainer form {
+	padding:8px 10px;
+	margin:0;
+}
+#formcontainer h2 {
+	margin:0;
+	padding:0 0 14px 0;
+	font:bold 21px/27px arial;
+	color:#fff;
+}
+#formcontainer fieldset {
+	border:none;
+	padding:0;
+}
+#formcontainer label {
+	display:block;
+	float:left;
+	font:bold 12px/18px verdana;
+	color:#fff;
+	padding-bottom:12px;
+}
+#formcontainer label.email {
+	width:350px;
+}
+#formcontainer label.email input {
+	width:340px;
+}
+#formcontainer label.password {
+	clear:left;
+	padding-right:40px;
+}
+#formcontainer label.password input,
+#formcontainer label.retype input {
+	width:150px;
+}
+#formcontainer fieldset.buttons {
+	padding-top:10px;
+	clear:left;
+}
+#prices {
+	position:relative;
+}
+
+<!-- because ie is a little different with its positioning... -->
+<!--[if lte IE 8]>
+<style type="text/css">
+#formcontainer {
+	top:34px;
+}
+</style>
+<![endif]-->

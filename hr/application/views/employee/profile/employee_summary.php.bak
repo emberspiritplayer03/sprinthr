@@ -1,0 +1,43 @@
+<h2 class="field_title">Summary Employee Information [<a href="javascript:void(0);" onclick="javascript:hideEmployeeSummary()">hide</a>]</h2>
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td align="left" valign="top">
+<table class="table_form" width="400" border="0" cellspacing="3" cellpadding="3">
+          <tr>
+            <td width="170" align="right" valign="top">Employee Code:</td>
+            <td align="left" valign="top"><?php echo $employee_details['employee_code']; ?></td>
+          </tr>
+          <tr>
+            <td width="170" align="right" valign="top">Name:</td>
+            <td align="left" valign="top"><div id="employee_name_wrapper"><?php echo $employee_details['salutation']; ?> <?php echo $employee_details['employee_name']; ?></div></td>
+          </tr>
+          <tr>
+            <td width="170" align="right" valign="top">Branch: </td>
+            <td align="left" valign="top"><?php echo $employee_details['branch_name']; ?></td>
+          </tr>
+          <tr>
+            <td width="170" align="right" valign="top">Department: </td>
+            <td align="left" valign="top"><?php echo $employee_details['department']; ?></td>
+          </tr>
+          <tr>
+            <td width="170" align="right" valign="top">Position: </td>
+            <td align="left" valign="top"><?php echo $employee_details['position']; ?></td>
+          </tr>
+            <?php $hired_date = ($employee_details['hired_date']=='0000-00-00' || $employee_details['hired_date']=='') ? '' : $employee_details['hired_date']; ?>
+          <?php if($hired_date!='') { ?>  
+          <tr>
+            <td align="right" valign="top">Hired Date:</td>
+          
+            <td align="left" valign="top"><?php echo Date::convertDateIntIntoDateString($hired_date); ?></td>
+          </tr>
+         <?php  } ?>
+        </table>
+    </td>
+    <td width="150" align="center" valign="top">
+    <div id="photo_frame_wrapper"><img onclick="javascript:loadPhotoDialog();" src="<?php echo $filename;?>?<?php echo $filemtime; ?>" width="140" border="1"  /></div></td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="center" valign="top">&nbsp;</td>
+  </tr>
+</table>

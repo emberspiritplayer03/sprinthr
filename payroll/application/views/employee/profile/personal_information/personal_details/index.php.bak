@@ -1,0 +1,94 @@
+<h2 class="field_title"><?php echo $title; ?></h2>
+
+<?php 
+
+include 'form/personal_details_edit.php';
+?>
+<table id="personal_details_table_wrapper" class="table_form" width="587" border="0" cellpadding="3" cellspacing="3">
+  <tr>
+    <td width="156" align="right" valign="top">Employee Code:</td>
+    <td valign="top"><?php echo $details->employee_code; ?></td>
+    <td width="187" rowspan="8" align="center" valign="top"><div id="photo_frame_personal_wrapper"><img onClick="javascript:loadPhotoDialog();" src="<?php echo $filename; ?>?<?php echo $filemtime; ?>" width="140" border="1"  /><br />
+     <center> <a href="javascript:void(0);" onClick="javascript:loadPhotoDialog();">[Click to upload]</a></center></div></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Salutation:</td>
+    <td width="241" valign="top"><div id="salutation_label"><?php echo  ucfirst($details->salutation); ?></div></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Firstname:</td>
+    <td valign="top"><div id="firstname_label"><?php echo ucfirst($details->firstname); ?></div></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Lastname:</td>
+    <td valign="top"><div id="lastname_label"><?php echo  ucfirst($details->lastname); ?></div></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Middlename:</td>
+    <td valign="top"><div id="middlename_label"><?php echo  ucfirst($details->middlename); ?></div></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Nickname:</td>
+    <td valign="top"><?php echo  ucfirst($details->nickname); ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Gender:</td>
+    <td valign="top"><?php echo ucfirst($details->gender); ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Birthdate:</td>
+     <?php 
+	 $birthdate = ($details->birthdate=='0000-00-00')? '' : Date::convertDateIntIntoDateString($details->birthdate); ?>
+    <td valign="top"><?php echo $birthdate; ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Marital Status:</td>
+    <td valign="top"><?php echo ucfirst($details->marital_status); ?></td>
+    <td valign="top">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">SSS Number:</td>
+    <td valign="top"><?php echo $details->sss_number; ?></td>
+    <td valign="top">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Tin Number:</td>
+    <td valign="top"><?php echo $details->tin_number; ?></td>
+    <td valign="top">&nbsp;</td>
+  </tr>
+   <tr>
+    <td align="right" valign="top">Pagibig Number</td>
+    <td valign="top"><?php echo $details->pagibig_number; ?></td>
+    <td valign="top">&nbsp;</td>
+  </tr>
+  <?php foreach($field as $key=>$value) { 
+	$employee_id = $details->id;
+	$e = G_Employee_Finder::findById($employee_id);
+    $f =  G_Employee_Dynamic_Field_Finder::findBySettingsEmployeeFieldId($value->getId(),$e);
+
+	if($f) {
+		$title = $f->title;		 
+		$value = $f->value;
+	}else {
+		$title = $value->title;		 
+		$value = '';
+	}
+  ?>
+ 
+  <tr>
+    <td align="right" valign="top"><?php echo ucfirst($title); ?>:</td>
+    <td valign="top"><?php echo $value; ?></td>
+    <td valign="top">&nbsp;</td>
+  </tr>
+  <?php } ?>
+  <tr>
+    <td align="right" valign="top">&nbsp;</td>
+    <td valign="top">&nbsp;</td>
+    <td valign="top">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="right" valign="top">&nbsp;</td>
+    <td valign="top"><input type="submit" name="button" id="button" value="Edit" onclick="javascript:loadPersonalDetailsForm();"  /></td>
+    <td valign="top">&nbsp;</td>
+  </tr>
+</table>

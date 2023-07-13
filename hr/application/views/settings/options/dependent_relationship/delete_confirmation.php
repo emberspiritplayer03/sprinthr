@@ -1,0 +1,1 @@
+<div class="confirmation-box"><div>Are you sure you want to delete "<b><?php echo $dependent; ?></b>" entry?</div></div>

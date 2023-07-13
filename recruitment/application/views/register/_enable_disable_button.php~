@@ -1,0 +1,10 @@
+<div style="margin-top:3px;">
+<input type="hidden" id="eError" value="<?php echo $error; ?>" />
+<?php if($error == 1){?>
+	<br />	
+	<input type="submit" value="Register" class="curve blue_button" />
+<?php }else{ ?>
+	<br />
+	<input type="submit" value="Register" class="curve blue_button" />
+<?php } ?>
+</div>

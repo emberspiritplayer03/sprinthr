@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<holiday_type>1</holiday_type>
+		<title>New Year's Day</title>
+		<month>1</month>
+		<day>1</day>
+	</Fields>
+	<Fields>
+		<holiday_type>2</holiday_type>
+		<title>Chinese New Year</title>
+		<month>1</month>
+		<day>3</day>
+	</Fields>
+	<Fields>
+		<holiday_type>2</holiday_type>
+		<title>EDSA Revolution Anniversary</title>
+		<month>2</month>
+		<day>25</day>
+	</Fields>
+	<Fields>
+		<holiday_type>1</holiday_type>
+		<title>Good Friday</title>
+		<month>4</month>
+		<day>18</day>
+	</Fields>
+	<Fields>
+		<holiday_type>1</holiday_type>
+		<title>Maundry Thursday</title>
+		<month>4</month>
+		<day>17</day>
+	</Fields>
+	<Fields>
+		<holiday_type>1</holiday_type>
+		<title>Day of Valour</title>
+		<month>4</month>
+		<day>9</day>
+	</Fields>
+	<Fields>
+		<holiday_type>2</holiday_type>
+		<title>Black Saturday</title>
+		<month>4</month>
+		<day>19</day>
+	</Fields>
+	<Fields>
+		<holiday_type>1</holiday_type>
+		<title>Labor Day</title>
+		<month>5</month>
+		<day>1</day>
+	</Fields>
+	<Fields>
+		<holiday_type>1</holiday_type>
+		<title>Independence Day</title>
+		<month>6</month>
+		<day>12</day>
+	</Fields>
+	<Fields>
+		<holiday_type>1</holiday_type>
+		<title>Eid'l Fitr</title>
+		<month>7</month>
+		<day>28</day>
+	</Fields>
+	<Fields>
+		<holiday_type>2</holiday_type>
+		<title>Ninoy Aquino Day</title>
+		<month>8</month>
+		<day>21</day>
+	</Fields>
+	<Fields>
+		<holiday_type>1</holiday_type>
+		<title>National Heroes' Day</title>
+		<month>8</month>
+		<day>25</day>
+	</Fields>
+	<Fields>
+		<holiday_type>1</holiday_type>
+		<title>Eidul Adha</title>
+		<month>10</month>
+		<day>5</day>
+	</Fields>
+	<Fields>
+		<holiday_type>1</holiday_type>
+		<title>Bonifacio Day</title>
+		<month>11</month>
+		<day>30</day>
+	</Fields>
+	<Fields>
+		<holiday_type>2</holiday_type>
+		<title>All Saints' Day</title>
+		<month>11</month>
+		<day>1</day>
+	</Fields>
+	<Fields>
+		<holiday_type>2</holiday_type>
+		<title>All Souls' Day</title>
+		<month>11</month>
+		<day>2</day>
+	</Fields>
+	<Fields>
+		<holiday_type>1</holiday_type>
+		<title>Rizal Day</title>
+		<month>12</month>
+		<day>30</day>
+	</Fields>
+	<Fields>
+		<holiday_type>2</holiday_type>
+		<title>Christmas Eve</title>
+		<month>12</month>
+		<day>24</day>
+	</Fields>
+	<Fields>
+		<holiday_type>2</holiday_type>
+		<title>Last Day of the Year</title>
+		<month>12</month>
+		<day>31</day>
+	</Fields>
+	<Fields>
+		<holiday_type>1</holiday_type>
+		<title>Christmas Day</title>
+		<month>12</month>
+		<day>25</day>
+	</Fields>
+
+</Main>
+
+

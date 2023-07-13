@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<title>CEO</title>
+	</Fields>
+	
+	<Fields>
+		<title>Human Resource Manager</title>
+	</Fields>
+	
+	<Fields>
+		<title>HR Supervisor</title>
+	</Fields>
+	
+	<Fields>
+		<title>HR Assistant</title>
+	</Fields>
+	
+	<Fields>
+		<title>Admin Assistant</title>
+	</Fields>		
+	
+	<Fields>
+		<title>Finance Manager</title>
+	</Fields>
+	
+	<Fields>
+		<title>Finance Analyst</title>
+	</Fields>
+	
+	<Fields>
+		<title>Production Manager</title>
+	</Fields>
+	
+	<Fields>
+		<title>Production Supervisor</title>
+	</Fields>
+	
+	<Fields>
+		<title>QA Manager</title>
+	</Fields>
+	
+	<Fields>
+		<title>Jr. QA Supervisor</title>
+	</Fields>
+	
+	<Fields>
+		<title>Manager</title>
+	</Fields>
+	
+	<Fields>
+		<title>Staff</title>
+	</Fields>
+	
+	<Fields>
+		<title>IT</title>
+	</Fields>
+	
+	<Fields>
+		<title>Sales Executive</title>
+	</Fields>
+	
+</Main>

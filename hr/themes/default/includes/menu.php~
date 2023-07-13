@@ -1,0 +1,85 @@
+<?php //echo ($hr_mod['recruitment'] != true ? 'hide-module' : ''); ?>
+<div id="menu"> 
+    <ul class="mainmenu">
+    		<?php
+    			if($hr_mod['employee'] == true){
+    				$default_url = url('dashboard/employee_dashboard');
+    			}else{
+    				$default_url = url('dashboard/recruitment_dashboard');
+    			}
+    		?>
+   		 <li class="first <?php echo $dashboard; ?>"><span class="lshad"></span><span class="selectedarrow"></span><a href="<?php echo $default_url;  ?>"><span class="menu_icon dashboard"></span>Dashboard<img src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/transparent.png" class="menudropicon" border="0" /></a>
+            <div class="sbmnhldr">
+            	<span class="sbmntp_arrw"></span>
+                <ul class="submenu">                	
+                   <!-- <li class="first"><a href="<?php echo url('dashboard/general_information'); ?>">General Information</a></li>-->
+                   <?php if($hr_mod['recruitment'] == true){ ?>
+                    	<li class="first" style="display:<?php echo ($hr_mod['recruitment'] != true ? 'none' : ''); ?>;"><a href="<?php echo url('dashboard/recruitment_dashboard'); ?>">Recruitment</a></li>
+                   <?php } ?>
+                   
+                   <?php if($hr_mod['employee'] == true){ ?>
+                    <li  class="last"><a href="<?php echo url('dashboard/employee_dashboard'); ?>">Employee</a></li>
+                   <?php } ?>
+                   
+                </ul><!-- .submenu -->
+			</div>
+            <span class="selectedarrow"></span>
+        </li>      
+
+       <!-- <li class="<?php echo $reminders; ?>" ><a href="<?php echo url('reminders');  ?>"><span class="menu_icon reminders"></span>Task Reminders<img src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/transparent.png" border="0" /></a></li>-->
+       
+        <li class="<?php echo $recruitment; ?>" style="display:<?php echo ($hr_mod['recruitment'] != true ? 'none' : ''); ?>;"><a href="<?php echo url('recruitment');  ?>"><span class="menu_icon recruitment"></span>Recruitment<img src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/transparent.png" class="menudropicon" border="0" /></a>
+            <div class="sbmnhldr">
+            	<span class="sbmntp_arrw"></span>
+                <ul class="submenu"> 
+                            	
+                    <li class="first <?php echo ($hr_mod['job_vacancy'] != true ? 'hide-module' : ''); ?>"><a href="<?php echo url('recruitment/job_vacancy'); ?>">Job Vacancy</a></li>
+                    <li class="<?php echo ($hr_mod['applicant'] != true ? 'hide-module' : ''); ?>"><a href="<?php echo url('recruitment/candidate'); ?>">Candidate</a></li>
+                    <li class="last <?php echo ($hr_mod['examination'] != true ? 'hide-module' : ''); ?>"><a href="<?php echo url('recruitment/examination'); ?>">Examination</a></li>
+                </ul><!-- .submenu -->
+			</div>
+            <span class="selectedarrow"></span>
+        </li>
+        <?php if($hr_mod['employee'] == true) { ?>        
+        <li class="<?php echo $employee; ?>" ><a href="<?php echo url('employee');  ?>"><span class="menu_icon employee"></span>Employee<img src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/transparent.png" class="menudropicon" border="0" /></a>  
+            <div class="sbmnhldr">
+                <span class="sbmntp_arrw"></span>
+                <ul class="submenu">
+                    <li class="first"><a href="<?php echo url('employee'); ?>">Employee Management</a></li>
+                    <li><a href="<?php echo url('employee/account'); ?>">Account Management</a></li>
+                    <li><a href="<?php echo url('loan'); ?>">Loan / Deduction Management</a></li>
+                    <li class="<?php echo ($attendance_mod['ob_request'] != true ? 'hide-module' : ''); ?> <?php echo ($attendance_mod['request'] != true ? 'hide-module' : ''); ?>"><a href="<?php echo url('ob/pendings'); ?>">Official Business Management</a></li>
+                    <li><a href="<?php echo url('earnings'); ?>">Earnings Management</a></li>
+                    <li class="<?php echo ($hr_mod['schedule'] != true ? 'hide-module' : ''); ?>"><a href="<?php echo url('schedule'); ?>">Schedule</a></li>
+                    <li class="<?php echo ($attendance_mod['leave_request'] != true ? 'hide-module' : ''); ?> <?php echo ($attendance_mod['request'] != true ? 'hide-module' : ''); ?>"><a href="<?php echo url('leave'); ?>">Leave</a></li>
+                    <li class="<?php echo ($attendance_mod['ot_request'] != true ? 'hide-module' : ''); ?> <?php echo ($attendance_mod['request'] != true ? 'hide-module' : ''); ?>"><a href="<?php echo url('overtime'); ?>">Overtime</a></li>
+                    <li class="<?php echo ($attendance_mod['undertime_request'] != true ? 'hide-module' : ''); ?> <?php echo ($attendance_mod['request'] != true ? 'hide-module' : ''); ?>"><a href="<?php echo url('undertime'); ?>">Undertime</a></li>
+                    <li class="<?php echo ($attendance_mod['dtr'] != true ? 'hide-module' : ''); ?>"><a href="<?php echo url('attendance'); ?>">Attendance</a></li>
+                    <!--<li><a href="<?php echo url('payslip'); ?>">Payslip</a></li>-->
+                    <li class="last"><a href="<?php echo url('performance'); ?>">Performance</a></li>
+                </ul><!-- .submenu -->
+            </div>
+            <span class="selectedarrow"></span>
+        </li>
+			<?php } ?>
+        <li class="last <?php echo $reports; ?>"><span class="rshad"></span><a href="<?php echo url('reports/recruitment#applicant_list');  ?>"><span class="menu_icon reports"></span>Reports<img src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/transparent.png" class="menudropicon" border="0" /></a>
+            <div class="sbmnhldr">
+            	<span class="sbmntp_arrw"></span>
+                <ul class="submenu">     
+                	<?php if($hr_mod['recruitment'] == true){ ?>           	
+                    <li class="first"><a href="<?php echo url('reports/recruitment#applicant_list'); ?>">Recruitment Report</a></li>
+                  <?php } ?>
+                    <li><a href="<?php echo url('reports/personnel_administration#birthday_list'); ?>">Personnel Administration Report</a></li>
+                    <!--<li ><a href="<?php echo url('reports/personnel_development#profile_matchup'); ?>">Personnel Development Report</a></li>-->
+                   <!-- <li ><a href="<?php echo url('reports/benefits#eligible_employee'); ?>">Benefits Report</a></li>-->
+                   <!-- <li><a href="<?php echo url('reports/compensation#total_compensation_statement'); ?>">Compensation Report</a></li>-->
+                  <?php if($attendance_mod['dtr'] == true){ ?>
+                    <li class="last"><a href="<?php echo url('reports/time_management#daily_work_schedule'); ?>">Time Management Report</a></li>
+                  <?php } ?>
+                    <!--<li class="last"><a href="<?php echo url('reports/payroll_management#sss_r1a'); ?>">Payroll Report</a></li>-->
+                </ul><!-- .submenu -->
+            </div>
+            <span class="selectedarrow"></span>
+        </li>
+    </ul>
+</div><!-- #menu -->

@@ -1,0 +1,4 @@
+   <td class="field_label">Memo Content:</td>
+   <td>
+		<p><?php echo $memo_content->getContent(); ?></p>
+   </td>       

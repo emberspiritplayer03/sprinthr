@@ -1,0 +1,643 @@
+<?php
+class Attendance_Controller extends Controller
+{
+	function __construct() {
+		parent::__construct();
+		//$this->login();
+		Loader::appMainScript('attendance_base.js');
+		Loader::appMainScript('attendance.js');		
+		Loader::appMainScript('schedule_base.js');
+		Loader::appMainScript('schedule.js');			
+		Loader::appMainUtilities();
+		Loader::appStyle('style.css');
+		$this->var['attendance'] = 'selected';
+	}
+
+	function index() {
+		Loader::appMainScript('payslip_base.js');
+		Loader::appMainScript('payslip.js');
+		//Style::loadTableThemes();
+		Jquery::loadMainInlineValidation2();
+		Jquery::loadMainJqueryFormSubmit();
+		
+		$this->var['page_title'] = 'Attendance';
+		//$this->var['action'] = url('attendance/ajax_search_employee');
+		$this->var['action'] = url('attendance/manage');
+		$this->var['periods'] = G_Payslip_Helper::getPeriods();
+		$this->view->setTemplate('template.php');
+		$this->view->render('attendance/index.php',$this->var);		
+	}
+	
+	function download_timesheet() {
+		set_time_limit(999999999999999999999);
+		$this->var['from'] = $from = $_GET['from'];
+		$this->var['to'] = $to = $_GET['to'];
+		
+		if (strtotime($from) && strtotime($to)) {
+			$this->var['employees'] = $employees = G_Employee_Finder::findAllActiveByDate($from);
+			$h = G_Payslip_Hour_Helper::getAllHoursByEmployeesAndPeriod($employees, $from, $to);
+			$this->var['hours'] = $h;
+			$this->var['total_employees'] = count($employees);
+		}
+		$this->view->render('attendance/download_timesheet.php', $this->var);		
+	}
+	
+	function download_timesheet_breakdown() {
+		ini_set("memory_limit", "999M");
+		set_time_limit(999999999999999999999);
+		
+		$this->var['from'] = $from = $_GET['from'];
+		$this->var['to'] = $to = $_GET['to'];
+		
+		if (strtotime($from) && strtotime($to)) {
+			$this->var['employees'] = $employees = G_Employee_Finder::findAllActiveByDate($from);
+			$at = G_Attendance_Helper::getAllAttendanceByEmployeesAndPeriod($employees, $from, $to);
+			$this->var['attendance'] = $at;
+			$this->var['total_employees'] = count($employees);
+		}
+		$this->view->render('attendance/download_timesheet_breakdown.php', $this->var);		
+	}
+	
+	function manage() {
+		Jquery::loadMainTipsy();
+		Jquery::loadMainInlineValidation2();
+		Jquery::loadMainJqueryFormSubmit();			
+		$this->var['page_title'] = 'Attendance';
+		$this->var['start_date'] = $start_date = $_GET['from'];
+		$this->var['end_date'] = $_GET['to'];
+		$this->var['query'] = $query = $_GET['query'];
+		if ($query != '') {
+			$this->var['employees'] = G_Employee_Finder::searchActiveByFirstnameAndLastnameAndEmployeeCode($query);
+		} else {
+			$this->var['employees'] = G_Employee_Finder::findAllActiveByDate($start_date);
+		}		
+		$this->view->setTemplate('template.php');
+		$this->var['page_title'] = '<a href="'. url('attendance') .'">Attendance</a>';
+		$this->view->render('attendance/manage.php',$this->var);	
+	}
+	
+	function attendance_logs() {
+		$from = $_GET['from'];
+		$to = $_GET['to'];
+		
+		if ($from != '' && $to == '') {
+			$to = $from;
+		} else if ($from == '' && $to == '') {
+			$from = date('Y-m-d');
+			$to = date('Y-m-d');	
+		}
+		
+		$this->var['from'] = $from;
+		$this->var['to'] = $to;
+		
+		$this->var['action'] = url('attendance/attendance_logs');
+		$this->var['page_title'] = 'Attendance Logs';
+		$this->var['logs'] = G_Attendance_Log_Finder::findAllByPeriod($from, $to);
+		$this->view->setTemplate('template.php');
+		$this->view->render('attendance/attendance_logs.php', $this->var);
+	}
+	
+	function error_no_time_in_out() {
+		$from = $_GET['from'];
+		$to = $_GET['to'];
+		
+		if ($from != '' && $to == '') {
+			$to = $from;
+		} else if ($from == '' && $to == '') {
+			$from = date('Y-m-d');
+			$to = date('Y-m-d');	
+		}
+		
+		$this->var['from'] = $from;
+		$this->var['to'] = $to;
+		
+		$this->var['page_title'] = 'No Time In or Out';
+		$this->var['errors'] = G_Attendance_Error_Finder::findAllNoTimeInAndOutNotFixedByPeriod($from, $to);				
+		$this->view->setTemplate('template.php');
+		$this->view->render('attendance/error_no_time_in_out.php', $this->var);
+	}	
+	
+	function show_attendance() {
+		Jquery::loadMainTipsy();
+		Jquery::loadMainInlineValidation2();
+		Jquery::loadMainJqueryFormSubmit();	
+		$this->var['employee_id'] = $_GET['employee_id'];
+		$employee_id = Utilities::decrypt($_GET['employee_id']);
+		$this->var['start_date'] = $_GET['from'];
+		$this->var['end_date'] = $_GET['to'];
+		
+		$hash = $_GET['hash'];
+		Utilities::verifyHash($employee_id, $hash);	
+		$e = $this->var['e'] = G_Employee_Finder::findById($employee_id);
+
+		$this->var['page_title'] = '<a href="'. url('attendance') .'">Attendance</a>';
+		$this->var['module_title'] =  ': <b class="mplynm">' .$e->getName(). ' ('. $e->getEmployeeCode() .')</b>';
+		$this->view->setTemplate('template.php');
+		$this->view->render('attendance/show_attendance.php', $this->var);
+	}
+	
+	function _edit_attendance() {
+		$date = $_POST['date'];
+		$employee_id = Utilities::decrypt($_POST['employee_id']);
+		$e = Employee_Factory::get($employee_id);
+		
+		$a = G_Attendance_Finder::findByEmployeeAndDate($e, $date);
+		if (!$a) {
+			$a = new G_Attendance;
+			$a->setDate($date);
+		}
+		$leave_id = (int) $_POST['attendance_type'];
+		$a->setLeaveId($leave_id);
+		$t = $a->getTimesheet();	
+		if (!$t) {
+			$t = new G_Timesheet;
+		}				
+		if ($leave_id) {
+			$a->setAsLeave();
+			$a->setAsAbsent();
+			$a->setAsNotRestday();
+			//$a->setAsPaid();
+		} else {
+			switch ($_POST['attendance_type']):
+				case 'present':
+					$a->setAsPresent();					
+					//$t->setTotalHoursWorked(8);		
+					$a->setAsNotRestday();
+					$a->setAsNotLeave();
+					//$a->setAsPaid();			
+				break;
+				case 'absent':
+					$a->setAsAbsent();
+					$a->setAsNotRestday();
+					$a->setAsNotLeave();
+					//$a->setAsNotPaid();
+				break;
+				case 'restday_present':
+					$a->setAsPresent();
+					//$t->setTotalHoursWorked(8);
+					$a->setAsRestday();
+					$a->setAsNotLeave();
+					//$a->setAsPaid();					
+				break;
+				case 'restday':
+					$a->setAsRestday();
+					$a->setAsAbsent();
+					$a->setAsNotLeave();
+					//$a->setAsPaid();
+				break;
+			endswitch;
+		}
+		if ($_POST['is_paid']) {
+			$a->setAsPaid();	
+		} else {
+			$a->setAsNotPaid();	
+		}
+		$a->setTimesheet($t);
+		$is_saved = $a->recordToEmployee($e);
+		$return['is_saved'] = $is_saved;
+		if ($is_saved) {			
+			$return['message'] = 'Attendance has been saved.';
+		} else {
+			$return['message'] = 'There was a problem saving the attendance. Please contact the administrator.';
+		}
+		echo json_encode($return);
+	}
+	
+	function _edit_timesheet() {
+		$date = $_POST['date'];
+		$employee_id = Utilities::decrypt($_POST['employee_id']);
+		$e = Employee_Factory::get($employee_id);
+		
+		$a = G_Attendance_Finder::findByEmployeeAndDate($e, $date);
+		if (!$a) {
+			$a = new G_Attendance;
+			$a->setDate($date);
+		}
+		$overtime_hours = Tools::convertTimeToHour((int) $_POST['overtime_hours']['hh'] .':'. (int) $_POST['overtime_hours']['mm']);		
+		$late_hours = Tools::convertTimeToHour((int) $_POST['late_hours']['hh'] .':'. (int) $_POST['late_hours']['mm']);
+		$legal_hours = Tools::convertTimeToHour((int) $_POST['legal_hours']['hh'] .':'. (int) $_POST['legal_hours']['mm']);
+		$legal_night_hours = Tools::convertTimeToHour((int) $_POST['legal_night_hours']['hh'] .':'. (int) $_POST['legal_night_hours']['mm']);
+		$night_hours = Tools::convertTimeToHour((int) $_POST['night_hours']['hh'] .':'. (int) $_POST['night_hours']['mm']);
+		$overtime_hours = Tools::convertTimeToHour((int) $_POST['overtime_hours']['hh'] .':'. (int) $_POST['overtime_hours']['mm']);
+		$special_hours = Tools::convertTimeToHour((int) $_POST['special_hours']['hh'] .':'. (int) $_POST['special_hours']['mm']);
+		$special_night_hours = Tools::convertTimeToHour((int) $_POST['special_night_hours']['hh'] .':'. (int) $_POST['special_night_hours']['mm']);
+		$undertime_hours = Tools::convertTimeToHour((int) $_POST['undertime_hours']['hh'] .':'. (int) $_POST['undertime_hours']['mm']);		
+		
+		$t = $a->getTimesheet();
+		if (!$t) {
+			$t = new G_Timesheet;
+		}
+		$t->setScheduledTimeIn($t->getScheduledTimeIn());
+		$t->setScheduledTimeOut($t->getScheduledTimeOut());
+		$t->setTimeIn($t->getTimeIn());
+		$t->setTimeOut($t->getTimeOut());
+		$t->setOverTimeIn($t->getOverTimeIn());
+		$t->setOverTimeOut($t->getOverTimeOut());
+		$t->setTotalHoursWorked($t->getTotalHoursWorked());
+		
+		$t->setNightShiftHours($night_hours);
+		$t->setNightShiftHoursSpecial($special_night_hours);
+		$t->setNightShiftHoursLegal($legal_night_hours);
+		$t->setHolidayHoursSpecial($special_hours);
+		$t->setHolidayHoursLegal($legal_hours);
+		$t->setOvertimeHours($overtime_hours);
+		$t->setLateHours($late_hours);
+		$t->setUndertimeHours($undertime_hours);		
+		
+		$a->setTimesheet($t);
+		$is_saved = $a->recordToEmployee($e);
+
+		$return['is_saved'] = $is_saved;
+		if ($is_saved) {			
+			$return['message'] = 'Attendance has been saved.';
+		} else {
+			$return['message'] = 'There was a problem saving the attendance. Please contact the administrator.';
+		}
+		echo json_encode($return);			
+	}
+	
+	function _edit_time_in_out() {
+		$employee_id = Utilities::decrypt($_POST['employee_id']);
+		$e = Employee_Factory::get($employee_id);
+		$date = $_POST['date'];
+		$a = G_Attendance_Finder::findByEmployeeAndDate($e, $date);
+		if ($a) {
+			$time_in = date('H:i:00', strtotime(Tools::addLeadingZero($_POST['actual_time_in']['hh']) .':'. Tools::addLeadingZero($_POST['actual_time_in']['mm']) .' '. $_POST['actual_time_in']['am']));
+			$time_out = date('H:i:00', strtotime(Tools::addLeadingZero($_POST['actual_time_out']['hh']) .':'. Tools::addLeadingZero($_POST['actual_time_out']['mm']) .' '. $_POST['actual_time_out']['am']));
+			$scheduled_time_in = date('H:i:00', strtotime(Tools::addLeadingZero($_POST['scheduled_time_in']['hh']) .':'. Tools::addLeadingZero($_POST['scheduled_time_in']['mm']) .' '. $_POST['scheduled_time_in']['am']));
+			$scheduled_time_out = date('H:i:00', strtotime(Tools::addLeadingZero($_POST['scheduled_time_out']['hh']) .':'. Tools::addLeadingZero($_POST['scheduled_time_out']['mm']) .' '. $_POST['scheduled_time_out']['am']));			
+			$t = $a->getTimesheet();
+			$t->setTimeIn($time_in);
+			$t->setTimeOut($time_out);
+			$t->setScheduledTimeIn($scheduled_time_in);
+			$t->setScheduledTimeOut($scheduled_time_out);
+			
+			$ss = G_Schedule_Specific_Finder::findByEmployeeAndStartAndEndDate($e, $date, $date);
+			if (!$ss) {
+				$ss = new G_Schedule_Specific;
+			}					
+			$ss->setDateStart($date);
+			$ss->setDateEnd($date);
+			$ss->setTimeIn($scheduled_time_in);
+			$ss->setTimeOut($scheduled_time_out);
+			$ss->setEmployeeId($e->getId());
+			$ss->save();		
+			
+			$a->setTimesheet($t);
+			$is_saved = $a->recordToEmployee($e);
+			G_Attendance_Helper::updateAttendance($e, $date);
+			$return['is_saved'] = $is_saved;
+		}
+		if ($is_saved) {			
+			$return['message'] = 'Timesheet has been saved.';
+		} else {
+			$return['message'] = 'There was a problem saving the timesheet. Please contact the administrator.';
+		}
+		echo json_encode($return);		
+	}
+	
+	function _edit_overtime_in_out() {
+		$employee_id = Utilities::decrypt($_POST['employee_id']);
+		$e = Employee_Factory::get($employee_id);
+		$date = $_POST['date'];
+		$a = G_Attendance_Finder::findByEmployeeAndDate($e, $date);
+		if ($a) {
+			$time_in = date('H:i:00', strtotime(Tools::addLeadingZero($_POST['actual_time_in']['hh']) .':'. Tools::addLeadingZero($_POST['actual_time_in']['mm']) .' '. $_POST['actual_time_in']['am']));
+			$time_out = date('H:i:00', strtotime(Tools::addLeadingZero($_POST['actual_time_out']['hh']) .':'. Tools::addLeadingZero($_POST['actual_time_out']['mm']) .' '. $_POST['actual_time_out']['am']));
+			$t = $a->getTimesheet();
+			$t->setOverTimeIn($time_in);
+			$t->setOverTimeOut($time_out);
+						
+			$a->setTimesheet($t);
+			$is_saved = $a->recordToEmployee($e);
+			
+			$o = G_Overtime_Finder::findByEmployeeAndDate($e, $date);
+			if (!$o) {
+				$o = new G_Overtime;	
+			}
+			$o->setDate($date);
+			$o->setTimeIn($time_in);
+			$o->setTimeOut($time_out);
+			$o->setEmployeeId($e->getId());
+			$o->save();
+			
+			G_Attendance_Helper::updateAttendance($e, $date);
+			$return['is_saved'] = $is_saved;
+		}
+		if ($is_saved) {
+			$return['message'] = 'Timesheet has been saved.';
+		} else {
+			$return['message'] = 'There was a problem saving the timesheet. Please contact the administrator.';
+		}
+		echo json_encode($return);		
+	}
+	
+	function _delete_overtime_by_employee_and_date() {
+		$employee_id = Utilities::decrypt($_POST['employee_id']);
+		$e = Employee_Factory::get($employee_id);
+		$date = $_POST['date'];
+			
+		$o = G_Overtime_Finder::findByEmployeeAndDate($e, $date);
+		if ($o) {
+			$date = $o->getDate();
+			$employee_id = $o->getEmployeeId();
+			if ($o->delete()) {
+				$e = G_Employee_Finder::findById($employee_id);
+				if ($e) {
+					G_Attendance_Helper::updateAttendance($e, $date);
+				}
+				$return['is_deleted'] = true;
+				$return['message'] = 'Overtime has been deleted';
+			} else {
+				$return['is_deleted'] = false;
+				$return['message'] = 'Overtime has not been deleted. Please contact the administrator';
+			}
+		} else {
+			$return['is_deleted'] = false;
+			$return['message'] = 'Overtime was not found.';
+		}
+		echo json_encode($return);
+	}	
+	
+	function _delete_overtime() {
+		$overtime_id = (int) $_POST['overtime_id'];		
+		$o = G_Overtime_Finder::findById($overtime_id);
+		if ($o) {
+			$date = $o->getDate();
+			$employee_id = $o->getEmployeeId();
+			if ($o->delete()) {
+				$e = G_Employee_Finder::findById($employee_id);
+				if ($e) {
+					G_Attendance_Helper::updateAttendance($e, $date);
+				}
+				$return['is_deleted'] = true;
+				$return['message'] = 'Overtime has been deleted';
+			} else {
+				$return['is_deleted'] = false;
+				$return['message'] = 'Overtime has not been deleted. Please contact the administrator';
+			}
+		} else {
+			$return['is_deleted'] = false;
+			$return['message'] = 'Overtime was not found.';
+		}
+		echo json_encode($return);
+	}	
+	
+	function _import_timesheet_excel() {			
+		$file = $_FILES['timesheet']['tmp_name'];
+		$is_imported = G_Attendance_Helper::importTimesheet($file);
+		if ($is_imported) {
+			$return['message'] = 'Timesheet has been successfully imported';
+		} else {
+			$return['message'] = 'An error occured. Please contact the administrator';
+		}
+		echo json_encode($return);		
+	}
+	
+	function _import_overtime() {
+		ini_set("memory_limit", "999M");
+		set_time_limit(999999999999999999999);
+		$file = $_FILES['overtime_file']['tmp_name'];
+		$time = new G_Overtime_Import($file);
+		$is_imported = $time->import();		
+		if ($is_imported) {
+			$return['is_imported'] = true;
+			$return['message'] = 'Overtime has been successfully imported.';	
+		} else {
+			$return['is_imported'] = false;
+			$return['message'] = 'There was a problem importing the overtime. Please contact the administrator.';
+		}
+		echo json_encode($return);		
+	}
+	
+	function _import_overtime_pending() {
+		ini_set("memory_limit", "999M");
+		set_time_limit(999999999999999999999);
+		$file = $_FILES['overtime_file']['tmp_name'];
+		$time = new G_Overtime_Import_Pending($file);
+		$time->setCreatedBy(Utilities::decrypt($_POST['h_employee_id']));
+		$is_imported = $time->import();		
+		if ($is_imported) {
+			$return['is_imported'] = true;
+			$return['message'] = 'Overtime has been successfully imported.';	
+		} else {
+			$return['is_imported'] = false;
+			$return['message'] = 'There was a problem importing the overtime. Please contact the administrator.';
+		}
+		echo json_encode($return);		
+	}		
+	
+	function ajax_search_employee() {
+		$query = $_GET['query'];
+		if ($query == '') {
+			$this->var['employees'] = G_Employee_Finder::findAllActive();
+		} else {
+			$this->var['employees'] = G_Employee_Finder::searchActiveByFirstnameAndLastnameAndEmployeeCode($query);
+		}		
+		$this->view->render('attendance/ajax_search_employee.php', $this->var);
+	}
+	
+	function ajax_show_attendance() {
+		$employee_id = Utilities::decrypt($_GET['employee_id']);
+		$this->var['encrypted_employee_id'] = $_GET['employee_id'];
+		$e = $this->var['e'] = Employee_Factory::get($employee_id);
+		$this->var['employee_name'] = $e->getName();
+		$today = Tools::getGmtDate('Y-m-d');
+		$cutoff_periods = G_Cutoff_Period_Finder::findAll();
+		$cutoff_periods_array = G_Cutoff_Period_Helper::convertToArray($cutoff_periods);	
+		
+		$this->var['start_date'] = $start_date = (empty($_GET['start_date'])) ? $cutoff_periods[0]->getStartDate() : $_GET['start_date'];
+		$this->var['end_date'] = $end_date = (empty($_GET['end_date'])) ? $cutoff_periods[0]->getEndDate() : $_GET['end_date'];	
+		
+		// Timesheet Navigation
+		$selected_period = array('start' => $start_date, 'end' => $end_date);
+		$selected_key = array_search($selected_period, $cutoff_periods_array);
+		$this->var['next_start_date'] = $cutoff_periods_array[$selected_key - 1]['start'];
+		$this->var['next_end_date'] = $cutoff_periods_array[$selected_key - 1]['end'];
+		$this->var['previous_start_date'] = $cutoff_periods_array[$selected_key + 1]['start'];
+		$this->var['previous_end_date'] = $cutoff_periods_array[$selected_key + 1]['end'];
+		
+		// Employee Navigation		
+		$previous_employee_id = G_Employee_Helper::getPreviousIdAlphabetic($employee_id);
+		$obj_previous_employee = Employee_Factory::get($previous_employee_id);
+		$next_employee_id = G_Employee_Helper::getNextIdAlphabetic($employee_id);
+		$obj_next_employee = Employee_Factory::get($next_employee_id);
+		if ($obj_next_employee) {
+			$this->var['next_employee_name'] = $obj_next_employee->getName();
+		}
+		if ($obj_previous_employee) {
+			$this->var['previous_employee_name'] = $obj_previous_employee->getName();
+		}
+		$this->var['previous_encrypted_employee_id'] = Utilities::encrypt($previous_employee_id);
+		$this->var['next_encrypted_employee_id'] = Utilities::encrypt($next_employee_id);
+		
+		$this->var['dates'] = Tools::getBetweenDates($start_date, $end_date);
+		$attendance = G_Attendance_Finder::findByEmployeeAndPeriod($e, $start_date, $end_date);
+		$this->var['attendance'] = G_Attendance_Helper::changeArrayKeyToDate($attendance);
+		$this->view->render('attendance/ajax_show_attendance.php', $this->var);
+	}
+	
+	function ajax_edit_attendance() {
+		$this->var['leaves'] = G_Leave_Finder::findAll();
+		$this->var['action'] = url('attendance/_edit_attendance');
+		$this->var['date'] = $date = $_GET['date'];
+		$this->var['employee_id'] = $_GET['employee_id'];
+		$employee_id = Utilities::decrypt($_GET['employee_id']);
+		$e = Employee_Factory::get($employee_id);
+		$a = G_Attendance_Finder::findByEmployeeAndDate($e, $date);
+		if ($a) {
+			if ($a->isPresent()) {
+				if ($a->isRestday()) {
+					$this->var['restday_present'] = 'checked="checked"';
+				} else {
+					$this->var['present'] = 'checked="checked"';
+				}					
+			} else {
+				if ($a->isRestday()) {
+					$this->var['restday'] = 'checked="checked"';
+				} else {
+					$this->var['absent'] = 'checked="checked"';	
+				}
+			}
+			$this->var['leave_id'] = $a->getLeaveId();
+			$this->var['is_paid'] = $a->isPaid();
+		} else {
+			$this->var['present'] = 'checked="checked"';
+		}
+		list($year, $month, $day) = explode('-', $date);
+		$h = G_Holiday_Finder::findByMonthAndDay($month, $day);
+		if ($h) {
+			$this->var['not_present'] = 'Holiday';	
+		} else {
+			$this->var['not_present'] = 'Absent';
+		}
+		$this->view->render('attendance/ajax_edit_attendance.php', $this->var);
+	}
+		
+	function ajax_edit_time_in_out() {
+		$this->var['action'] = url('attendance/_edit_time_in_out');
+		$this->var['date'] = $date = $_GET['date'];
+		$this->var['employee_id'] = $_GET['employee_id'];
+		$employee_id = Utilities::decrypt($_GET['employee_id']);
+		$e = Employee_Factory::get($employee_id);
+		$a = G_Attendance_Finder::findByEmployeeAndDate($e, $date);
+		if ($a) {
+			$t = $a->getTimesheet();
+			list($actual_time_in_hh, $temp_actual_time_in_mm) = explode(':', Tools::timeFormat($t->getTimeIn()));
+			list($actual_time_in_mm, $actual_time_in_am) = explode(' ', $temp_actual_time_in_mm);
+			$this->var['actual_time_in_hh'] = $actual_time_in_hh;
+			$this->var['actual_time_in_mm'] = $actual_time_in_mm;
+			$this->var['actual_time_in_am'] = $actual_time_in_am;
+			list($actual_time_out_hh, $temp_actual_time_out_mm) = explode(':', Tools::timeFormat($t->getTimeOut()));
+			list($actual_time_out_mm, $actual_time_out_am) = explode(' ', $temp_actual_time_out_mm);
+			$this->var['actual_time_out_hh'] = $actual_time_out_hh;
+			$this->var['actual_time_out_mm'] = $actual_time_out_mm;
+			$this->var['actual_time_out_am'] = $actual_time_out_am;
+			
+			list($scheduled_time_in_hh, $temp_scheduled_time_in_mm) = explode(':', Tools::timeFormat($t->getScheduledTimeIn()));
+			list($scheduled_time_in_mm, $scheduled_time_in_am) = explode(' ', $temp_scheduled_time_in_mm);
+			$this->var['scheduled_time_in_hh'] = $scheduled_time_in_hh;
+			$this->var['scheduled_time_in_mm'] = $scheduled_time_in_mm;
+			$this->var['scheduled_time_in_am'] = $scheduled_time_in_am;	
+			
+			list($scheduled_time_out_hh, $temp_scheduled_time_out_mm) = explode(':', Tools::timeFormat($t->getScheduledTimeOut()));
+			list($scheduled_time_out_mm, $scheduled_time_out_am) = explode(' ', $temp_scheduled_time_out_mm);
+			$this->var['scheduled_time_out_hh'] = $scheduled_time_out_hh;
+			$this->var['scheduled_time_out_mm'] = $scheduled_time_out_mm;
+			$this->var['scheduled_time_out_am'] = $scheduled_time_out_am;
+		}
+		$this->view->render('attendance/ajax_edit_time_in_out.php', $this->var);
+	}
+	
+	function ajax_edit_overtime_in_out() {
+		$this->var['action'] = url('attendance/_edit_overtime_in_out');
+		$this->var['date'] = $date = $_GET['date'];
+		$this->var['employee_id'] = $_GET['employee_id'];
+		$employee_id = Utilities::decrypt($_GET['employee_id']);
+		$e = Employee_Factory::get($employee_id);
+		$a = G_Attendance_Finder::findByEmployeeAndDate($e, $date);
+		if ($a) {
+			$t = $a->getTimesheet();
+			$time_in = $t->getOverTimeIn();
+			if ($time_in) {
+				list($actual_time_in_hh, $temp_actual_time_in_mm) = explode(':', Tools::timeFormat($time_in));
+				list($actual_time_in_mm, $actual_time_in_am) = explode(' ', $temp_actual_time_in_mm);
+			} else {
+				list($actual_time_in_hh, $temp_actual_time_in_mm) = explode(':', Tools::timeFormat($t->getScheduledTimeOut()));
+				list($actual_time_in_mm, $actual_time_in_am) = explode(' ', $temp_actual_time_in_mm);
+			}
+			$this->var['actual_time_in_hh'] = $actual_time_in_hh;
+			$this->var['actual_time_in_mm'] = $actual_time_in_mm;
+			$this->var['actual_time_in_am'] = $actual_time_in_am;			
+			
+			
+			$time_out = $t->getOverTimeOut();
+			if ($time_out) {
+				list($actual_time_out_hh, $temp_actual_time_out_mm) = explode(':', Tools::timeFormat($time_out));
+				list($actual_time_out_mm, $actual_time_out_am) = explode(' ', $temp_actual_time_out_mm);
+			} else {
+				$mk_time_out = strtotime($t->getTimeOut());
+				$mk_scheduled_time_out = strtotime($t->getScheduledTimeOut());
+				if ($mk_time_out > $mk_scheduled_time_out) {
+					$temp_time_out = $t->getTimeOut();	
+				} else {
+					$temp_time_out = date('g:i a', strtotime($t->getScheduledTimeOut() .'+1 hours'));	
+				}
+				
+				list($actual_time_out_hh, $temp_actual_time_out_mm) = explode(':', Tools::timeFormat($temp_time_out));
+				list($actual_time_out_mm, $actual_time_out_am) = explode(' ', $temp_actual_time_out_mm);
+			}
+
+			$this->var['actual_time_out_hh'] = $actual_time_out_hh;
+			$this->var['actual_time_out_mm'] = $actual_time_out_mm;
+			$this->var['actual_time_out_am'] = $actual_time_out_am;
+		}
+		$this->view->render('attendance/ajax_edit_overtime_in_out.php', $this->var);
+	}	
+	
+	function ajax_edit_timesheet() {
+		$this->var['date'] = $date = $_GET['date'];
+		$this->var['employee_id'] = $_GET['employee_id'];		
+		$this->var['action'] = url('attendance/_edit_timesheet');
+		$employee_id = Utilities::decrypt($_GET['employee_id']);
+		$e = Employee_Factory::get($employee_id);
+		$a = G_Attendance_Finder::findByEmployeeAndDate($e, $date);
+		$this->var['timesheet'] = $a->getTimesheet();
+		
+		$this->view->render('attendance/ajax_edit_timesheet.php', $this->var);	
+	}
+	
+	function ajax_show_timesheet() {
+		$this->var['date'] = $date = $_GET['date'];
+		$this->var['employee_id'] = $_GET['employee_id'];		
+		$this->var['action'] = url('attendance/_edit_timesheet');
+		$employee_id = Utilities::decrypt($_GET['employee_id']);
+		$e = Employee_Factory::get($employee_id);
+		$a = G_Attendance_Finder::findByEmployeeAndDate($e, $date);
+		$this->var['timesheet'] = $a->getTimesheet();
+		
+		$this->view->render('attendance/ajax_show_timesheet.php', $this->var);	
+	}
+	
+	function ajax_import_timesheet() {	
+		$this->var['action'] = url('attendance/_import_timesheet_excel');
+		$this->view->render('attendance/ajax_import_timesheet.php', $this->var);	
+	}
+	
+	function ajax_import_overtime() {	
+		$this->var['action'] = url('attendance/_import_overtime');
+		$this->view->render('attendance/ajax_import_overtime.php', $this->var);	
+	}
+	
+	function ajax_import_overtime_pending() {	
+		$this->var['h_employee_id'] = $_GET['h_employee_id'];
+		$this->var['action'] = url('attendance/_import_overtime_pending');
+		$this->view->render('attendance/ajax_import_overtime.php', $this->var);	
+	}
+	
+	function html_import_overtime() {
+		$this->view->setTemplate('template_blank.php');
+		$this->view->render('attendance/html/html_import_overtime.php', $this->var);	
+	}		
+}
+?>

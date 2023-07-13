@@ -1,0 +1,93 @@
+a img { border:0;}
+
+body, html { padding:0; margin:0; display:block; min-height:100%; line-height:100%; height:100%;}
+body { font-family:Helvetica, Arial, Helvetica, sans-serif; color:#777777; line-height:20px; font-size:13px; font-weight:normal;}
+.clear { clear:both; }
+.body_bg { width:auto; height:auto; position:fixed; top:0; bottom:0; right:0; left:0; z-index:1; background:url(themes-images/new/body_bg.jpg) no-repeat 0 0; background-size: 100% 100%;}
+#wrapper { position:relative; z-index:10; background:none;}
+#container { width:960px; border:0; margin:0 auto; padding:0; background:url(themes-images/new/content_bg.jpg) repeat 0 0 #ffffff;}
+#header { background:#3c3c3c; height:auto; padding:15px 15px 0; border-bottom:2px solid #8fffc9; width:auto; margin:0 auto;}
+#header .logo { position:absolute; left:30px; top:0; background:#ffffff; padding:8px 35px 5px 20px;}
+/*Menu*/
+#header #menu { float:right; position:relative; margin-top:-10px; bottom:-3px;}
+#header #menu ul { list-style:none; padding:0; margin:0;}
+#header #menu ul li,
+#header #menu ul div.profile_info { float:left; padding:0; margin:0;}
+#header #menu ul div.profile_info { padding-left:10px;}
+#header #menu ul div.profile_info #profile_tab { position:relative; top:0; left:0;}
+#header #menu ul li a { padding:10px 10px 15px; display:block; color:#ffffff; text-transform:uppercase; font-size:14px; text-decoration:none; font-family: 'Aller';}
+#header #menu ul li.selected a, #header #menu ul li a:hover { color:#ffffff;}
+#header #menu ul li.selected { border-bottom:2px solid #57ccc6;}
+/*Profile Tab*/
+#header #menu #profile_tab ul li.user_photo a { padding:10px 5px 15px;}
+#header #menu #profile_tab ul li.user_photo img { padding:0; border:0; -moz-border-radius:0; -webkit-border-radius:0; -o-border-radius:0; -khtml-border-radius:0; border-radius:0;}
+#header #menu #profile_tab ul li.userfname a { font-weight:normal; text-shadow:none; padding-left:7px; padding-right:5px;}
+#header #menu #profile_tab ul li.userfname:hover a,
+#header #menu #profile_tab ul li.userfname a:hover { color:#333333;}
+#header #menu #profile_tab ul #usrprfl_cntnr a { padding:5px 10px; color:#555555; text-transform:none;}
+#header #menu #profile_tab ul #usrprfl_cntnr a:hover { color:#111111;}
+/*Banner*/
+#banner { background:url(themes-images/new/banner_image.jpg) no-repeat 0 bottom; height:300px; position:relative;}
+#banner .banner_text { display:block; float:right; padding:60px 35px 20px;}
+#banner h1, #banner h2, #banner h3 { text-transform:uppercase; font-family: 'BebasNeue'; *font-family: 'Aller'; font-family: 'Aller'\0/; padding:0; margin:0; font-weight:normal;}
+#banner h1 { color:#ef3e56; font-size:82px; line-height:70px; *font-size:58px; *line-height:56px;}
+#banner h2 { color:#fbb64a; font-size:72px; line-height:65px; *font-size:50px; *line-height:48px;}
+#banner h3 { color:#50bbb6; font-size:42px; line-height:35px; *font-size:29px; *line-height:27px;}
+/* IE8 */
+html.ie8 #banner h1 { font-size:58px; line-height:56px;}
+html.ie8 #banner h2 { font-size:50px; line-height:48px;}
+html.ie8 #banner h3 { font-size:29px; line-height:27px;}
+ /**/
+/*Content*/
+#main_container { position:relative; width:100%; margin:0 380px 0 0; z-index:1;}
+#main { position:relative; width:100%; margin:0 -380px 0 0; float:left;}
+#main.fullwidth { margin:0 auto;}
+#content { padding:20px; width:auto; margin:0 380px 0 0;}
+body.body_contact_us #content { padding:0;}
+body.body_contact_us #content .page_content { display:block; position:relative;}
+body.body_contact_us #content .page_content > .page_title { position:absolute; left:50px; top:23px; z-index:100; text-shadow:0 2px #ffffff;}
+#main.fullwidth #content { margin:0 auto;}
+#content .page_content, #sidebar, #subfooter, #footer { font-family: 'OpenSans';}
+#content .page_content p { margin:0 0 15px;}
+#container .page_title, #sidebar .sidebar_title { font-family: 'KlavikaBold-Bold'; font-weight:normal; color:#ef3e56; text-transform:uppercase; margin:0 0 20px; }
+/*Sidebar*/
+#sidebar { float:right; width:350px; padding:20px 20px 20px 0; position:relative; z-index:100;}
+#content iframe, #sidebar iframe { border:5px solid #a7f2cd;}
+/*SubFooter*/
+#subfooter { padding:20px;}
+#subfooter .col_1_4 { float:left; width:25%; text-align:center;}
+#subfooter .col_1_4 img { border:3px solid #a7f2cd; max-width:90%;}
+/*Footer*/
+#footer { background:#373737; position:relative; width:auto; display:block; border-top:20px solid #57cbc5;}
+#footer .inner { text-align:center; padding:20px; margin:0; color:#cccccc;}
+#footer a.gleent {font-family: 'GothamMedium'; color:#ffffff; font-weight:normal; color:#ffffff; text-decoration:none;}
+
+
+/*Job Vacancy List*/
+#job_vacancy_list { margin:0 10px; padding:0 0 20px;}
+#job_vacancy_list ul { list-style:none; padding:0; margin:0;}
+#job_vacancy_list ul li { padding:0 20px 20px;}
+#job_vacancy_list ul li + li { padding-top:10px; border-top:1px solid #dddddd;}
+#job_vacancy_list ul li + li + li, #job_vacancy_list ul li + li + li +  li + li, #job_vacancy_list ul li + li + li +  li + li +  li + li, #job_vacancy_list ul li + li + li +  li + li +  li + li +  li + li, #job_vacancy_list ul li + li + li +  li + li +  li + li +  li + li +  li + li { background:none;}
+#job_vacancy_list ul li + li, #job_vacancy_list ul li + li + li + li, #job_vacancy_list ul li + li + li + li + li + li, #job_vacancy_list ul li + li + li + li + li + li + li + li, #job_vacancy_list ul li + li + li + li + li + li + li + li + li + li, #job_vacancy_list ul li + li + li + li + li + li + li + li + li + li + li + li { background:#f5f5f5;}
+#job_vacancy_list h2.job_title { margin:0 0 15px; padding:0; color:#215175; line-height:22px; font-size:18px;}
+#job_vacancy_list h2.job_title small.job_meta { color:#888888; font-size:13px; line-height:16px; font-weight:normal; padding:0; margin:0; display:block;}
+#job_vacancy_list h2.job_title small.job_meta i { vertical-align:middle; position:relative; top:-1px;}
+#job_vacancy_list .job-description-container { color:#444444; font-size:14px;}
+/*Job Search*/
+.job_search_container { display:block; overflow:auto; position:relative; border-bottom:1px solid #d0cd73; border-top:1px solid #d0cd73; background:#fffee1; padding:20px 50px; margin:0 -20px 20px;}
+.job_search_container form { margin:0;}
+.job_search_container .search_inline { display:block; float:left; margin:0; vertical-align:middle;}
+.job_search_container form h2.search_inline { font-size:25px; line-height:30px; margin-right:15px;}
+.job_search_container form input[type=text] { padding:0 10px; height:30px; line-height:30px;}
+.job_search_container form button { padding:0 20px; height:30px; line-height:30px; text-transform:uppercase; font-weight:bold; font-size:15px;}
+
+/* Template = Blank Popup */
+body.template_blank_popup { background:#ffffff; background-image:none;}
+body.template_blank_popup #container { width:auto; min-width:400px;}
+body.template_blank_popup #wrapper { background-image:none;}
+body.template_blank_popup #header { display:none;}
+body.template_blank_popup #main { float:none;}
+body.template_blank_popup .form_sectiontitle { background:none;}
+body.template_blank_popup div#form_default table td.field_label { padding-left:20px;}
+body.template_blank_popup div#form_default table td + td { font-weight:bold;}

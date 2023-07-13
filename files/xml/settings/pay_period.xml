@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<pay_period_code>BMO</pay_period_code>
+		<pay_period_name>Bi-Monthly</pay_period_name>
+		<cut_off>1-15,16-31</cut_off>
+		<payout_day>20,5</payout_day>
+		<default>1</default>
+	</Fields>
+
+</Main>

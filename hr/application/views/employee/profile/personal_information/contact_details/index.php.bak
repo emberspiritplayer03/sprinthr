@@ -1,0 +1,74 @@
+<h2 class="field_title"><?php echo $title; ?></h2>
+
+<?php 
+include 'form/contact_details_edit.php';
+?>
+<table id="contact_details_table_wrapper" class="table_form" width="498" border="0" cellpadding="3" cellspacing="3">
+  <tr>
+    <td width="156" align="right" valign="top">Address:</td>
+    <td valign="top"><?php echo $details->address; ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">City:</td>
+    <td width="241" valign="top"><?php echo  ucfirst($details->city); ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Province:</td>
+    <td valign="top"><?php echo ucfirst($details->province); ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Zip Code:</td>
+    <td valign="top"><?php echo  ucfirst($details->zip_code); ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Country:</td>
+    <td valign="top"><?php echo  ucfirst($details->country); ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Home Telephone:</td>
+    <td valign="top"><?php echo  ucfirst($details->home_telephone); ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Mobile:</td>
+    <td valign="top"><?php echo ucfirst($details->mobile); ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Work Telephone:</td>
+    <td valign="top"><?php echo $details->work_telephone; ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Work Email:</td>
+    <td valign="top"><?php echo $details->work_email; ?></td>
+  </tr>
+  <tr>
+    <td width="156" align="right" valign="top">Other Email:</td>
+    <td valign="top"><?php echo $details->other_email; ?></td>
+  </tr>
+   <?php foreach($field as $key=>$value) { 
+	$employee_id = $details->employee_id;
+	$e = G_Employee_Finder::findById($employee_id);
+	
+    $f =  G_Employee_Dynamic_Field_Finder::findBySettingsEmployeeFieldId($value->getId(),$e);
+	if($f) {
+		$title = $f->title;		 
+		$value = $f->value;
+	}else {
+		$title = $value->title;		 
+		$value = '';
+	}
+  ?>
+  <tr>
+    <td align="right" valign="top"><?php echo ucfirst($title); ?>:</td>
+    <td valign="top"><?php echo $value; ?></td>
+    <td valign="top">&nbsp;</td>
+  </tr>
+  <?php } ?>
+  <tr>
+    <td align="right" valign="top">&nbsp;</td>
+    <td valign="top">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="right" valign="top">&nbsp;</td>
+    <td valign="top"><input type="submit" name="button" id="button" value="Edit" onclick="javascript:loadContactDetailsForm();"  /></td>
+  </tr>
+</table>

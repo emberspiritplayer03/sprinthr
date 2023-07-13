@@ -1,0 +1,14 @@
+
+<?php 
+define('TDD_CONFIG_PATH','config/');
+define('TDD_SYSTEM_PATH','system/');
+define('TDD_ENGINE_PATH','simpletest/');
+define('MAIN_FOLDER','/internal-projects/products/development/sprint_hr/');
+define('BASE_FOLDER', '/internal-projects/products/development/sprint_hr/tdd/');
+//leave '/' if you don't have folder
+define('LIBRARY_FOLDER', '/'); //this is for folder library in root directory
+define('EXT','.php');
+
+
+require_once TDD_SYSTEM_PATH.'webgine.php';
+?>

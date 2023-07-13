@@ -1,0 +1,134 @@
+<?php
+class G_Fp_Attendance_Logs_Helper {
+
+    public static function sqlGetEmployeeLogsByEmployeeCodeAndDate($employee_code = '', $date = '', $fields) {
+    	if( !empty($fields) ){
+    		$sql_fields = implode(",", $fields);
+    	}else{
+    		$sql_fields = " * ";
+    	}
+
+		$sql = "
+            SELECT {$sql_fields}
+            FROM ". G_ATTENDANCE_LOG ." 
+            WHERE employee_code ='{$employee_code}'
+            	AND `date` =" . Model::safeSql($date) . "
+            ORDER BY date, type ASC
+        ";         
+       $records = Model::runSql($sql,true);       
+       return $records;
+	}
+
+    public static function sqlGetEmployeeLogsByUserIdAndDate($user_id = '', $date = '', $fields) {
+        if( !empty($fields) ){
+            $sql_fields = implode(",", $fields);
+        }else{
+            $sql_fields = " * ";
+        }
+
+        $sql = "
+            SELECT {$sql_fields}
+            FROM ". G_ATTENDANCE_LOG ." 
+            WHERE user_id =" . Model::safeSql($user_id) . "
+                AND `date` =" . Model::safeSql($date) . "
+            ORDER BY date, type ASC
+        ";  
+       $records = Model::runSql($sql,true);       
+       return $records;
+    }
+
+    public static function sqlCountMultipleInOutByDateRange($from = '', $to = '') {
+
+        $sqlin = "
+            SELECT COUNT(eal.id) AS total_in, eal.date as attendance_date, eal.employee_code, eal.employee_name  
+            FROM " . G_ATTENDANCE_LOG . " eal
+            WHERE eal.date BETWEEN " . Model::safeSql($from) . " AND " . Model::safeSql($to) . "
+            AND eal.type = 'in' AND (eal.employee_name != '' OR eal.user_id != 0)
+            GROUP BY attendance_date, eal.employee_code
+        ";
+        $records_in = Model::runSql($sqlin,true);       
+
+        $multiple_in_array = array();
+        foreach($records_in as $rin) {
+            if($rin['total_in'] > 1 ) {
+                $multiple_in_array[] = $rin;
+            }
+        }
+
+        $sqlout = "
+            SELECT COUNT(eal.id) AS total_out, eal.date as attendance_date, eal.employee_code, eal.employee_name  
+            FROM " . G_ATTENDANCE_LOG . " eal
+            WHERE eal.date BETWEEN " . Model::safeSql($from) . " AND " . Model::safeSql($to) . "
+            AND eal.type = 'out' AND (eal.employee_name != '' OR eal.user_id != 0)
+            GROUP BY attendance_date, eal.employee_code
+        ";
+        $records_out = Model::runSql($sqlout,true);       
+
+        $multiple_out_array = array();
+        foreach($records_out as $rout) {
+            if($rout['total_out'] > 1 ) {
+                $multiple_out_array[] = $rout;
+            }
+        }        
+
+        $total_multiple_in_out = (count($multiple_in_array) + count($multiple_out_array));
+        return $total_multiple_in_out;
+    }
+
+    public static function sqlGetMultipleInOutByDateRange($from = '', $to = '') {
+        $sqlin = "
+            SELECT COUNT(eal.id) AS total_in, eal.date as attendance_date, eal.employee_code, eal.employee_name, eal.type as type  
+            FROM " . G_ATTENDANCE_LOG . " eal
+            WHERE eal.date BETWEEN " . Model::safeSql($from) . " AND " . Model::safeSql($to) . "
+            AND eal.type = 'in' AND eal.employee_name != ''
+            GROUP BY attendance_date, eal.employee_code
+        ";
+        $records_in = Model::runSql($sqlin,true);       
+
+        $multiple_in_array = array();
+        foreach($records_in as $rin) {
+            if($rin['total_in'] > 1 ) {
+                $multiple_in_array[] = $rin;
+            }
+        }
+
+        $sqlout = "
+            SELECT COUNT(eal.id) AS total_out, eal.date as attendance_date, eal.employee_code, eal.employee_name, eal.type as type   
+            FROM " . G_ATTENDANCE_LOG . " eal
+            WHERE eal.date BETWEEN " . Model::safeSql($from) . " AND " . Model::safeSql($to) . "
+            AND eal.type = 'out' AND eal.employee_name != ''
+            GROUP BY attendance_date, eal.employee_code
+        ";
+        $records_out = Model::runSql($sqlout,true);       
+
+        $multiple_out_array = array();
+        foreach($records_out as $rout) {
+            if($rout['total_out'] > 1 ) {
+                $multiple_out_array[] = $rout;
+            }
+        }        
+
+        $in_out_data = array_merge($multiple_in_array,$multiple_out_array);
+
+        return $in_out_data;
+    }    
+
+    public static function sqlIsIdExists($id) {
+        $is_exists = false;
+
+        $sql = "
+            SELECT COUNT(id) as total
+            FROM " . G_ATTENDANCE_LOG ."
+            WHERE id = ". Model::safeSql($id) ."
+        ";
+        $result = Model::runSql($sql);
+        $row    = Model::fetchAssoc($result);
+
+        if( $row['total'] > 0 ){
+            $is_exists = true;
+        }
+        
+        return $is_exists;
+    }
+}
+?>

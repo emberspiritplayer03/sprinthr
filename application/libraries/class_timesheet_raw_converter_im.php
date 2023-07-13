@@ -1,0 +1,283 @@
+<?php
+/*
+	$file = BASE_PATH . 'files/files/import_dtr_im.xlsx';
+	$time = new G_Timesheet_Import_IM($file);
+	$time->import();
+*/
+class Timesheet_Raw_Converter_IM {
+	protected $employee_codes;
+	protected $file_to_import;
+	protected $obj_reader;
+	
+	protected $current_employee_code;
+	protected $current_type;
+	protected $current_time_in;
+	protected $current_time_out;
+	protected $current_date_in;
+	protected $current_date_out;
+	
+	protected $current_break_date;
+	protected $current_break_time;
+
+
+	protected $cur_date;
+	protected $cur_time;
+	protected $cur_datetime;
+
+	
+	protected $involved_dates = array();
+		
+	protected $main_break_log_types = array();
+	
+	public function __construct($file) {
+		$this->file_to_import = $file;
+		$inputFileType = PHPExcel_IOFactory::identify($this->file_to_import);
+		$objReader = PHPExcel_IOFactory::createReader($inputFileType); 				
+		$this->obj_reader = $objReader->load($this->file_to_import);
+		//$this->employee_codes = $this->getAllEmployeeCodes();
+
+		$this->main_break_log_types = array(
+			strtolower(G_Employee_Break_Logs::TYPE_BOUT),
+			strtolower(G_Employee_Break_Logs::TYPE_BIN),
+			strtolower(G_Employee_Break_Logs::TYPE_BOT_OUT),
+			strtolower(G_Employee_Break_Logs::TYPE_BOT_IN),
+		);
+	}
+	
+	private function getAllEmployeeCodes() {
+		return G_Employee_Helper::getAllEmployeeCodes();
+	}
+	
+	private function isValidEmployeeCode($value) {
+		$value = trim($value);
+		if (in_array($value, $this->employee_codes)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public function convert() {
+		$is_imported = false;						
+		$read_sheet = $this->obj_reader->getActiveSheet();
+		$counter = 1;
+		foreach ($read_sheet->getRowIterator() as $row) {			
+			$this->emptyValues();
+			$cellIterator = $row->getCellIterator();
+		   	foreach ($cellIterator as $cell) {
+				$current_row = $cell->getRow();
+				$cell_value = $cell->getFormattedValue();
+				$column = $cell->getColumn();
+				$current_column = PHPExcel_Cell::columnIndexFromString($cell->getColumn());
+		
+				if (trim($cell_value) != '') {
+					$this->process($cell_value, $column);
+				}
+			}
+
+			$data[$counter]['employee_code'] = $this->current_employee_code;
+			$data[$counter]['type'] = $this->current_type;
+			$data[$counter]['time_in'] = $this->current_time_in;
+			$data[$counter]['date_in'] = $this->current_date_in;
+			$data[$counter]['time_out'] = $this->current_time_out;
+			$data[$counter]['date_out'] = $this->current_date_out;
+			
+			if ($this->current_type == 'in') {
+				$converted_dates[$this->current_employee_code]['in'][$this->current_date_in][$this->current_time_in] = $this->current_date_in;
+				$this->addInvolvedDate($this->current_date_in);
+			} else if ($this->current_type == 'out') {
+				$converted_dates[$this->current_employee_code]['out'][$this->current_date_out][$this->current_time_out] = $this->current_date_out;
+				$this->addInvolvedDate($this->current_date_out);
+			}
+			// break logs
+			else if (in_array(strtolower($this->current_type), $this->main_break_log_types)) {
+				$converted_dates[$this->current_employee_code]['breaks'][$this->current_break_date . ' ' . $this->current_break_time] = array(
+					'date' => $this->current_break_date,
+					'time' => $this->current_break_time,
+					'type' => $this->current_type
+				);
+			}
+			
+			$counter++;		
+		}		
+		return $converted_dates;
+	}
+	
+	private function addInvolvedDate($date) {
+		$this->involved_dates[$date] = $date;
+	}
+	
+	public function getInvolvedDates() {
+		return $this->involved_dates;	
+	}
+	
+	private function addTimesheet($employee_code, $time_in, $time_out, $date_in, $date_out) {
+		$e = G_Employee_Finder::findByEmployeeCode($employee_code);
+		if ($e) {
+			$is_true = G_Attendance_Helper::recordTimecard($e, $date_in, $time_in, $time_out, $date_in, $date_out);
+			if ($is_true) {
+				return G_Attendance_Helper::updateAttendance($e, $date_in);
+			}
+		} else {
+			$error = new G_Attendance_Error;			
+			$error->setMessage("Employee code can't find: {$employee_code}");
+			$error->setErrorTypeId(G_Attendance_Error::ERROR_INVALID_EMPLOYEE_ID);
+			$error->setDate($date_in);
+			$error->setEmployeeCode($employee_code);
+			$error->addError();
+		}
+	}
+	
+	private function addErrorNoIn($employee_code, $time_out, $date_out) {
+		$e = G_Employee_Finder::findByEmployeeCode($employee_code);
+		if ($e) {
+			$name = $e->getName();
+			$employee_id = $e->getId();
+		}
+		$time = $date_out .' '. date('g:i a', strtotime($time_out));
+		
+		$error = G_Attendance_Error_Finder::findNotFixedByEmployeeCodeAndDateAndErrorType($employee_code, $date_out, G_Attendance_Error::ERROR_NO_IN);
+		if (!$error) {
+			$error = new G_Attendance_Error;
+		}				
+		$error->setMessage("No Time In: {$name}<br>OUT: {$time}");
+		$error->setErrorTypeId(G_Attendance_Error::ERROR_NO_IN);
+		$error->setDate($date_out);
+		$error->setEmployeeId($employee_id);
+		$error->setEmployeeCode($employee_code);
+		$error->addError();
+	}
+	
+	private function addErrorNoOut($employee_code, $time_in, $date_in) {
+		$e = G_Employee_Finder::findByEmployeeCode($employee_code);
+		if ($e) {
+			$name = $e->getName();
+			$employee_id = $e->getId();
+		}
+		$time = $date_in .' '. date('g:i a', strtotime($time_in));
+		
+		$error = G_Attendance_Error_Finder::findNotFixedByEmployeeCodeAndDateAndErrorType($employee_code, $date_in, G_Attendance_Error::ERROR_NO_OUT);
+		if (!$error) {
+			$error = new G_Attendance_Error;
+		}				
+		$error->setMessage("No Time Out: {$name}<br>IN: {$time}");
+		$error->setErrorTypeId(G_Attendance_Error::ERROR_NO_OUT);
+		$error->setDate($date_in);
+		$error->setEmployeeId($employee_id);
+		$error->setEmployeeCode($employee_code);
+		$error->addError();
+	}	
+	
+	public function process($value, $column) {
+		//if ($this->isValidEmployeeCode($value)) {
+		//	$this->current_employee_code = $value;				
+		//}
+
+		if ($column == 'A' && $value != '') {
+			$this->current_employee_code = $value;				
+		}
+
+		if ($this->isIn($value)) {
+			$this->current_type = 'in';
+		}
+		
+		if ($this->isOut($value)) {
+			$this->current_type = 'out';
+		}
+		
+		if ($this->isBreak($value)) {
+			$this->current_type = strtolower($value);
+		}
+
+		if($column == 'C' && $value != "" && strtolower($value) != 'date'){
+			$this->cur_date = $value;
+		}
+
+		if($column == 'D' && $value != "" && strtolower($value) != 'time'){
+
+			 $this->cur_time = $this->cur_date.' '.$value;
+			 $this->cur_datetime = date('Y-m-d H:i:s', strtotime($this->cur_time));
+
+			if ($this->current_type == 'in' && $this->isValidTime($this->cur_datetime)) {
+				$this->current_time_in = $this->getTime($this->cur_datetime);
+				$this->current_date_in = $this->getDate($this->cur_datetime);
+			}
+			
+			if ($this->current_type == 'out' && $this->isValidTime($this->cur_datetime)) {
+				$this->current_time_out = $this->getTime($this->cur_datetime);
+				$this->current_date_out = $this->getDate($this->cur_datetime);
+			}
+			
+			if (in_array(strtolower($this->current_type), $this->main_break_log_types) && $this->isValidTime($this->cur_datetime)) {
+				$this->current_break_date = $this->getDate($this->cur_datetime);
+				$this->current_break_time = $this->getTime($this->cur_datetime);
+			}
+
+
+		}
+	}
+
+    protected function getTime($value) {
+		$time = strtotime($value);
+		return date('H:i:s', $time);
+	}
+
+    protected function getDate($value) {
+		$date = strtotime($value);
+		return date('Y-m-d', $date);
+	}
+
+    protected function isValidTime($value) {
+		$time = strtotime($value);
+		if ($time) {
+			return true;
+		} else {
+			return false;	
+		}
+	}
+	
+	protected function isIn($value) {
+		$value = trim($value);
+		if (strtolower($value) == 'in') {
+			return true;
+		} else {
+			return false;	
+		}
+	}
+
+    protected function isOut($value) {
+		$value = trim($value);
+		if (strtolower($value) == 'out') {
+			return true;
+		} else {
+			return false;	
+		}
+	}	
+
+    protected function isBreak($value) {
+		$value = trim($value);
+		
+		if (in_array(strtolower($value), $this->main_break_log_types)) {
+			return true;
+		} else {
+			return false;	
+		}
+	}	
+	
+	private function emptyValues() {
+		$this->current_employee_code = '';
+		$this->current_type = '';
+		$this->current_time_in = '';
+		$this->current_time_out = '';
+		$this->current_date_in = '';
+		$this->current_date_out = '';
+		$this->current_break_date = '';
+		$this->current_break_time = '';
+		$this->is_valid_in = false;
+		$this->is_valid_out = false;
+		$this->cur_datetime = '';
+		$this->cur_date = '';
+		$this->cur_time = '';
+	}	
+}
+?>

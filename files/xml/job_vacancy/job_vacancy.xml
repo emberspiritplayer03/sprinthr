@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<data>
+  <job_vacant>
+    <id>2</id>
+    <job_id>4</job_id>
+    <job_description>This is a sample content test</job_description>
+    <job_title>HR Assistant</job_title>
+    <publication_date>2013-03-27</publication_date>
+    <advertisement_end>2013-04-05</advertisement_end>
+  </job_vacant>
+  <job_vacant>
+    <id>5</id>
+    <job_id>10</job_id>
+    <job_description>test</job_description>
+    <job_title>QA Manager</job_title>
+    <publication_date>2013-03-06</publication_date>
+    <advertisement_end>2013-04-24</advertisement_end>
+  </job_vacant>
+</data>

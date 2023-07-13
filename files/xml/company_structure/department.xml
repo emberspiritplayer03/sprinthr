@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<title>Facilities</title>
+	</Fields>
+
+	<Fields>
+		<title>Finance</title>
+	</Fields>
+
+	<Fields>
+		<title>General Affairs</title>
+	</Fields>
+	
+	<Fields>
+		<title>Human Resources</title>
+	</Fields>
+
+	<Fields>
+		<title>Information Technology</title>
+	</Fields>
+
+	<Fields>
+		<title>Logistics</title>
+	</Fields>
+
+	<Fields>
+		<title>Equipment</title>
+	</Fields>
+
+	<Fields>
+		<title>Production</title>
+	</Fields>
+
+	<Fields>
+		<title>Technical</title>
+	</Fields>
+
+	<Fields>
+		<title>Quality Control</title>
+	</Fields>
+</Main>

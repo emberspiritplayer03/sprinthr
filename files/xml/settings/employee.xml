@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fields>
+	<firstname>HR</firstname>
+	<lastname>HR</lastname>
+	<employee_code>1</employee_code> 	
+	<department_company_structure_id>5</department_company_structure_id>
+	<hired_date>2013-01-01</hired_date>
+</Fields>

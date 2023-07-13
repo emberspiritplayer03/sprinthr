@@ -1,0 +1,6 @@
+<div class="alert alert-error" style="font-size:18px;">
+	<i class="icon-remove-sign"></i><span class="message"></span>  Account already activated.
+</div>
+<div style="margin-top:80px;">
+<a class="btn" href="<?php echo url_to_recruitment('applicant_login');?>"><i class="icon-lock icon-vertical"></i> Applicant Login</a> <a class="btn" href="<?php echo url('register');?>"><i class="icon-list-alt icon-vertical"></i> Applicant Registration</a>
+</div>

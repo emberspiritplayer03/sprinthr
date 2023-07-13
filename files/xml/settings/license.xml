@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<license_type>Driver's License</license_type>
+		<description>Driver's License</description>
+	</Fields>
+	
+	<Fields>
+		<license_type>Pharmacist PRC License</license_type>
+		<description>Pharmacist PRC License</description>
+	</Fields>
+	
+	<Fields>
+		<license_type>Doctor's License</license_type>
+		<description>Doctor's License</description>
+	</Fields>
+</Main>

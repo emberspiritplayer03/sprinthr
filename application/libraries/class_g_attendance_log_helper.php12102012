@@ -1,0 +1,31 @@
+<?php
+class G_Attendance_Log_Helper {
+	/*
+		$logs = returned value from G_Attendance_Log_Finder::findAllYesterday();
+	*/
+	public static function convertLogsToTimesheets($logs) {
+		foreach ($logs as $log) {
+			$time = date('H:i:s', strtotime($log->getTime()));
+			$date = $log->getDate();
+			$employee_code = $log->getEmployeeCode();
+			$type = $log->getType();
+			$timesheets[$employee_code][$type][$date][$time] = $date;
+		}
+		return $timesheets;
+	}
+	
+	public static function countLogByEmployeeCodeDateTimeType($employee_code, $date, $time, $type) {
+		$sql = "
+			SELECT COUNT(*) AS total
+			FROM ". G_ATTENDANCE_LOG ."
+			WHERE employee_code = ". Model::safeSql($employee_code) ."
+			AND date = ". Model::safeSql($date) ."
+			AND time = ". Model::safeSql($time) ."
+			AND type = ". Model::safeSql($type) ."
+		";
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+}
+?>

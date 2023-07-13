@@ -1,0 +1,303 @@
+<?php
+class G_Attendance_Log_Helper {
+	/*
+		$logs = returned value from G_Attendance_Log_Finder::findAllYesterday();
+	*/
+	public static function convertLogsToTimesheets($logs) {
+		foreach ($logs as $log) {
+			$time = date('H:i:s', strtotime($log->getTime()));
+			$date = $log->getDate();
+			$employee_code = $log->getEmployeeCode();
+			$type = $log->getType();
+			$timesheets[$employee_code][$type][$date][$time] = $date;
+		}
+		return $timesheets;
+	}
+
+	public static function sqlGetDataById($id = 0) {
+		$sql = "
+			SELECT  fp.user_id, fp.employee_code, fp.date, fp.time, fp.type
+			FROM ". G_ATTENDANCE_LOG ." fp
+			WHERE fp.id =" . Model::safeSql($id) . "
+		";
+		
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row;
+	}
+
+	public static function sqlGetAllLogsByDate( $date = '' ) {
+		$log_date = date("Y-m-d",strtotime($date));
+
+		$sql = "
+			SELECT  employee_code, date, time, type
+			FROM ". G_ATTENDANCE_LOG ."
+			WHERE date =" . Model::safeSql($log_date) . "			
+		";
+
+		$records = Model::runSql($sql,true);
+		return $records;
+	}
+
+	public static function sqlGetAllLogsNotTransferredByDate( $date = '' ) {
+		$log_date = date("Y-m-d",strtotime($date));
+
+		$sql = "
+			SELECT  employee_code, date, time, type
+			FROM ". G_ATTENDANCE_LOG ."
+			WHERE date =" . Model::safeSql($log_date) . "	
+				AND is_transferred =" . Model::safeSql(G_Attendance_Log::ISNOT_TRANSFERRED) . "		
+		";		
+		$records = Model::runSql($sql,true);
+		return $records;
+	}
+
+	public static function sqlGetAllLogsNotTransferredByDateRange( $from = '', $to = '' ) {
+		$value_from = date("Y-m-d",strtotime($from));
+		$value_to   = date("Y-m-d",strtotime($to));
+
+		$sql = "
+			SELECT  employee_code, date, time, type
+			FROM ". G_ATTENDANCE_LOG ."
+			WHERE date BETWEEN " . Model::safeSql($value_from) . " AND " . Model::safeSql($value_to) . "
+				AND is_transferred =" . Model::safeSql(G_Attendance_Log::ISNOT_TRANSFERRED) . "		
+		";			
+		$records = Model::runSql($sql,true);
+		return $records;
+	}
+	
+	public static function countAllByPeriod($start_date, $end_date) {		
+		$sql = "
+			SELECT  COUNT(*) AS total
+			FROM ". G_ATTENDANCE_LOG ."
+			WHERE date >= ". Model::safeSql($start_date) ."
+			AND date <= ". Model::safeSql($end_date) ."				
+		";
+		
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+	
+	public static function countAllByPeriodAndEmployeeId($arrId, $start_date, $end_date) {	
+		$arrId    = explode(",",$arrId);			
+		$arr_size = count($arrId);		
+		$counter  = 1;
+		
+		$sql = "
+			SELECT  COUNT(*) AS total
+			FROM ". G_ATTENDANCE_LOG ." al LEFT JOIN " . EMPLOYEE . " e
+				ON al.employee_code = e.employee_code  
+			WHERE (al.date >= ". Model::safeSql($start_date) ."
+			AND al.date <= ". Model::safeSql($end_date) . ") ";
+		
+			foreach($arrId as $key => $value){
+				if($counter == 1){
+				  $sql .= "AND (";
+				}else{}
+				
+				$sql .= "e.id=" . Model::safeSql(Utilities::decrypt($value));
+				if($counter < $arr_size){
+				  $sql .= " OR ";
+				}else{$sql .= ")";}
+				$counter++;
+			}
+			
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		
+		return $row['total'];
+	}
+	
+	public static function countAllIncompleteSwipeByPeriodAndEmployeeId($arrId,$start_date, $end_date) {				
+		$logs = G_Attendance_Log_Finder::findAllByPeriodAndEmployeeIdWithLimit($arrId,$start_date, $end_date);
+		
+		foreach ($logs as $l) {
+			$timesheets[$l->getEmployeeCode()][$l->getType()][$l->getDate()][$l->getTime()] = $l->getDate();
+			$ids[$l->getEmployeeCode()][$l->getDate().'-'.$l->getTime()] = $l->getId();
+		}
+		$tr = new G_Timesheet_Raw_Filter($timesheets);
+		$tr->filter();
+		
+		$errors_no_in  = $tr->getErrorsNoIn();		
+		$errors_no_out = $tr->getErrorsNoOut();
+		
+		//echo '<pre>';
+		//print_r($errors);		
+		$counter = 0;
+		
+		foreach ($errors_no_out as $employee_code => $timesheet) {
+			foreach ($timesheet as $date => $time) {
+				$log_id = $ids[$employee_code][$date .'-'. $time];
+				$e = new G_Attendance_Log;
+				$e->setId($log_id);
+				$e->setEmployeeCode($employee_code);
+				$e->setDate($date);
+				$e->setTime($time);
+				$e->setType('out');
+				$counter++;
+			}
+		}
+		
+		foreach ($errors_no_in as $employee_code => $timesheet) {
+			foreach ($timesheet as $date => $time) {
+				$log_id = $ids[$employee_code][$date .'-'. $time];
+				$e = new G_Attendance_Log;
+				$e->setId($log_id);
+				$e->setEmployeeCode($employee_code);
+				$e->setDate($date);
+				$e->setTime($time);
+				$e->setType('out');
+				$counter++;
+			}
+		}
+		return $counter;
+	}
+	
+	public static function countAllIncompleteSwipeByPeriodAndEmployeeIdDebug($arrId,$start_date, $end_date,$limit) {
+		
+		$logs = G_Attendance_Log_Finder::findAllByPeriodAndEmployeeIdWithLimit($arrId,$start_date, $end_date, $order_by, $limit,"GROUP BY e.employee_code,date");
+		$counter = 1;		
+		foreach ($logs as $l) {			
+			$timesheets[$counter . '_' . $l->getEmployeeCode()][$l->getType()][$l->getDate()][$l->getTime()] = $l->getDate();
+			$ids[$counter . '_' . $l->getEmployeeCode()][$l->getDate().'-'.$l->getTime()] = $l->getId();						
+			$counter++;
+		}			
+							
+		$tr = new G_Timesheet_Raw_Filter($timesheets);
+		$tr->filter_sub();
+		
+		$errors_no_out = $tr->getErrorsNoOut();
+		$errors_no_in  = $tr->getErrorsNoIn();		
+		
+		$total_records = 0;
+		foreach ($errors_no_out as $employee_code => $timesheet) {						
+			foreach ($timesheet as $date => $time) {	
+				$total_records++;
+			}		
+		}
+								
+		return $total_records;
+	}
+	
+	public static function countAllIncompleteSwipeByPeriod($start_date, $end_date) {				
+		$logs = G_Attendance_Log_Finder::findAllByPeriodWithLimit($start_date, $end_date);
+		
+		foreach ($logs as $l) {
+			$timesheets[$l->getEmployeeCode()][$l->getType()][$l->getDate()][$l->getTime()] = $l->getDate();
+			$ids[$l->getEmployeeCode()][$l->getDate().'-'.$l->getTime()] = $l->getId();
+		}
+		$tr = new G_Timesheet_Raw_Filter($timesheets);
+		$tr->filter();
+		
+		$errors_no_in  = $tr->getErrorsNoIn();		
+		$errors_no_out = $tr->getErrorsNoOut();
+		
+		//echo '<pre>';
+		//print_r($errors);		
+		$counter = 0;
+		
+		foreach ($errors_no_out as $employee_code => $timesheet) {
+			foreach ($timesheet as $date => $time) {
+				$log_id = $ids[$employee_code][$date .'-'. $time];
+				$e = new G_Attendance_Log;
+				$e->setId($log_id);
+				$e->setEmployeeCode($employee_code);
+				$e->setDate($date);
+				$e->setTime($time);
+				$e->setType('out');
+				$counter++;
+			}
+		}
+		
+		foreach ($errors_no_in as $employee_code => $timesheet) {
+			foreach ($timesheet as $date => $time) {
+				$log_id = $ids[$employee_code][$date .'-'. $time];
+				$e = new G_Attendance_Log;
+				$e->setId($log_id);
+				$e->setEmployeeCode($employee_code);
+				$e->setDate($date);
+				$e->setTime($time);
+				$e->setType('out');
+				$counter++;
+			}
+		}
+		return $counter;
+	}
+	
+	public static function countAllWithMultipleLogsAndEmployeeIdByPeriod($arrId, $start_date, $end_date) {				
+		$arrId    = explode(",",$arrId);			
+		$arr_size = count($arrId);		
+		$counter  = 1;
+		
+		$sql = "
+			SELECT COUNT(*) AS total
+			FROM (
+				SELECT b.employee_code, b.date, b.type
+				FROM ". G_ATTENDANCE_LOG ." b
+				WHERE b.date >= ". Model::safeSql($start_date) ."
+				AND b.date <= ". Model::safeSql($end_date) ."
+				GROUP BY b.employee_code, b.date, b.type
+				HAVING count(*) > 1) x, ". G_ATTENDANCE_LOG ." a LEFT JOIN " . EMPLOYEE . " e
+				ON a.employee_code = e.employee_code  
+			WHERE (x.employee_code = a.employee_code
+			AND x.date = a.date
+			AND x.type = a.type
+			AND a.date >= ". Model::safeSql($start_date) ."
+			AND a.date <= ". Model::safeSql($end_date) .") ";
+		
+			foreach($arrId as $key => $value){
+				if($counter == 1){
+				  $sql .= "AND (";
+				}else{}
+				
+				$sql .= "e.id=" . Model::safeSql(Utilities::decrypt($value));
+				if($counter < $arr_size){
+				  $sql .= " OR ";
+				}else{$sql .= ")";}
+				$counter++;
+			}
+			
+		$sql .= " ORDER BY a.employee_code, a.date, a.type";
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+	
+	public static function countAllWithMultipleLogsByPeriod($start_date, $end_date) {				
+		$sql = "
+			SELECT COUNT(*) AS total
+			FROM (
+				SELECT b.employee_code, b.date, b.type
+				FROM ". G_ATTENDANCE_LOG ." b
+				WHERE b.date >= ". Model::safeSql($start_date) ."
+				AND b.date <= ". Model::safeSql($end_date) ."
+				GROUP BY b.employee_code, b.date, b.type
+				HAVING count(*) > 1) x, ". G_ATTENDANCE_LOG ." a
+			WHERE x.employee_code = a.employee_code
+			AND x.date = a.date
+			AND x.type = a.type
+			AND a.date >= ". Model::safeSql($start_date) ."
+			AND a.date <= ". Model::safeSql($end_date) ."
+			ORDER BY a.employee_code, a.date, a.type	
+		";
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+	
+	public static function countLogByEmployeeCodeDateTimeType($employee_code, $date, $time, $type) {
+		$sql = "
+			SELECT COUNT(*) AS total
+			FROM ". G_ATTENDANCE_LOG ."
+			WHERE employee_code = ". Model::safeSql($employee_code) ."
+			AND date = ". Model::safeSql($date) ."
+			AND time = ". Model::safeSql($time) ."
+			AND type = ". Model::safeSql($type) ."
+		";		
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+}
+?>

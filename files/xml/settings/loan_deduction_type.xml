@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<deduction_type>Bi-monthly</deduction_type>
+	</Fields>
+	
+	<Fields>
+		<deduction_type>Monthly</deduction_type>
+	</Fields>
+	
+	<Fields>
+		<deduction_type>Weekly</deduction_type>
+	</Fields>
+	
+	<Fields>
+		<deduction_type>Daily</deduction_type>
+	</Fields>
+	
+	<Fields>
+		<deduction_type>Quarterly</deduction_type>
+	</Fields>
+</Main>

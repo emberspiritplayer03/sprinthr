@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sprint>
+	<table>
+		<name>g_access_rights</name>
+	</table>
+	
+	<table>
+		<name>g_applicant</name>
+	</table>
+	
+	<table>
+		<name>g_applicant_attachment</name>
+	</table>
+	
+	<table>
+		<name>g_applicant_education</name>
+	</table>
+	
+	<table>
+		<name>g_applicant_examination</name>
+	</table>
+	
+	<table>
+		<name>g_applicant_language</name>
+	</table>
+	
+	<table>
+		<name>g_applicant_license</name>
+	</table>
+	
+	<table>
+		<name>g_applicant_requirements</name>
+	</table>
+	
+	<table>
+		<name>g_applicant_skills</name>
+	</table>
+	
+	<table>
+		<name>g_applicant_training</name>
+	</table>
+	
+	<table>
+		<name>g_applicant_work_experience</name>
+	</table>
+	
+	<table>
+		<name>g_attendance_rate</name>
+	</table>
+	
+	<table>
+		<name>g_company_branch</name>
+	</table>
+	
+	<table>
+		<name>g_company_info</name>
+	</table>
+	
+	<table>
+		<name>g_company_structure</name>
+	</table>
+	
+	<table>
+		<name>g_cutoff_period</name>
+	</table>
+	
+	<table>
+		<name>g_daily_time_record</name>
+	</table>
+	
+	<table>
+		<name>g_eeo_job_category</name>
+	</table>
+	
+	<table>
+		<name>g_email_buffer</name>
+	</table>
+	
+	<table>
+		<name>g_employee</name>
+	</table>
+	
+	<table>
+		<name>g_employee_attachment</name>
+	</table>
+	
+	<table>
+		<name>g_employee_attendance</name>
+	</table>
+	
+	<table>
+		<name>g_employee_attendance_correction_request</name>
+	</table>
+	
+	<table>
+		<name>g_employee_basic_salary_history</name>
+	</table>
+	
+	<table>
+		<name>g_employee_branch_history</name>
+	</table>
+	
+	<table>
+		<name>g_employee_change_schedule_request</name>
+	</table>
+	
+	<table>
+		<name>g_employee_contact_details</name>
+	</table>
+	
+	<table>
+		<name> 	g_employee_contribution</name>
+	</table>
+	
+	<table>
+		<name>g_employee_dependent</name>
+	</table>
+	
+	<table>
+		<name>g_employee_details_history</name>
+	</table>
+	
+	<table>
+		<name>g_employee_direct_deposit</name>
+	</table>
+	
+	<table>
+		<name>g_employee_dynamic_field</name>
+	</table>
+	
+	<table>
+		<name>g_employee_earnings</name>
+	</table>
+	
+	<table>
+		<name>g_employee_education</name>
+	</table>
+	
+	<table>
+		<name>g_employee_emergency_contact</name>
+	</table>
+	
+	<table>
+		<name>g_employee_extend_contract</name>
+	</table>
+	
+	<table>
+		<name>g_employee_group_schedule</name>
+	</table>
+	
+	<table>
+		<name>g_employee_job_history</name>
+	</table>
+	
+	<table>
+		<name>g_employee_language</name>
+	</table>
+	
+	<table>
+		<name>g_employee_leave_available</name>
+	</table>
+	
+	<table>
+		<name>g_employee_leave_request</name>
+	</table>
+	
+	<table>
+		<name>g_employee_license</name>
+	</table>
+	
+	<table>
+		<name>g_employee_loan_details</name>
+	</table>
+	
+	<table>
+		<name>g_employee_loan_payment_breakdown</name>
+	</table>
+	
+	<table>
+		<name>g_employee_make_up_schedule_request</name>
+	</table>
+	
+	<table>
+		<name>g_employee_membership</name>
+	</table>
+	
+	<table>
+		<name>g_employee_memo</name>
+	</table>
+	
+	<table>
+		<name>g_employee_official_business_request</name>
+	</table>
+	
+	<table>
+		<name>g_employee_overtime</name>
+	</table>
+	
+	<table>
+		<name>g_employee_payable</name>
+	</table>
+	
+	<table>
+		<name>g_employee_payable_history</name>
+	</table>
+	
+	<table>
+		<name>g_employee_payslip</name>
+	</table>
+	
+	<table>
+		<name>g_employee_performance</name>
+	</table>
+	
+	<table>
+		<name>g_employee_request</name>
+	</table>
+	
+	<table>
+		<name>g_employee_request_approvers</name>
+	</table>
+	
+	<table>
+		<name>g_employee_requirements</name>
+	</table>
+	
+	<table>
+		<name>g_employee_restday</name>
+	</table>
+	
+	<table>
+		<name>g_employee_rest_day_request</name>
+	</table>
+	
+	<table>
+		<name>g_employee_schedule_specific</name>
+	</table>
+	
+	<table>
+		<name>g_employee_skills</name>
+	</table>
+	
+	<table>
+		<name>g_employee_subdivision_history</name>
+	</table>
+	
+	<table>
+		<name>g_employee_supervisor</name>
+	</table>
+	
+	<table>
+		<name>g_employee_tags</name>
+	</table>
+	
+	<table>
+		<name>g_employee_training</name>
+	</table>
+	
+	<table>
+		<name>g_employee_undertime_request</name>
+	</table>
+	
+	<table>
+		<name>g_employee_work_experience</name>
+	</table>
+	
+	<table>
+		<name>g_error_attendance</name>
+	</table>
+	
+	<table>
+		<name>g_error_leave</name>
+	</table>
+	
+	<table>
+		<name>g_error_overtime</name>
+	</table>
+	
+	<table>
+		<name>g_error_payslip</name>
+	</table>
+	
+	<table>
+		<name>g_exam</name>
+	</table>
+	
+	<table>
+		<name>g_exam_choices</name>
+	</table>
+	
+	<table>
+		<name>g_exam_question</name>
+	</table>
+	
+	<table>
+		<name>g_fp_attendance_log</name>
+	</table>
+	
+	<table>
+		<name>g_fp_attendance_summary</name>
+	</table>
+	
+	<table>
+		<name>g_fp_fingerprint</name>
+	</table>
+	
+	<table>
+		<name>g_holiday</name>
+	</table>
+	
+	<table>
+		<name>g_holiday_branch</name>
+	</table>
+	
+	<table>
+		<name>g_job</name>
+	</table>
+	
+	<table>
+		<name>g_job_application_event</name>
+	</table>
+	
+	<table>
+		<name>g_job_employment_status</name>
+	</table>
+	
+	<table>
+		<name>g_job_salary_rate</name>
+	</table>
+	
+	<table>
+		<name>g_job_specification</name>
+	</table>
+	
+	<table>
+		<name>g_job_vacancy</name>
+	</table>
+	
+	<table>
+		<name>g_leave</name>
+	</table>
+	
+	<table>
+		<name>g_loan_deduction_type</name>
+	</table>
+	
+	<table>
+		<name>g_loan_type</name>
+	</table>
+	
+	<table>
+		<name>g_pagibig_table</name>
+	</table>
+	
+	<table>
+		<name>g_payslip_deductions</name>
+	</table>
+	
+	<table>
+		<name>g_payslip_earnings</name>
+	</table>
+	
+	<table>
+		<name>g_performance</name>
+	</table>
+	
+	<table>
+		<name>g_performance_indicator</name>
+	</table>
+	
+	<table>
+		<name>g_philhealth</name>
+	</table>
+	
+	<table>
+		<name>g_philhealth_table_rate</name>
+	</table>
+	
+	<table>
+		<name>g_salary_cycle</name>
+	</table>
+	
+	<table>
+		<name>g_schedule</name>
+	</table>
+	
+	<table>
+		<name>g_schedule_group</name>
+	</table>
+	
+	<table>
+		<name>g_settings_application_status </name>
+	</table>
+	
+	<table>
+		<name>g_settings_deduction_breakdown</name>
+	</table>
+	
+	<table>
+		<name>g_settings_default_leave</name>
+	</table>
+	
+	<table>
+		<name>g_settings_dependent_relationship</name>
+	</table>
+	
+	<table>
+		<name>g_settings_employee_field</name>
+	</table>
+	
+	<table>
+		<name>g_settings_employment_status</name>
+	</table>
+	
+	<table>
+		<name>g_settings_grace_period</name>
+	</table>
+	
+	<table>
+		<name>g_settings_language</name>
+	</table>
+	
+	<table>
+		<name>g_settings_license</name>
+	</table>
+	
+	<table>
+		<name>g_settings_location</name>
+	</table>
+	
+	<table>
+		<name>g_settings_membership</name>
+	</table>
+	
+	<table>
+		<name>g_settings_membership_type</name>
+	</table>
+	
+	<table>
+		<name>g_settings_pay_period</name>
+	</table>
+	
+	<table>
+		<name>g_settings_request</name>
+	</table>
+	
+	<table>
+		<name>g_settings_request_approvers</name>
+	</table>
+	
+	<table>
+		<name>g_settings_salutation</name>
+	</table>
+	
+	<table>
+		<name>g_settings_skills</name>
+	</table>
+	
+	<table>
+		<name>g_settings_subdivision_type</name>
+	</table>
+	
+	<table>
+		<name>g_sss</name>
+	</table>
+	
+	<table>
+		<name>g_sss_table_rate</name>
+	</table>
+	
+	<table>
+		<name>g_system_modules</name>
+	</table>
+	
+	<table>
+		<name>g_tax_table</name>
+	</table>
+	
+	<table>
+		<name>g_user</name>
+	</table>
+	
+	<table>
+		<name>g_user_group</name>
+	</table>
+	
+	<table>
+		<name>pbcattbl</name>
+	</table>
+	
+	<table>
+		<name>p_philhealth</name>
+	</table>
+	
+	<table>
+		<name>p_sss</name>
+	</table>
+</sprint>

@@ -1,0 +1,43 @@
+.selected_box {
+	background-color:#DEE7F8;
+	position:relative;
+	width:120px;
+	border:1px solid #CAD8F3;
+	float:left;
+	margin-right:5px;
+	margin-bottom:5px;	
+}
+.selected_box .close_button {
+	background:transparent url(close.gif) repeat scroll 0 0;
+	display:block;
+	top:5px;
+	right:4px;
+	position:absolute;
+	width:7px;
+	height:7px;
+	font-size:1px;
+}
+.autocomplete_input
+{
+	border:#fff;
+	background:url(autocomplete.gif) no-repeat center left;
+	width:271px;
+	height:32px;
+	padding-bottom:13px;
+}
+.autocomplete_input input
+{
+background:#fff;
+border:none;
+margin:15px 15px 0 19px;
+width:160px;
+}
+.autocomplete_input span.browse_link
+{
+margin-left:4px;
+width:87px;
+height:32px;
+font: 14px "Trebuchet MS",Arial,Helvetica,sans-serif;
+font-weight:bold;
+color:#2a7fa2;
+}

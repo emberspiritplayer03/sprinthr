@@ -1,0 +1,10 @@
+Tiggers
+1. repeat daily
+2. every 12:15am
+
+Actions
+1. scripts: 
+Y:\Production\gleent_hr_payroll\cron\wget.exe
+
+2. arguments: 
+-q -O NUL http://gleent.local/gleent_hr_payroll/hr/index.php/cron

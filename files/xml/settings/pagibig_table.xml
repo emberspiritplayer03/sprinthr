@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<salary_from>0</salary_from>
+		<salary_to>1499.99</salary_to>
+		<multiplier_employee>0.01</multiplier_employee>
+		<multiplier_employer>0.02</multiplier_employer>		
+	</Fields>
+	
+	<Fields>
+		<salary_from>1500.00</salary_from>
+		<salary_to>999999.00</salary_to>
+		<multiplier_employee>0.02</multiplier_employee>
+		<multiplier_employer>0.02</multiplier_employer>		
+	</Fields>	
+</Main>

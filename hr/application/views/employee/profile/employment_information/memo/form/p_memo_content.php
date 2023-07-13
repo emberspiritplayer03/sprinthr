@@ -1,0 +1,1 @@
+<p><?php echo $memo_content->getMemo(); ?></p>       

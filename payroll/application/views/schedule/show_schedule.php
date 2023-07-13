@@ -1,0 +1,32 @@
+<div id="detailscontainer" class="detailscontainer_blue view_schedule_holder">
+    <div id="applicant_details">
+    	<div id="applicant_details">    
+            <div id="form_main">
+                <h2 class="field_title blue" style="font-size:22px;"><i class="icon-list-alt icon-fade vertical-middle"></i> <?php echo $schedule_name; ?></h2>
+                <div class="form_separator"></div>                
+                <div class="view_schedule"><?php echo $schedule_date_time; ?></div>
+                <div id="form_default" class="yellow_form_action_section form_action_section yellow_section" align="center">
+                    <a class="tooltip edit_button" title="Edit this schedule" onclick="javascript:editWeeklySchedule('<?php echo $public_id;?>')" href="javascript:void(0)"><strong></strong>Edit Schedule</a>&nbsp;&nbsp;&nbsp;                    
+                    <a class="relative delete_link red" title="Delete this schedule" onclick="javascript:deleteSchedule('<?php echo $public_id;?>')" href="javascript:void(0)"><span class="delete"></span>Delete Schedule</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+<div id="status_message"></div>
+<a class="tooltip add_button float-left" title="Add employees to this schedule" onclick="javascript:importEmployeesInSchedule('<?php echo $public_id;?>')" href="javascript:void(0)"><strong><i class="icon-arrow-left"></i></strong>Import Employees</a>
+<div id="schedule_members_list"></div>
+
+<!--<div style="display:none" id="assign_schedule_groups_id">
+<?php //include 'application/views/schedule/forms/ajax_assign_schedule_groups_form.php';?>
+</div>-->
+
+<!--<div style="display:none" id="assign_employees_groups_id">
+<?php //include 'application/views/schedule/forms/ajax_assign_schedule_employees_form.php';?>
+</div>-->
+
+<script>
+showScheduleMembersList('#schedule_members_list', '<?php echo $public_id;?>');	
+//$('.tooltip').tipsy({gravity: 's'});
+</script>

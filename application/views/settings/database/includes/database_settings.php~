@@ -1,0 +1,219 @@
+<style>
+h3.cinfo-header-form{width:99%; background-color:#666; color:#FFF; padding:10px 0 8px 5px; margin:0;}
+.text{width:250px;}
+legend{
+	-moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color -moz-use-text-color #E5E5E5;
+    border-image: none;
+    border-style: none none solid;
+    border-width: 0 0 1px;
+    color: #333333;
+    display: block;
+    font-size: 21px;
+    line-height: 40px;
+    margin-bottom: 20px;
+    padding: 0;
+    width: 100%;
+}
+	
+</style>
+<script>
+$(document).ready(function() {	
+	$('#databaseSettings').validationEngine({scroll:false});	
+		
+	$('#databaseSettings').ajaxForm({
+		success:function(o) {
+			if (o.is_success == 1) {
+				closeDialog('#' + DIALOG_CONTENT_HANDLER);					
+				$("#error_container").html(o.message);																
+			} else {
+				closeDialog('#' + DIALOG_CONTENT_HANDLER);										
+				$("#error_container").html(o.message);
+			}
+		},
+		dataType:'json',
+		beforeSubmit: function() {
+			showLoadingDialog('Updating...');
+		}
+	});		
+});
+
+function checkBoxSwitchState(obj_id) {
+	disAbleSprintTables();
+	if(obj_id == 'all'){		
+		//document.getElementById("truncate_all").checked = true;
+		document.getElementById("truncate_recruitment").checked = false;
+		document.getElementById("truncate_recommended").checked = false;
+	}else if(obj_id == 'db_recruitment'){
+		document.getElementById("truncate_all").checked = false;
+		document.getElementById("truncate_recommended").checked = false;
+	}else{
+		document.getElementById("truncate_recruitment").checked = false;
+		document.getElementById("truncate_all").checked = false;
+		//document.getElementById("truncate_recommended").checked = true;
+	}	
+}
+
+function disAbleSprintTables() {
+	if(document.getElementById("truncate_recommended").checked == true || document.getElementById("truncate_all").checked == true || document.getElementById("truncate_recruitment").checked == true){
+		$("#sprint_tables").attr('disabled','disabled');
+		$("#sprint_tables").removeClass('validate[required] text');
+		$("#sprint_tables").val("");
+	}else{
+		$("#sprint_tables").addClass('validate[required] text');
+		$("#sprint_tables").removeAttr('disabled');
+	}
+}
+</script>
+<div id="error_container"></div>
+<div class="formWrapper">		
+	<form class="form-inline" id="databaseSettings" name="databaseSettings" method="post" action="<?php echo url('settings/truncate_table'); ?>">
+    <fieldset>
+    <legend>Tables</legend>
+    <div class="alert alert-block alert-error">
+    	Note : <br />
+	    <b>Truncating will delete all data in the selected table.</b><br />
+        <b>Loading default value will truncate/delete all records in selected tables</b>
+        
+    </div>    
+    	<select id="sprint_tables" name="sprint_tables" class="validate[required] text" style="width:50%;">
+        	<option value="">-- Select Table --</option>
+            <option value="<?php echo COMPANY_INFO; ?>"><?php echo COMPANY_INFO; ?></option>
+            <option value="<?php echo COMPANY_STRUCTURE; ?>"><?php echo COMPANY_STRUCTURE; ?></option>
+            <option value="<?php echo COMPANY_BRANCH; ?>"><?php echo COMPANY_BRANCH; ?></option>
+            <option value="<?php echo G_ACCESS_RIGHTS; ?>"><?php echo G_ACCESS_RIGHTS; ?></option>
+            <option value="<?php echo G_USER_GROUP; ?>"><?php echo G_USER_GROUP; ?></option>
+            <option value="<?php echo SSS; ?>"><?php echo SSS; ?></option>
+            <option value="<?php echo PHILHEALTH; ?>"><?php echo PHILHEALTH; ?></option>
+            <option value="<?php echo G_PAGIBIG; ?>"><?php echo G_PAGIBIG; ?></option>
+            <option value="<?php echo G_TAX_TABLE; ?>"><?php echo G_TAX_TABLE; ?></option>
+            <option value="<?php echo SUBDIVISION_TYPE; ?>"><?php echo SUBDIVISION_TYPE; ?></option>
+            <option value="<?php echo LOCATION; ?>"><?php echo LOCATION; ?></option>
+            <option value="<?php echo LICENSE; ?>"><?php echo LICENSE; ?></option>
+            <option value="<?php echo DEPENDENT_RELATIONSHIP; ?>"><?php echo DEPENDENT_RELATIONSHIP; ?></option>
+            <option value="<?php echo MEMBERSHIP_TYPE; ?>"><?php echo MEMBERSHIP_TYPE; ?></option>
+            <option value="<?php echo EMPLOYMENT_STATUS; ?>"><?php echo EMPLOYMENT_STATUS; ?></option>
+            <option value="<?php echo G_JOB; ?>"><?php echo G_JOB; ?></option>
+            <option value="<?php echo G_JOB_SPECIFICATION; ?>"><?php echo G_JOB_SPECIFICATION; ?></option>
+            <option value="<?php echo G_JOB_EMPLOYMENT_STATUS; ?>"><?php echo G_JOB_EMPLOYMENT_STATUS; ?></option>
+            <option value="<?php echo G_EEO_JOB_CATEGORY; ?>"><?php echo G_EEO_JOB_CATEGORY; ?></option>
+            <option value="<?php echo G_JOB_SALARY_RATE; ?>"><?php echo G_JOB_SALARY_RATE; ?></option>
+            <option value="<?php echo G_EMPLOYEE_LOAN; ?>"><?php echo G_EMPLOYEE_LOAN; ?></option>
+            <option value="<?php echo G_EMPLOYEE_LOAN_DETAILS; ?>"><?php echo G_EMPLOYEE_LOAN_DETAILS; ?></option>
+            <option value="<?php echo G_EMPLOYEE_LOAN_PAYMENT_BREAKDOWN; ?>"><?php echo G_EMPLOYEE_LOAN_PAYMENT_BREAKDOWN; ?></option>
+            <option value="<?php echo G_LOAN_TYPE; ?>"><?php echo G_LOAN_TYPE; ?></option>
+            <option value="<?php echo G_LOAN_DEDUCTION_TYPE; ?>"><?php echo G_LOAN_DEDUCTION_TYPE; ?></option>
+            <option value="<?php echo G_EMPLOYEE_EARNINGS; ?>"><?php echo G_EMPLOYEE_EARNINGS; ?></option>
+            <option value="<?php echo G_SETTINGS_EMPLOYMENT_STATUS; ?>"><?php echo G_SETTINGS_EMPLOYMENT_STATUS; ?></option>
+            <option value="<?php echo G_SETTINGS_PAY_PERIOD; ?>"><?php echo G_SETTINGS_PAY_PERIOD; ?></option>
+            <option value="<?php echo G_SETTINGS_APPLICATION_STATUS; ?>"><?php echo G_SETTINGS_APPLICATION_STATUS; ?></option>
+            <option value="<?php echo G_SETTINGS_DEDUCTION_BREAKDOWN; ?>"><?php echo G_SETTINGS_DEDUCTION_BREAKDOWN; ?></option>
+            <option value="<?php echo G_JOB_VACANCY; ?>"><?php echo G_JOB_VACANCY; ?></option>
+            <option value="<?php echo EMPLOYEE; ?>"><?php echo EMPLOYEE; ?></option>
+            <option value="<?php echo G_EMPLOYEE_DETAILS_HISTORY; ?>"><?php echo G_EMPLOYEE_DETAILS_HISTORY; ?></option>
+            <option value="<?php echo APPLICANT; ?>"><?php echo APPLICANT; ?></option>
+            <option value="<?php echo G_ERROR_LEAVE; ?>"><?php echo G_ERROR_LEAVE; ?></option>
+            <option value="<?php echo G_HOLIDAY; ?>"><?php echo G_HOLIDAY; ?></option>
+            <option value="<?php echo G_HOLIDAY_BRANCH; ?>"><?php echo G_HOLIDAY_BRANCH; ?></option>
+            <option value="<?php echo G_EMPLOYEE_CONTACT_DETAILS; ?>"><?php echo G_EMPLOYEE_CONTACT_DETAILS; ?></option>
+            <option value="<?php echo G_EMPLOYEE_EMERGENCY_CONTACT; ?>"><?php echo G_EMPLOYEE_EMERGENCY_CONTACT; ?></option>
+            <option value="<?php echo G_EMPLOYEE_DEPENDENT; ?>"><?php echo G_EMPLOYEE_DEPENDENT; ?></option>
+            <option value="<?php echo G_EMPLOYEE_DIRECT_DEPOSIT; ?>"><?php echo G_EMPLOYEE_DIRECT_DEPOSIT; ?></option>
+            <option value="<?php echo G_EMPLOYEE_ATTENDANCE; ?>"><?php echo G_EMPLOYEE_ATTENDANCE; ?></option>
+            <option value="<?php echo G_EMPLOYEE_BRANCH_HISTORY; ?>"><?php echo G_EMPLOYEE_BRANCH_HISTORY; ?></option>
+            <option value="<?php echo G_EMPLOYEE_BASIC_SALARY_HISTORY; ?>"><?php echo G_EMPLOYEE_BASIC_SALARY_HISTORY; ?></option>
+            <option value="<?php echo G_EMPLOYEE_JOB_HISTORY; ?>"><?php echo G_EMPLOYEE_JOB_HISTORY; ?></option>
+            <option value="<?php echo G_EMPLOYEE_SUBDIVISION_HISTORY; ?>"><?php echo G_EMPLOYEE_SUBDIVISION_HISTORY; ?></option>
+            <option value="<?php echo G_EMPLOYEE_PERFORMANCE; ?>"><?php echo G_EMPLOYEE_PERFORMANCE; ?></option>
+            <option value="<?php echo G_EMPLOYEE_TRAINING; ?>"><?php echo G_EMPLOYEE_TRAINING; ?></option>
+            <option value="<?php echo G_EMPLOYEE_WORK_EXPERIENCE; ?>"><?php echo G_EMPLOYEE_WORK_EXPERIENCE; ?></option>
+            <option value="<?php echo G_EMPLOYEE_EDUCATION; ?>"><?php echo G_EMPLOYEE_EDUCATION; ?></option>
+            <option value="<?php echo G_EMPLOYEE_SKILLS; ?>"><?php echo G_EMPLOYEE_SKILLS; ?></option>            
+            <option value="<?php echo G_EMPLOYEE_SUPERVISOR; ?>"><?php echo G_EMPLOYEE_SUPERVISOR; ?></option>
+            <option value="<?php echo G_EMPLOYEE_LICENSE; ?>"><?php echo G_EMPLOYEE_LICENSE; ?></option>
+            <option value="<?php echo G_EMPLOYEE_LANGUAGE; ?>"><?php echo G_EMPLOYEE_LANGUAGE; ?></option>
+            <option value="<?php echo G_EMPLOYEE_MEMBERSHIP; ?>"><?php echo G_EMPLOYEE_MEMBERSHIP; ?></option>
+            <option value="<?php echo G_EMPLOYEE_MEMO; ?>"><?php echo G_EMPLOYEE_MEMO; ?></option>
+            <option value="<?php echo G_EMPLOYEE_LEAVE_AVAILABLE; ?>"><?php echo G_EMPLOYEE_LEAVE_AVAILABLE; ?></option>
+            <option value="<?php echo G_EMPLOYEE_LEAVE_REQUEST; ?>"><?php echo G_EMPLOYEE_LEAVE_REQUEST; ?></option>
+            <option value="<?php echo G_EMPLOYEE_DYNAMIC_FIELD; ?>"><?php echo G_EMPLOYEE_DYNAMIC_FIELD; ?></option>
+            <option value="<?php echo G_EMPLOYEE_ATTACHMENT; ?>"><?php echo G_EMPLOYEE_ATTACHMENT; ?></option>
+            <option value="<?php echo G_EMPLOYEE_REQUIREMENTS; ?>"><?php echo G_EMPLOYEE_REQUIREMENTS; ?></option>
+            <option value="<?php echo G_LEAVE; ?>"><?php echo G_LEAVE; ?></option>
+            <option value="<?php echo G_EMPLOYEE_CONTRIBUTION; ?>"><?php echo G_EMPLOYEE_CONTRIBUTION; ?></option>
+            <option value="<?php echo G_EMPLOYEE_EXTEND_CONTRACT; ?>"><?php echo G_EMPLOYEE_EXTEND_CONTRACT; ?></option>
+            <option value="<?php echo G_EMPLOYEE_TAGS; ?>"><?php echo G_EMPLOYEE_TAGS; ?></option>
+            <option value="<?php echo G_JOB_APPLICATION_EVENT; ?>"><?php echo G_JOB_APPLICATION_EVENT; ?></option>
+            <option value="<?php echo G_APPLICANT_ATTACHMENT; ?>"><?php echo G_APPLICANT_ATTACHMENT; ?></option>
+
+				            
+            <option value="<?php echo APPLICANT_PROFILE; ?>"><?php echo APPLICANT_PROFILE; ?></option>
+            <option value="<?php echo APPLICANT_LOGS; ?>"><?php echo APPLICANT_LOGS; ?></option>
+            <option value="<?php echo G_APPLICANT_REQUIREMENTS; ?>"><?php echo G_APPLICANT_REQUIREMENTS; ?></option>
+            <option value="<?php echo G_APPLICANT_EXAMINATION; ?>"><?php echo G_APPLICANT_EXAMINATION; ?></option>
+            <option value="<?php echo G_APPLICANT_EDUCATION; ?>"><?php echo G_APPLICANT_EDUCATION; ?></option>
+            <option value="<?php echo G_APPLICANT_TRAINING; ?>"><?php echo G_APPLICANT_TRAINING; ?></option>
+            <option value="<?php echo G_APPLICANT_SKILLS; ?>"><?php echo G_APPLICANT_SKILLS; ?></option>
+            <option value="<?php echo G_APPLICANT_LICENSE; ?>"><?php echo G_APPLICANT_LICENSE; ?></option>
+            <option value="<?php echo G_APPLICANT_LANGUAGE; ?>"><?php echo G_APPLICANT_LANGUAGE; ?></option>
+            <option value="<?php echo G_APPLICANT_WORK_EXPERIENCE; ?>"><?php echo G_APPLICANT_WORK_EXPERIENCE; ?></option>
+            <option value="<?php echo G_EXAM; ?>"><?php echo G_EXAM; ?></option>
+            <option value="<?php echo G_EXAM_CHOICES; ?>"><?php echo G_EXAM_CHOICES; ?></option>
+            <option value="<?php echo G_EXAM_QUESTION; ?>"><?php echo G_EXAM_QUESTION; ?></option>
+            <option value="<?php echo G_PERFORMANCE; ?>"><?php echo G_PERFORMANCE; ?></option>
+            <option value="<?php echo G_PERFORMANCE_INDICATOR; ?>"><?php echo G_PERFORMANCE_INDICATOR; ?></option>
+            <option value="<?php echo G_SALARY_CYCLE; ?>"><?php echo G_SALARY_CYCLE; ?></option>
+            <option value="<?php echo G_CUTOFF_PERIOD; ?>"><?php echo G_CUTOFF_PERIOD; ?></option>
+            <option value="<?php echo G_SETTINGS_EMPLOYEE_FIELD; ?>"><?php echo G_SETTINGS_EMPLOYEE_FIELD; ?></option>
+            <option value="<?php echo G_PAYSLIP_ERROR; ?>"><?php echo G_PAYSLIP_ERROR; ?></option>
+            <option value="<?php echo G_ATTENDANCE_ERROR; ?>"><?php echo G_ATTENDANCE_ERROR; ?></option>
+            <option value="<?php echo G_EMPLOYEE_PAYSLIP; ?>"><?php echo G_EMPLOYEE_PAYSLIP; ?></option>
+            <option value="<?php echo G_DAILY_TIME_RECORD; ?>"><?php echo G_DAILY_TIME_RECORD; ?></option>
+            <option value="<?php echo G_OVERTIME_ERROR; ?>"><?php echo G_OVERTIME_ERROR; ?></option>
+            <option value="<?php echo G_EMPLOYEE_OVERTIME_REQUEST; ?>"><?php echo G_EMPLOYEE_OVERTIME_REQUEST; ?></option>
+            <option value="<?php echo G_EMPLOYEE_REST_DAY_REQUEST; ?>"><?php echo G_EMPLOYEE_REST_DAY_REQUEST; ?></option>
+            <option value="<?php echo G_EMPLOYEE_CHANGE_SCHEDULE_REQUEST; ?>"><?php echo G_EMPLOYEE_CHANGE_SCHEDULE_REQUEST; ?></option>
+            <option value="<?php echo G_EMPLOYEE_OFFICIAL_BUSINESS_REQUEST; ?>"><?php echo G_EMPLOYEE_OFFICIAL_BUSINESS_REQUEST; ?></option>
+            <option value="<?php echo G_EMPLOYEE_UNDERTIME_REQUEST; ?>"><?php echo G_EMPLOYEE_UNDERTIME_REQUEST; ?></option>
+            <option value="<?php echo G_EMPLOYEE_MAKE_UP_SCHEDULE_REQUEST; ?>"><?php echo G_EMPLOYEE_MAKE_UP_SCHEDULE_REQUEST; ?></option>
+            <option value="<?php echo G_EMPLOYEE_ATTENDANCE_CORRECTION_REQUEST; ?>"><?php echo G_EMPLOYEE_ATTENDANCE_CORRECTION_REQUEST; ?></option>
+            <option value="<?php echo G_SETTINGS_REQUEST; ?>"><?php echo G_SETTINGS_REQUEST; ?></option>
+            <option value="<?php echo G_SETTINGS_REQUEST_APPROVERS; ?>"><?php echo G_SETTINGS_REQUEST_APPROVERS; ?></option>
+            <option value="<?php echo G_EMPLOYEE_REQUEST; ?>"><?php echo G_EMPLOYEE_REQUEST; ?></option>
+            <option value="<?php echo G_EMPLOYEE_REQUEST_APPROVERS; ?>"><?php echo G_EMPLOYEE_REQUEST_APPROVERS; ?></option>
+            <option value="<?php echo G_EMPLOYEE_OVERTIME; ?>"><?php echo G_EMPLOYEE_OVERTIME; ?></option>
+            <option value="<?php echo G_ATTENDANCE_LOG; ?>"><?php echo G_ATTENDANCE_LOG; ?></option>
+            <option value="<?php echo G_EMPLOYEE_RESTDAY; ?>"><?php echo G_EMPLOYEE_RESTDAY; ?></option>
+            <option value="<?php echo G_SCHEDULE_GROUP; ?>"><?php echo G_SCHEDULE_GROUP; ?></option>
+            <option value="<?php echo G_SCHEDULE; ?>"><?php echo G_SCHEDULE; ?></option>
+            <option value="<?php echo G_EMPLOYEE_GROUP_SCHEDULE; ?>"><?php echo G_EMPLOYEE_GROUP_SCHEDULE; ?></option>
+            <option value="<?php echo G_EMPLOYEE_SCHEDULE; ?>"><?php echo G_EMPLOYEE_SCHEDULE; ?></option>
+            <option value="<?php echo G_EMPLOYEE_PAYABLE; ?>"><?php echo G_EMPLOYEE_PAYABLE; ?></option>            
+            <option value="<?php echo G_EMPLOYEE_PAYABLE_HISTORY; ?>"><?php echo G_EMPLOYEE_PAYABLE_HISTORY; ?></option>
+            <option value="<?php echo EMAIL_BUFFER; ?>"><?php echo EMAIL_BUFFER; ?></option>
+            <option value="<?php echo G_USER; ?>"><?php echo G_USER; ?></option>
+            <option value="<?php echo G_SETTINGS_DEFAULT_LEAVE; ?>"><?php echo G_SETTINGS_DEFAULT_LEAVE; ?></option>
+            <option value="<?php echo G_SETTINGS_GRACE_PERIOD; ?>"><?php echo G_SETTINGS_GRACE_PERIOD; ?></option>
+        </select>    	
+        <button type="submit" class="btn btn-primary">Truncate</button>        
+        <br />
+        <label class="checkbox">
+        	<input name="truncate_all" id="truncate_all" type="checkbox" onchange="checkBoxSwitchState('all');" />Truncate All            
+        </label>
+        <label class="checkbox">
+        	<input name="truncate_recruitment" id="truncate_recruitment" type="checkbox" onchange="checkBoxSwitchState('db_recruitment');" />Truncate Recruitment
+        </label>
+        <label class="checkbox">
+        	<input name="truncate_recommended" id="truncate_recommended" type="checkbox" onchange="checkBoxSwitchState('recommended');" />Truncate Recommended
+        </label>
+        <br /><br />
+        <div>
+        	<a href="javascript:void(0);" onclick="javascript:_createRecommendedTables();" class="btn btn-primary">Create Recommended Tables</a>
+         <a href="javascript:void(0);" onclick="javascript:load_table_default_values_confirmation();" class="btn btn-primary">Load Default Values</a>
+        </div>
+    </fieldset>
+    </form>
+</div>

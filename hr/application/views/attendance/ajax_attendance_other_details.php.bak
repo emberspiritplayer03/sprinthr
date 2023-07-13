@@ -1,0 +1,197 @@
+<style>
+.tbl-other-details{border:none;}
+.tbl-other-details td{border: none;}
+.tbl-other-details td.field_label{width:176px;}
+.lbl-attendance-other-details{background-color:#198cc9;color:#ffffff;padding-left: 10px;margin:0 0 6px;}
+ul.list-attendance-other-details{list-style: none;}
+ul.list-attendance-other-details li{display: inline-block; margin-left:24px; padding:6px;width:40%;background-color:#e3e3e3;margin-bottom: 32px}
+</style>
+<ul class="list-attendance-other-details">
+<?php if( !empty($schedule) ) { ?>
+    <li>
+        <h3 class="lbl-attendance-other-details">Assigned Schedule</h3>
+        <table class="tbl-other-details">
+        <?php foreach($schedule as $key => $value){ ?>    
+            <?php if($value != "0"){ ?>         
+                <?php if($key == 'Time Out' && $value == '04:59 AM') { ?>
+                        <tr><td class="field_label"><?php echo $key; ?></td><td>: <?php echo '05:00 AM'; ?></td></tr>  
+                <?php }else if($key == 'Total Required Working HRS' && $value == '9.48') { ?>
+                        <tr><td class="field_label"><?php echo $key; ?></td><td>: <?php echo '9.50'; ?></td></tr>  
+                <?php } else { ?>
+                        <tr><td class="field_label"><?php echo $key; ?></td><td>: <?php echo $value; ?></td></tr>  
+                <?php } ?>  
+            <?php } ?>
+        <?php } ?>
+        </table>
+    </li>
+<?php } ?>
+
+<?php if( !empty($breaktime) ) { ?>
+    <li>
+        <h3 class="lbl-attendance-other-details">Breaktime Schedule</h3>
+        <table class="tbl-other-details">
+        <?php foreach($breaktime as $key => $value){ ?>
+            <tr>
+                <td class="field_label" colspan="1">Sched: </td>
+                <td class="field_label" colspan="1"><?php echo $value; ?></td>
+            </tr>                  
+        <?php } ?>   
+        <?php if(!empty($break)) {?>
+            <?php foreach($break as $bkey => $bkey_d) { ?> 
+                <?php if($bkey == 'time_in') { ?>
+                    <tr>
+                        <td class="field_label" colspan="1">Time In: </td>
+                        <td class="field_label" colspan="1"><?php echo $bkey_d; ?></td>
+                    </tr>
+                <?php } ?>
+                <?php if($bkey == 'time_out') { ?>
+                    <tr>
+                        <td class="field_label" colspan="1">Time Out: </td>
+                        <td class="field_label" colspan="1"><?php echo $bkey_d; ?></td>
+                    </tr>
+                <?php } ?>            
+            <?php } ?>  
+        <?php } ?>                    
+        </table>
+    </li>
+<?php } ?>
+<!-- <tr><td class="field_label"><?php echo $key; ?></td><td>: <?php echo $value; ?></td></tr>    -->
+<?php if( !empty($attendance) ) { ?>    
+    <li>
+        <h3 class="lbl-attendance-other-details">Attendance</h3>
+        <table class="tbl-other-details">
+        <?php foreach($attendance as $key => $value){ ?> 
+                       <?php if($value != "0" && $key != 'Total HRS Worked (Less Break Time)'){ ?>             
+                <tr><td class="field_label"><?php echo $key; ?></td><td>: <?php echo $value; ?></td></tr>        
+            <?php }
+                elseif($key == 'Total HRS Worked (Less Break Time)'){
+                  $break_deduction = 0;
+                  
+            $eid = $emp_id;
+           
+            $e    = G_Employee_Finder::findById($eid);
+            $a    = G_Attendance_Finder::findByEmployeeAndDate($e, $date);
+            $ts = $a->getTimesheet();
+            $total_hours_work = $ts->getTotalHoursWorked();
+           
+            // var_dump($a->getScheduledDateIn());
+            // echo "<pre>";
+            // var_dump($ts->getTimeOut());
+            // echo "</pre>";
+            $actual_time_in = $ts->getTimeIn();
+            $actual_time_out = $ts->getTimeOut();
+            
+            $schedules['schedule_in']  = $ts->getScheduledTimeIn();
+            $schedules['schedule_out'] = $ts->getScheduledTimeOut();
+            $day_type = array();
+            $is_holiday = $a->isHoliday();
+            
+            if( $is_holiday == 1 && !empty($is_holiday) ){
+                $h = $a->getHoliday();
+
+                if( $h->getType() == Holiday::LEGAL ){
+                    $day_type[] = "applied_to_legal_holiday";
+                }else{
+                    $day_type[] = "applied_to_special_holiday";
+                }
+            }elseif( $a->isRestday() == 1 ){
+
+                if( $value['total_schedule_hours'] > 0 ){                   
+                    $day_type[] = "applied_to_restday";
+                }else{                    
+                    $day_type[] = "applied_to_regular_day";
+                }
+            }else{
+                $day_type[] = "applied_to_regular_day";
+            }
+
+
+            $break = G_Employee_Breaktime_Finder::findByEmployeeIdAndDate($eid,$date);
+            $break_time_schedules = $e->getEmployeeBreakTimeBySchedule($schedules, $day_type);
+           
+           $seperate_breaktime_schedule = (explode("to",$break_time_schedules[0]));
+           $break_time_in = date('H:i:s',strtotime($seperate_breaktime_schedule[0]));
+           $break_time_out = date('H:i:s',strtotime($seperate_breaktime_schedule[1]));
+
+          
+          
+            if( (strtotime($actual_time_out) > strtotime($break_time_in)) && (strtotime($actual_time_out) < strtotime($break_time_out))){
+                
+                if(($actual_time_out > $break_time_in && $actual_time_out < $break_time_out)){
+                    $time1 = strtotime($actual_time_out);
+                    $time2 = strtotime($break_time_out);
+                    $difference = round(abs($time2 - $time1) / 3600,2);
+                    $break_deduction = $difference;
+                }
+                else{
+                    $break_deduction = 0;
+                }
+            }else{
+
+                $break_deduction = 0;
+
+                if( ( strtotime($break_time_in) >= strtotime($actual_time_in) && strtotime($break_time_in) <= strtotime($actual_time_out)) && ( strtotime($break_time_out) >= strtotime($actual_time_in) && strtotime($break_time_out) <= strtotime($actual_time_out)) ){
+                    $break_deduction = 0;
+
+                }elseif((strtotime($actual_time_in) > strtotime($break_time_in) && strtotime($actual_time_in) < strtotime($break_time_out))){
+                    $time1 = strtotime($actual_time_in);
+                    $time2 = strtotime($break_time_out);
+                    $difference = round(abs($time2 - $time1) / 3600,2);
+                    $difference = round(abs($time2 - $time1) / 3600,2);
+                    $break_deduction = $difference;
+
+                }                
+              }
+              ?>
+
+
+              <tr><td class="field_label"><?php echo $key; ?></td><td>: <?php echo number_format($total_hours_work - $break_deduction,2) ?></td></tr> 
+<?php
+
+                }
+
+             ?>
+        <?php } ?>
+        </table>
+    </li>
+<?php } ?>
+
+<?php if( !empty($holiday) ) { ?>
+    <li>
+        <h3 class="lbl-attendance-other-details">Holiday</h3>
+        <table class="tbl-other-details">
+        <?php foreach($holiday as $key => $value){ ?>     
+            <?php if($value != "0"){ ?>         
+                <tr><td class="field_label"><?php echo $key; ?></td><td>: <?php echo $value; ?></td></tr>        
+            <?php } ?>
+        <?php } ?>
+        </table>
+    </li>
+<?php } ?>
+
+<?php if( !empty($tardiness) ) { ?>
+    <li>
+        <h3 class="lbl-attendance-other-details">Tardiness</h3>
+        <table class="tbl-other-details">
+        <?php foreach($tardiness as $key => $value){ ?>  
+            <?php if($value != "0"){ ?>                  
+                <tr><td class="field_label"><?php echo $key; ?></td><td>: <?php echo $value; ?></td></tr>        
+            <?php } ?>
+        <?php } ?>
+        </table>
+    </li>
+<?php } ?>
+
+<?php if( !empty($overtime) ) { ?>
+    <li>
+        <h3 class="lbl-attendance-other-details">Overtime</h3>
+        <table class="tbl-other-details">
+        <?php foreach($overtime as $key => $value){ ?>       
+            <?php if($value != "0"){ ?>      
+                <tr><td class="field_label"><?php echo $key; ?></td><td>: <?php echo $value; ?></td></tr>    
+            <?php } ?>
+        <?php } ?>
+        </table>
+    </li>
+<?php } ?>
+</ul>

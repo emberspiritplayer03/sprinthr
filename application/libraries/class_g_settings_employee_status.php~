@@ -1,0 +1,49 @@
+<?php
+class G_Settings_Employee_Status extends Settings_Employee_Status {
+	
+	public $is_archive;
+	public $date_created;
+	
+	const YES = "Yes";
+	const NO  = "No";
+	
+	const TERMINATED = 3;
+	const RESIGNED   = 2;
+	
+	public function __construct() {
+	
+	}
+	
+	public function setIsArchive($value) {
+		$this->is_archive = $value;	
+	}
+	
+	public function getIsArchive() {
+		return $this->is_archive;	
+	}
+	
+	public function setDateCreated($value) {
+		$this->date_created = $value;	
+	}
+	
+	public function getDateCreated() {
+		return $this->date_created;	
+	}
+	
+	public function save() {		
+		return G_Settings_Employee_Status_Manager::save($this);	
+	}
+	
+	public function archive() {		
+		return G_Settings_Employee_Status_Manager::archive($this);	
+	}
+	
+	public function restore() {		
+		return G_Settings_Employee_Status_Manager::restore($this);	
+	}
+	
+	public function delete() {
+		return G_Settings_Employee_Status_Manager::delete($this);	
+	}
+}
+?>

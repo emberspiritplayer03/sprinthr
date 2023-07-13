@@ -1,0 +1,118 @@
+<div id="employee_search_container">
+<script>
+  $(function(){
+    $("#payslip-report-year-selector").change(function(){   
+       changePayPeriodByYear(this.value,'<?php echo $cutoff_selected; ?>','payslip-pay-period-container',$("#payslip-report-frequency-selector").val());
+    });
+
+    $("#payslip-report-frequency-selector").change(function(){    
+       changePayPeriodByYear($("#payslip-report-year-selector").val(),'<?php echo $cutoff_selected; ?>','payslip-pay-period-container',this.value);
+    });
+
+    changePayPeriodByYear($("#payslip-report-year-selector").val(),'<?php echo $cutoff_selected; ?>','payslip-pay-period-container',$("#payslip-report-frequency-selector").val());
+  });  
+</script>
+
+<form method="get" action="<?php echo $action;?>">
+<input type="hidden" name="selected_frequency" value="<?php echo $frequency_id;?>" />
+<input type="hidden" name="from" value="<?php echo $start_date;?>" />
+<input type="hidden" name="to" value="<?php echo $end_date;?>" />
+<!-- <input type="hidden" name="hpid" value="<?php echo $_GET['hpid'];?>" /> -->
+<!--<form id="search_employee" method="get" action="<?php echo $action;?>">-->
+	<div class="employee_basic_search"><input id="search" class="curve" type="text" name="query" value="<?php echo $query;?>" placeholder="Type employee, department or section name" />
+    <button id="create_schedule_submit" class="blue_button" type="submit"><i class="icon-search icon-white"></i> Search</button><br/> 	
+    </div>
+</form>
+</div><!-- #employee_search_container -->
+<div class="detailscontainer_blue details_highlights" id="detailscontainer">
+    <div class="earnings_period_selected">
+        <div class="overtime_title_period">
+        <?php if($is_period_lock == ((!isset($frequency_id) || $frequency_id != 2 ? G_Cutoff_Period::NO : G_Weekly_Cutoff_Period::NO))){ ?>
+              <div class="actions_holder float-right" style="position:relative; top:6px;">
+                <a class="gray_button" href="javascript:void(0)" onclick="javascript:updateAttendance('<?php echo $start_date;?>', '<?php echo $end_date;?>', '<?php echo $frequency_id;?>')"><i class="icon-repeat vertical-middle"></i> Update Attendance</a>
+              </div>
+        <?php } ?>
+        <?php if (strtotime($start_date) && strtotime($end_date)):?>
+            <h2 class="no-padding no-margin">
+            	Period: <span class="blue"><?php echo date('M j', strtotime($start_date));?></span> - <span class="blue"><?php echo date('M j, Y', strtotime($end_date));?></span>
+
+            	<!--
+              <div class="pull-right"> <a class="blue_button" href="javascript:void(0);" onclick="javascript:filterTimeSheetBreakDown('<?php echo $start_date; ?>','<?php echo $end_date; ?>');"><i class="icon-search icon-white"></i> Filter Timesheet Breakdown</a> </div>
+              -->
+              
+              <div class="pull-right" style="position:relative; top:-3px; font-size: 12px !important; margin-right: 8px !important;">
+              <form method="get" action="<?php echo url('attendance/manage'); ?>">  
+                <div class="payslip-pay-period-container" style="display:inline-block;"></div>
+                <select name="year_selected" id="payslip-report-year-selector">
+                  <?php foreach($all_cutoff_years as $year){ ?>
+                          <?php if($year <= date("Y")) { ?>
+                                  <option <?php echo $year_selected == $year ? 'selected="selected"' : ''?> value="<?php echo $year; ?>"><?php echo $year; ?></option>
+                          <?php } ?>
+                  <?php } ?>
+                  
+                </select>  
+                <select id="payslip-report-frequency-selector" name="selected_frequency">
+                  <option value = "1" <?php echo $frequency_id == '1' ? 'selected="selected"' : ''?>>Bi-Monthly</option>
+                  <option value = "2" <?php echo $frequency_id == '2' ? 'selected="selected"' : ''?>>Weekly</option>    
+                </select>              
+                <input class="gray_button" type="submit" name="submit" value="Load">
+              </form>
+              </div>
+
+            </h2>
+            <div class="earnings_period_selected">
+                <div class="overtime_title_period"><?php echo $period_selected; ?>
+
+                    <?php if ($previous_cutoff_link != ''){ ?>
+                        [ Go to:
+                        <a href="<?php echo $previous_cutoff_link;?>">Previous Cutoff</a>
+                        |
+                    <?php } ?>
+                    
+                    <?php if ($next_cutoff_link != ''){ ?>
+                        <a href="<?php echo $next_cutoff_link;?>">Next Cutoff</a>
+                        ]
+                    <?php }?>
+                    
+                </div>
+            </div>
+        <?php endif;?>        
+        </div>        
+    </div>
+</div>
+<!--<div><a class="gray_button" href="javascript:void(0)" onclick="javascript:importTimesheet()">Import Timesheet</a><br /><br /></div>-->
+<div id="employee_list">
+  <table class="formtable" id="box-table-a" style="margin:0px">
+    <thead>
+    	<tr>
+        	<th width="150"><strong>Employee #</strong></th>
+          <th><strong>Employee Name</strong></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($employees as $e):?>
+        <tr>
+          <td width="150"><?php echo $e->getEmployeeCode();?></td>
+          <td><a href="<?php echo url('attendance/show_attendance?employee_id='. Utilities::encrypt($e->getId()) .'&hash='. $e->getHash() .'&from='. $start_date .'&to='. $end_date.'&selected_frequency='.$frequency_id);?>"><?php echo $e->getLastname();?>  <?php echo $e->extension_name;?> , <?php echo $e->getFirstname();?> <?php echo $e->middlename[0]; ?>. </a></td>
+        </tr>
+      <?php endforeach;?> 
+    </tbody>
+  </table>
+</div>
+
+<br>
+<div style="text-align: center"><?php echo $pager_links;?></div>
+
+<script language="javascript">
+$(document).ready(function() {
+	$('#search_employee').ajaxForm({
+		success:function(o) {	
+			$('#employee_list').html(o);
+		},
+		beforeSubmit:function() {
+			$('#employee_list').html(loading_image + ' Loading... ');
+		}
+	});		
+});
+
+</script>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<salutation>Mr</salutation>
+	</Fields>
+
+	<Fields>
+		<salutation>Mrs</salutation>
+	</Fields>
+
+	<Fields>
+		<salutation>Ms</salutation>
+	</Fields>
+
+	<Fields>
+		<salutation>Dr</salutation>
+	</Fields>
+
+</Main>

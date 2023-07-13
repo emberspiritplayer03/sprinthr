@@ -1,0 +1,1 @@
+<img src="<?php echo BASE_FOLDER;?>/application/views/earnings/html/import_earnings_format.jpg" />

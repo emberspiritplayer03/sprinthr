@@ -1,0 +1,179 @@
+<?php
+class G_Applicant_Finder {
+
+	public static function findById($id) {
+	/*	$sql = "
+			SELECT 
+			a.id,a.hash,a.photo, a.employee_id,a.job_id, a.company_structure_id, a.job_vacancy_id, a.application_status_id, a.lastname,
+			a.firstname, a.middlename,a.gender,a.marital_status,a.birthdate,a.birth_place, a.address, a.city, a.province, a.zip_code, a.country, a.home_telephone,
+			a.mobile, a.email_address, a.qualification, a.applied_date_time, a.resume_name, a.resume_path,sas.status as application_staus,j.title as position_applied
+			FROM g_applicant a, g_job_vacancy jv, g_settings_application_status sas ,g_job as j
+			WHERE a.id=". Model::safeSql($id)." AND a.job_id=j.id OR a.application_status_id=sas.id GROUP BY a.id
+			LIMIT 1
+		";*/
+		$sql = "
+			SELECT 
+			*
+			FROM g_applicant a
+			WHERE a.id=". Model::safeSql($id)." 
+			LIMIT 1
+		";
+
+		return self::getRecord($sql);
+	}
+	
+	
+	public static function findByCompanyStructureId(G_Company_Structure $csid, $order_by = '', $limit = '') {
+		
+		$order_by = ($order_by != '') ? 'ORDER BY ' . $order_by : '';
+		$limit = ($limit!='')? 'LIMIT ' . $limit : '';
+		
+		$sql = "
+			SELECT 
+			a.id, 
+			a.hash,
+			a.photo, 
+			a.employee_id,
+			a.job_id, 
+			a.company_structure_id, 
+			a.job_vacancy_id, 
+			a.application_status_id, 
+			a.lastname, 
+			a.firstname, 
+			a.middlename,
+			a.extension_name, 
+			a.gender,
+			a.marital_status,
+			a.birthdate,
+			a.birth_place, 
+			a.address, 
+			a.city, 
+			a.province, 
+			a.zip_code, 
+			a.country, 
+			a.home_telephone, 
+			a.mobile, 
+			a.email_address, 
+			a.qualification, 
+			a.sss_number,
+			a.tin_number,
+			a.pagibig_number,
+			a.philhealth_number, 
+			a.applied_date_time, 
+			a.hired_date,
+			a.rejected_date,
+			a.resume_name, 
+			a.resume_path,
+			sas.status as application_status,
+			j.title as position_applied
+			 FROM g_applicant a,  g_settings_application_status sas ,g_job as j
+			 WHERE a.company_structure_id=".Model::safeSql($csid->getId())." AND a.job_id=j.id GROUP BY a.id
+			".$order_by."
+			".$limit."		
+		";		
+		return self::getRecords($sql);
+	}
+	
+	public static function findByEmailAddress($email) {
+		$sql = "
+			SELECT 
+			*
+			FROM g_applicant a
+			WHERE a.email_address=". Model::safeSql($email)."
+			LIMIT 1 
+		";
+
+		return self::getRecord($sql);		
+	}
+	
+	public static function findSpecificEmailAddress($email) {
+		$sql = "			
+			SELECT id, lastname, firstname, email_address  
+			FROM g_applicant a
+			WHERE a.email_address=". Model::safeSql($email)." 
+		";	
+		return self::getRecord($sql);		
+	}		
+	
+	public static function findAll() {
+		$sql = "
+			SELECT * 
+			FROM " . APPLICANT ." 			
+			
+		";
+		return self::getRecords($sql);
+	}
+	
+	private static function getRecord($sql) {
+		$result = Model::runSql($sql);
+		$total = mysql_num_rows($result);
+		if ($total == 0) {
+			return false;	
+		}		
+		$row = Model::fetchAssoc($result);
+		$records = self::newObject($row);	
+		return $records;
+	}
+	
+	private static function getRecords($sql) {
+		$result = Model::runSql($sql);
+		$total = mysql_num_rows($result);
+		if ($total == 0) {
+			return false;	
+		}
+		while ($row = Model::fetchAssoc($result)) {
+			$records[$row['id']] = self::newObject($row);
+			
+		}
+		return $records;
+	}
+	
+	private static function newObject($row) {
+		//print_r($row);
+		$gcb = new G_Applicant;
+		$gcb->setId($row['id']);
+		$gcb->setEmployeeId($row['employee_id']);
+		$gcb->setHash($row['hash']);
+		$gcb->setJobId($row['job_id']);
+		$gcb->setPhoto($row['photo']);
+		$gcb->setCompanyStructureId($row['company_structure_id']);
+		$gcb->setJobVacancyId($row['job_vacancy_id']);
+		$gcb->setApplicationStatusId($row['application_status_id']);
+		$gcb->setLastname($row['lastname']);
+		$gcb->setFirstname($row['firstname']);
+		$gcb->setMiddlename($row['middlename']);
+		$gcb->setExtensionName($row['extension_name']);
+		$gcb->setGender($row['gender']);
+		$gcb->setMaritalStatus($row['marital_status']);
+		$gcb->setBirthdate($row['birthdate']);
+		$gcb->setBirthPlace($row['birth_place']);
+		$gcb->setAddress($row['address']);
+		$gcb->setCity($row['city']);
+		$gcb->setProvince($row['province']);
+		$gcb->setZipCode($row['zip_code']);
+		$gcb->setCountry($row['country']);
+		$gcb->setHomeTelephone($row['home_telephone']);
+		$gcb->setMobile($row['mobile']);
+		$gcb->setEmailAddress($row['email_address']);
+		$gcb->setQualification($row['qualification']);
+		$gcb->setSssNumber($row['sss_number']);
+		$gcb->setTinNumber($row['tin_number']);
+		$gcb->setPagibigNumber($row['pagibig_number']);
+		$gcb->setPhilhealthNumber($row['philhealth_number']);		
+		$gcb->setAppliedDateTime($row['applied_date_time']);
+		$gcb->setHiredDate($row['hired_date']);
+		$gcb->setRejectedDate($row['rejected_date']);
+		$gcb->setResumeName($row['resume_name']);
+		$gcb->setResumePath($row['resume_path']);
+		$gcb->setPositionApplied($row['position_applied']);
+		
+		//foreach($GLOBALS['application_status'] as $key=>$value)
+		//{
+			//if($key==$row['application_status_id']) {
+				//$gcb->setApplicationStatus($value);
+			//}	
+		//}
+		return $gcb;
+	}
+}
+?>

@@ -1,0 +1,41 @@
+<table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#efefef">
+  <?php foreach ($deductions as $ear):
+  	if (is_object($ear)):
+  		if ($ear->getAmount() != 0):
+  ?>
+  <tr>
+    <td width="72%" valign="top" bgcolor="#ffffff"><?php echo $ear->getLabel();?>
+	<!--<a style="float:right" title="Change Amount" href="javascript:changeDeductionAmount('<?php echo $ear->getLabel();?>','<?php echo $ear->getVariable();?>',<?php echo $ear->getAmount();?>,'<?php echo $encrypted_employee_id;?>','<?php echo $from;?>','<?php echo $to;?>')" class="ui-icon ui-icon-pencil add-earning"></a>-->
+	</td>
+    <td width="28%" align="right" valign="top" bgcolor="#ffffff"><?php echo Tools::currencyFormat($ear->getAmount());?></td>
+  </tr>
+  <?php 
+ 		endif;
+	endif;
+  endforeach;?>
+  
+  <?php 
+  	if ($other_deductions):
+		foreach ($other_deductions as $oear):
+		if (is_object($oear)):
+			if ($oear->getAmount() != 0):
+	  ?>
+	  <tr>
+		<td width="72%" valign="top" bgcolor="#ffffff"><?php echo $oear->getLabel();?>
+		<a style="float:right" title="Remove" href="javascript:removeDeduction('<?php echo $oear->getLabel();?>', '<?php echo $encrypted_employee_id;?>', '<?php echo $from;?>', '<?php echo $to;?>')" class="ui-icon ui-icon-circle-close add-earning"></a>
+		</td>
+		<td width="28%" align="right" valign="top" bgcolor="#ffffff"><?php echo Tools::currencyFormat($oear->getAmount());?></td>
+	  </tr>
+	  <?php 
+			endif;
+		endif;
+	  endforeach;
+	  ?>  
+	  <?php
+  endif;
+  ?>  
+	  <tr>
+	    <td valign="top" bgcolor="#ffffff"><div align="right"><strong>Total</strong></div></td>
+	    <td align="right" valign="top" bgcolor="#ffffff"><strong><?php echo Tools::currencyFormat($total_deductions);?></strong></td>
+  	  </tr>	  
+</table>

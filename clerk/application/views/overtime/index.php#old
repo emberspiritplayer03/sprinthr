@@ -1,0 +1,22 @@
+<script>
+	$(function() {
+		 //load_employee_list_dt(); 
+		 $('#overtime_back').hide();
+	//$('#request_overtime_button').hide();
+		// load_overtime_list_dt();
+		load_overtime_list_dt_withselectionfilter();
+	});
+</script>
+<div id="request_overtime_form_wrapper" style="display:none;"><?php include_once('form/add_overtime_hideshow.php'); ?></div>
+
+<div id="action_link" style="float:left; display:none;">
+<a class="gray_button" href="javascript:void(0)" onclick="javascript:importOvertimePending('<?php echo $eid; ?>');">Import OT</a>
+<br /><br />
+</div>
+
+
+<div id="overtime_list_dt"></div>
+
+<div id="employee_list_dt_wrapper" style="display:none;"></div>
+<div id="overtime_details_wrapper"></div>
+<div id="edit_request_overtime_form_modal_wrapper"></div>

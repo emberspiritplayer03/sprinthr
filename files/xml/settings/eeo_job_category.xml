@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<category_name>Officials and managers</category_name>
+		<description>Occupations requiring administrative and managerial personnel who set broad policies, exercise overall responsibility for execution of these policies, and direct individual departments or special phases of a firm's operations. Includes: officials, executives, middle management, plant managers, department managers, and superintendents, salaried supervisors who are members of management, purchasing agents and buyers, railroad conductors and yard masters, ship captains, mates and other officers, farm operators and managers, and kindred workers.</description>
+	</Fields>
+	
+	<Fields>
+		<category_name>Professionals</category_name>
+		<description>Occupations requiring either college graduation or experience of such kind and amount as to provide a comparable background. Includes: accountants and auditors, airplane pilots and navigators, architects, artists, chemists, designers, dietitians, editors, engineers, lawyers, librarians, mathematicians, natural scientists, registered professional nurses, personnel and labor relations specialists, physical scientists, physicians, social scientists, teachers, surveyors and kindred workers.</description>
+	</Fields>
+	
+	<Fields>
+		<category_name>Technicians</category_name>
+		<description>Occupations requiring a combination of basic scientific knowledge and manual skill which can be obtained through 2 years of post high school education, such as is offered in many technical institutes and junior colleges, or through equivalent on-the-job training. Includes: computer programmers, drafters, engineering aides, junior engineers, mathematical aides, licensed, practical or vocational nurses, photographers, radio operators, scientific assistants, technical illustrators, technicians (medical, dental, electronic, physical science), and kindred workers.</description>
+	</Fields>
+	
+	<Fields>
+		<category_name>Sales</category_name>
+		<description>Occupations engaging wholly or primarily in direct selling. Includes: advertising agents and sales workers, insurance agents and brokers, real estate agents and brokers, stock and bond sales workers, demonstrators, sales workers and sales clerks, grocery clerks, and cashiers/checkers, and kindred workers.</description>
+	</Fields>
+	
+	<Fields>
+		<category_name>Office and clerical</category_name>
+		<description>Includes all clerical-type work regard-less of level of difficulty, where the activities are predominantly nonmanual though some manual work not directly involved with altering or transporting the products is included. Includes: bookkeepers, collectors (bills and accounts), messengers and office helpers, office machine operators (including computer), shipping and receiving clerks, stenographers, typists and secretaries, telegraph and telephone operators, legal assistants, and kindred workers.</description>
+	</Fields>
+	
+	<Fields>
+		<category_name>Craft Workers (skilled)</category_name>
+		<description>Manual workers of relatively high skill level having a thorough and comprehensive knowledge of the processes involved in their work. Exercise considerable independent judgment and usually receive an extensive period of training. Includes: the building trades, hourly paid supervisors and lead operators who are not members of management, mechanics and repairers, skilled machining occupations, compositors and typesetters, electricians, engravers, painters (construction and maintenance), motion picture projectionists, pattern and model makers, stationary engineers, tailors and tailoresses, arts occupations, handpainters, coaters, bakers, decorating occupations, and kindred workers.</description>
+	</Fields>
+	
+	<Fields>
+		<category_name>Operatives (semiskilled)</category_name>
+		<description>Workers who operate machine or processing equipment or perform other factory-type duties of intermediate skill level which can be mastered in a few weeks and require only limited training. Includes: apprentices (auto mechanics, plumbers, bricklayers, carpenters, electricians, machinists, mechanics, building trades, metalworking trades, printing trades, etc.), operatives, attendants (auto service and parking), blasters, chauffeurs, delivery workers, sewers and stitchers, dryers, furnace workers, heaters, laundry and dry cleaning operatives, milliners, mine operatives and laborers, motor operators, oilers and greasers (except auto), painters (manufactured articles), photographic process workers, truck and tractor drivers, knitting, looping, taping and weaving machine operators, welders and flamecutters, electrical and electronic equipment assemblers, butchers and meatcutters, inspectors, testers and graders, handpackers and packagers, and kindred workers.</description>
+	</Fields>
+	
+	<Fields>
+		<category_name>Laborers (unskilled)</category_name>
+		<description>Workers in manual occupations which generally require no special training who perform elementary duties that may be learned in a few days and require the application of little or no independent judgment. Includes: garage laborers, car washers and greasers, groundskeepers and gardeners, farmworkers, stevedores, wood choppers, laborers performing lifting, digging, mixing, loading and pulling operations, and kindred workers.</description>
+	</Fields>	
+	
+	<Fields>
+		<category_name>Service workers</category_name>
+		<description>Workers in both protective and non-protective service occupations. Includes: attendants (hospital and other institutions, professional and personal service, including nurses aides, and orderlies), barbers, charworkers and cleaners, cooks, counter and fountain workers, elevator operators, firefighters and fire protection, guards, door-keepers, stewards, janitors, police officers and detectives, porters, waiters and waitresses, amusement and recreation facilities attendants, guides, ushers, public transportation attendants, and kindred workers.</description>
+	</Fields>	
+</Main>

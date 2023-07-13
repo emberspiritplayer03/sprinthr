@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Default_Requirements>
+	<id>1</id>
+	<company_structure_id>1</company_structure_id>
+	<name>Main</name>
+	<province>Cabuyao</province>
+	<city>Laguna</city>
+	<address>Sundrel Bldg Brgy Sala</address>
+	<zip_code>4025</zip_code>
+	<phone>5024826</phone>
+	<fax>5024826</fax>
+	<location_id></location_id>
+	<is_archive>No</is_archive>
+</Default_Requirements>

@@ -1,0 +1,144 @@
+<?php
+class Settings_Controller extends Controller {
+	function __construct() 
+	{
+		parent::__construct();
+		Loader::appUtilities();		
+		Loader::appStyle('style.css');
+		$this->c_date  = Tools::getCurrentDateTime('Y-m-d h:i:s','Asia/Manila');
+		$this->var['settings'] = 'current';
+		$this->company_structure_id = $_SESSION['sprint_hr']['company_structure_id'];
+	}
+		
+	function index()
+	{
+		$this->view->render('generic_admin/main.php', $this->var);
+	}
+	
+	function database()
+	{	
+		$this->db_admin_login();
+		Loader::appScript('db_settings.js');
+		Jquery::loadInlineValidation2();
+		Jquery::loadModalExetend();	
+		Jquery::loadJqueryFormSubmit();
+		Jquery::loadTipsy();
+		
+		$this->var['show_db_admin_logout'] 	= true;
+		$this->var['page_title'] 			= 'Database';
+		$this->var['company_structure_sb']	= 'selected';
+		$this->var['module_title']			= 'SprintHR Settings';
+		$this->view->setTemplate('template_startup.php'); //template_settings
+		$this->view->render('settings/database/index.php',$this->var);
+		
+	}
+	
+	function policy()
+	{
+		$this->db_admin_login();
+		Loader::appScript('db_settings.js');
+		Jquery::loadInlineValidation2();
+		Jquery::loadModalExetend();	
+		Jquery::loadJqueryFormSubmit();
+		Jquery::loadTipsy();		
+		
+		$this->var['policy'] 					= G_Settings_Policy_Finder::findAll(); 
+		$this->var['show_db_admin_logout'] 	= true;
+		$this->var['page_title'] 				= 'Policy';
+		$this->var['module_title']				= 'SprintHR Settings';
+		$this->view->setTemplate('template_startup.php'); //template_settings
+		$this->view->render('settings/policy/index.php',$this->var);
+
+	}
+	
+	function update_policy()
+	{			
+		if($_POST) {
+			$to_update = G_Settings_Policy_Finder::findAll();
+			foreach($to_update as $tu):
+				$u = G_Settings_Policy_Finder::findById($tu->getId());	
+				if($_POST['policy'][$tu->getId()] == G_Settings_Policy::IS_ACTIVATED) {
+					$u->setIsActive("Yes");						
+				} else {
+					$u->setIsActive("No");
+				}
+				$u->save();
+			endforeach;
+			$return['is_success'] = 1;
+			$return['message']    = '<div class="alert alert-info">Updating policy(s) completed.</div>';						
+		} else {
+			$return['is_success'] = 2;
+			$return['message']    = '<div class="alert alert-block alert-error fade in">Error in SQL.Contact your system administrator.</div>';			
+		}
+		echo json_encode($return);	
+	}	
+	
+	function truncate_table()
+	{
+		if($_POST){	
+			if($_POST['sprint_tables']){
+				$t = new Sprint_Tables($_POST['sprint_tables']);
+				$t->truncateSelectedTable();
+			}elseif($_POST['truncate_recommended']){
+				$t = new Sprint_Tables();
+				$t->truncateRecommendedTables();
+				$this->enable_startup();
+			}elseif($_POST['truncate_all']){
+				$t = new Sprint_Tables();
+				$t->truncateAllTables();
+				$this->enable_startup();
+			}
+			
+			$return['is_success'] = 1;
+			$return['message']    = '<div class="alert alert-info">Truncating table(s) completed.</div>';			
+		}else{
+			$return['is_success'] = 2;
+			$return['message']    = '<div class="alert alert-block alert-error fade in">Error in SQL.Contact your system administrator.</div>';			
+		}
+		
+		echo json_encode($return);
+	}
+	
+	function _load_create_recommended_tables() {
+		$t = Sprint_Tables::checkTableIfExists();
+	}
+	
+	function enable_startup()
+	{
+		$xmlUrl = $_SERVER['DOCUMENT_ROOT'].BASE_FOLDER. 'files/xml/settings/startup.xml';
+		if(Tools::isFileExist($file)==true) {
+			$xmlStr = file_get_contents($xmlUrl);
+			$xmlStr = simplexml_load_string($xmlStr);
+
+			$xml2   = new Xml;
+			$arrXml = $xml2->objectsIntoArray($xmlStr);							
+			$obj    = $xmlStr->xpath('//Settings');
+			$obj[0]->startup = 'enabled';						
+			$xmlStr->asXml($xmlUrl);
+		}
+	}
+	
+	function load_default_values()
+	{
+		$t = new Sprint_Tables();
+		$r = $t->loadDefaultValues();
+					
+		$return['is_success'] = 1;
+		$return['message']    = '<div class="alert alert-info">Loading default values completed.</div>';			
+		
+		echo json_encode($return);
+	}
+	
+	function show_page_one()
+	{
+		$this->view->noTemplate();
+		$this->view->render('generic_admin/page_one.php', $this->var);
+	}
+	
+	function show_page_two()
+	{
+		$this->view->noTemplate();
+		$this->view->render('generic_admin/page_two.php', $this->var);
+	}	
+}
+?>

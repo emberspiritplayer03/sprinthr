@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<name>ACTIVE</name>
+	</Fields>
+	
+	<Fields>
+		<name>RESIGNED</name>
+	</Fields>
+
+	<Fields>
+		<name>TERMINATED</name>
+	</Fields>
+
+	<Fields>
+		<name>END OF CONTRACT</name>
+	</Fields>
+</Main>
+
+

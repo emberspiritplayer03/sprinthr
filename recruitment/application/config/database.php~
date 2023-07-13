@@ -1,0 +1,6 @@
+<?php
+define(DB_HOST, 'localhost');
+define(DB_USERNAME, 'product');
+define(DB_PASSWORD, '3lmK3sKchG*0ao=zM4CjS9');
+define(DB_DATABASE, 'sprint_hr_dev');
+?>

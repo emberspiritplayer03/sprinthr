@@ -1,0 +1,297 @@
+<?php
+class Login_Controller extends Controller
+{
+	function __construct()
+	{
+		parent::__construct();
+		Loader::appUtilities();
+		Loader::appStyle('style.css');
+		$this->module = 'LOGIN';
+		
+	}
+
+	function index()
+	{
+		Jquery::loadInlineValidation2();
+		Jquery::loadJqueryFormSubmit();
+
+		if( $this->user_session_files ){
+
+			$total_module = 0;
+
+			if( is_array($this->global_user_hr_actions) ){								
+				$total_module++;
+				$redirect_url = $this->default_redirect_hr_url;			
+			}
+
+			if( is_array($this->global_user_dtr_actions) ){					
+				$total_module++;
+				$redirect_url = $this->default_redirect_dtr_url;
+			}
+
+			if( is_array($this->global_user_payroll_actions) ){								
+				$total_module++;
+				$redirect_url = $this->default_redirect_payroll_url;
+			}
+
+			if( is_array($this->global_user_employee_actions) ){												
+				$total_module++;
+				$redirect_url = $this->default_redirect_employee_url;				
+			}
+			
+			if( $total_module == 1 ){
+				header("Location:{$redirect_url}");
+			}else{
+				$this->var['hr_url']       = $this->default_redirect_hr_url;
+				$this->var['dtr_url']      = $this->default_redirect_dtr_url;
+				$this->var['payroll_url']  = $this->default_redirect_payroll_url;
+				$this->var['employee_url'] = $this->default_redirect_employee_url;
+				$view_file = "module_select.php";
+			}
+		}else{
+			$view_file = "index.php";
+		}
+
+		$this->view->setTemplate('login.php');
+		$this->view->render('login/' . $view_file, $this->var);	
+	}
+
+	function index_depre()
+	{
+		Jquery::loadInlineValidation2();
+		Jquery::loadJqueryFormSubmit();
+		
+		$e = G_User_Finder::findByEmployeeId(Utilities::decrypt($_SESSION['sprint_hr']['employee_id']));
+		//echo Utilities::isHashValid(Utilities::decrypt($eid),$hash);		
+		if($e) {
+            $this->applyAutoSettings();
+			$this->var['mod'] = $mod = explode(',', $e->getModule());	
+		}
+		
+		$this->var['company_structure_id']   =  $_SESSION['sprint_hr']['company_structure_id'];
+		$this->var['username'] 			     =  $_SESSION['sprint_hr']['username'];
+		$this->var['employee_id'] 		     =  $_SESSION['sprint_hr']['employee_id'];
+		
+		if(!empty($_SESSION['sprint_hr']['redirect_uri'])) {
+			$this->var['url_param']	= "?next=".$_SESSION['sprint_hr']['redirect_uri']."&redirect=true";
+		}
+		
+		if(!empty($_SESSION['sprint_hr']['company_structure_id']) && !empty($_SESSION['sprint_hr']['username']) && !empty($_SESSION['sprint_hr']['employee_id'])){
+			//Check if Employee Table is empty
+				$c = G_Company_Structure_Finder::findById($_SESSION['sprint_hr']['company_structure_id']);
+				if($c){
+					//Validate if startup is enable
+						$is_enabled = $this->verifyStartUpXml();
+						if($is_enabled == 'enabled'){
+							redirect('startup');
+						}
+					//
+				}else{
+				
+				}
+			//
+		}
+
+		if($_GET['redirect'] == true) {
+		//	header("Location : " . urldecode($_GET['next']));
+		} else {
+		
+		}
+		
+		$this->view->setTemplate('login.php');
+		$this->view->render('login/index.php',$this->var);
+	}
+	
+	function verifyStartUpXml()
+	{
+		$xmlUrl = $_SERVER['DOCUMENT_ROOT'].BASE_FOLDER. 'files/xml/settings/startup.xml';
+		if(Tools::isFileExist($file)==true) {
+			$xmlStr = file_get_contents($xmlUrl);
+			$xmlStr = simplexml_load_string($xmlStr);
+
+			$xml2   = new Xml;
+			$arrXml = $xml2->objectsIntoArray($xmlStr);				
+			return $arrXml['startup'];			
+			
+		}else {
+			return "disabled";
+		}
+	}
+
+	function _login()
+	{
+		$username = $_POST['username'];
+		$password = $_POST['password'];
+
+		$u = new G_Employee_User();
+		$u->setUserName($username);
+		$u->setPassword($password);
+		$json = $u->login();
+
+		$err_image = BASE_FOLDER . 'themes/' . THEME . '/themes-images/login/error.png';
+		if( !$json['is_success'] ){
+			$json['message'] = '
+					<div class="alert alert-block alert-error fade in">
+						<button class="close" data-dismiss="alert" type="button" onclick="javascript:hideAlertBox();">×</button>
+						<h4 class="alert-heading">
+								<img src="' . $err_image . '" alt="error" class="error_icon" />Invalid Username or Password							
+						</h4>
+					</div>';
+		}
+
+		echo json_encode($json);
+	}
+	
+	function _login_deprecated()
+	{		
+		$username = $_POST['username'];
+		$password = $_POST['password'];
+
+		$image    = BASE_FOLDER . 'themes/' . THEME . '/themes-images/login/error.png';
+		$e = G_User_Finder::findByUsername($username);
+
+		if($e) {
+			$encrypt = Utilities::encryptPassword($password);
+			$shapass = hash("SHA512", $password, false);
+			if($e->getPassword()==$shapass) {
+				$session = new WG_Session(array('namespace' => 'sprint_hr'));				
+				$session->set('company_structure_id', $e->getCompanyStructureId());
+				$session->set('username',  $e->getUsername());
+				$session->set('employee_id',Utilities::encrypt($e->getEmployeeId()));
+				$session->set('hash',$e->getHash());
+				$return['is_success'] = 1;
+				$this->triggerAudit(1,$e->getUsername(),ACTION_USER_LOGIN,$this->module.': id '. $e->getEmployeeId());
+				
+			}else if($e->getPassword()==$encrypt) {
+				$e->setPassword($shapass);
+				$e->save();	
+				$session = new WG_Session(array('namespace' => 'sprint_hr'));				
+				$session->set('company_structure_id', $e->getCompanyStructureId());
+				$session->set('username',  $e->getUsername());
+				$session->set('employee_id',Utilities::encrypt($e->getEmployeeId()));
+				$session->set('hash',$e->getHash());
+				$return['is_success'] = 1;
+				
+				$this->triggerAudit(1,$e->getUsername(),ACTION_USER_LOGIN,$this->module.': id '. $e->getEmployeeId());
+				
+			}else {
+				// INVALID PASSWORD	
+				$this->triggerAudit(0,$username,ACTION_USER_LOGIN,$this->module.': ' . ERROR_LOGIN);
+				$return['is_success'] = 2;
+				$return['message']    = '
+					<div class="alert alert-block alert-error fade in">
+						<button class="close" data-dismiss="alert" type="button" onclick="javascript:hideAlertBox();">×</button>
+						<h4 class="alert-heading">
+								<img src="' . $image . '" alt="error" class="error_icon" />Invalid Username or Password							
+						</h4>
+					</div>';
+			}
+		}else {
+			//CHECK IF THE LOGIN IS SUPER USER
+			if($username=='admin123' && $password=='Eao8fi') {
+				$session = new WG_Session(array('namespace' => 'sprint_hr'));				
+				$session->set('company_structure_id', 0);
+				$session->set('username',  'super_admin');
+				$session->set('employee_id',Utilities::encrypt(12313123123));
+				$session->set('hash',md5('admin'));
+				$return['is_success'] = 1;
+				$this->triggerAudit(1,$username,ACTION_USER_LOGIN,$this->module.': Super admin user');
+			} else {
+				//INVALID USERNAME
+				$this->triggerAudit(0,$username,ACTION_USER_LOGIN,$this->module.': ' . ERROR_LOGIN);
+				$return['is_success'] = 2;
+				$return['message']    = '
+					<div class="alert alert-block alert-error fade in">
+						<button class="close" data-dismiss="alert" type="button" onclick="javascript:hideAlertBox();">×</button>
+						<h4 class="alert-heading">
+								<img src="' . $image . '" alt="error" class="error_icon" />Invalid Username or Password							
+						</h4>
+					</div>';
+			}
+			
+		}
+		
+		echo json_encode($return);
+	}
+	
+	function _isLogin()
+	{
+		$return = false;
+
+		if ($_SESSION['sprint_hr']['company_structure_id'] && $_SESSION['sprint_hr']['username'] && $_SESSION['sprint_hr']['employee_id'] && $_SESSION['sprint_hr']['hash'])
+		{
+			$return = true;
+		}
+		return $return;
+	}
+	
+	function logout()
+	{
+		//$this->triggerAudit(1,$$this->global_user_username ,'user logout',$this->module.': id '. Utilities::decrypt($_SESSION['sprint_hr']['employee_id']));		
+		$u = new G_Employee_User();
+		$u->logout();		
+		redirect('login');	
+	}
+
+	function getHash() {
+		echo Utilities::encryptPassword("icannottellyou!@#");
+		echo Utilities::decrypt('89169ab53c70b250b3deb3909bad52bef34551b3');
+	}
+	
+	function database()
+	{	
+		Jquery::loadInlineValidation2();
+		Jquery::loadJqueryFormSubmit();
+		
+		$this->view->setTemplate('login.php');
+		$this->view->render('login/database/index.php',$this->var);
+	}
+	
+	function _database_login() {
+		$username = $_POST['username'];
+		$password = $_POST['password'];
+		$image    = BASE_FOLDER . 'themes/' . THEME . '/themes-images/login/error.png';
+		
+		$encrypt = Utilities::encryptPassword($password);
+	
+		if($username == 'db_admin!@#' && $encrypt == '89169ab53c70b250b3deb3909bad52bef34551b3') {
+			$_SESSION['sprint_hr']['db_admin_user'] 	= 'db_admin!@#';
+			$_SESSION['sprint_hr']['db_admin_password'] = $encrypt;
+			$this->triggerAudit(1,$username,ACTION_USER_LOGIN,$this->module.' : database module, user: database admin user');
+			$return['is_success'] = true;
+		} else {
+			$this->triggerAudit(0,$username,ACTION_USER_LOGIN,$this->module.' : database module, ' . ERROR_LOGIN);
+			$return['is_success'] = false;
+			$return['message']    = '
+				<div class="alert alert-block alert-error fade in">
+					<button class="close" data-dismiss="alert" type="button" onclick="javascript:hideAlertBox();">×</button>
+					<h4 class="alert-heading">
+							<img src="' . $image . '" alt="error" class="error_icon" />Invalid Username or Password							
+					</h4>
+				</div>';
+		}
+		
+		echo json_encode($return);
+	}
+	
+	function isDatabaseLogin() {
+		$return = false;
+		$username = $_SESSION['sprint_hr']['db_admin_user'];
+		$password = $_SESSION['sprint_hr']['db_admin_password'];
+		
+		if($username == 'db_admin!@#' && $password == '89169ab53c70b250b3deb3909bad52bef34551b3') {
+			$return = true;
+		}
+
+		return $return;
+		
+	}
+	
+	function logout_db_module() {
+		$this->triggerAudit(1,$_SESSION['sprint_hr']['db_admin_user'],ACTION_USER_LOGIN,$this->module.' : database module, user: database admin user');
+		unset($_SESSION['sprint_hr']['db_admin_user']);
+		unset($_SESSION['sprint_hr']['db_admin_password']);	
+		redirect('settings/database');	
+	}
+}
+?>

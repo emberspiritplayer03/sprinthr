@@ -1,0 +1,1 @@
+<div class="confirmation-box"><div>Are you sure you want to cancel application - "<b><?php echo $job_title; ?></b>"?</div></div>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<relationship>Husband</relationship>
+	</Fields>	
+		
+	<Fields>
+		<relationship>Wife</relationship>		
+	</Fields>
+	
+	<Fields>
+		<relationship>Cousin</relationship>		
+	</Fields>
+	
+	<Fields>
+		<relationship>Friend</relationship>		
+	</Fields>
+</Main>

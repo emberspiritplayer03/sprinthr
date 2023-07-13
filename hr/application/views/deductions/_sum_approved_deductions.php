@@ -1,0 +1,1 @@
+<?php echo number_format($approved_sum,2,".",","); ?>

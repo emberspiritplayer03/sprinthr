@@ -1,0 +1,40 @@
+
+<h2 class="field_title"><?php echo $title; ?></h2>
+<div id="schedule_edit_form_wrapper"></div>
+<div id="schedule_add_form_wrapper" style="display:none">
+
+</div>
+<div id="schedule_delete_wrapper"></div>
+<div id="schedule_table_wrapper">
+<table width="858" id="hor-minimalist-b"  border="0">
+      <thead>
+        <tr>
+          <th width="117" scope="col">Title</th>
+          <th width="150" scope="col">Day</th>
+          <th width="109" scope="col">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+      <?php 
+	  $ctr = 0;
+	  // foreach($schedule as $key=>$e) {
+	if($schedule) {	  
+		   ?>
+        <tr>
+          <td><?php  echo $schedule->getName(); ?></td>
+          <td><?php echo $schedule->getWorkingDays(); ?></td>
+          <td><?php echo Date::convertMilitaryTo12Hours($schedule->getTimeIn()). " - ". Date::convertMilitaryTo12Hours($schedule->getTimeOut()); ?></td>
+        </tr>
+       <?php 
+	  // $ctr++;
+	 //  }
+	  }
+
+	  if(!$schedule) { ?>
+		  <tr>
+          <td colspan="3"><center><i>No Record(s) Found</i></center></td>
+        </tr> 
+		<?php }  ?>
+      </tbody>
+    </table>
+</div>

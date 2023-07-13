@@ -1,0 +1,34 @@
+<?php
+class G_Audit_Trail_Helper {
+	public static function isIdExist(G_Audit_Trail $at) {
+		$sql = "
+			SELECT COUNT(*) as total
+			FROM " . AUDIT_TRAIL ."
+			WHERE id = ". Model::safeSql($at->getId()) ."
+		";
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+	
+	public static function getUserIPAndCountry(){		
+		$user_ip = Tools::getRealIpAddr();				
+		//$url     = "http://api.hostip.info/country.php?ip={$my_ip}&position=true";
+		$user['ip']     = $user_ip;
+		//$user['country']= file_get_contents($url);
+		return $user; 
+	}
+	
+	public static function countTotalRecords() {
+		$sql = "
+			SELECT COUNT(*) as total
+			FROM " . AUDIT_TRAIL ."
+		";
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+			
+	
+}
+?>

@@ -1,0 +1,495 @@
+@import "jquery.css";
+@import url('menu.css');
+
+#backgroundPopup{
+	display:none;
+	position:fixed;
+	_position:absolute; /* hack for internet explorer 6*/
+	height:100%;
+	width:100%;
+	top:0;
+	left:0;
+	background:#000000;
+	border:1px solid #cecece;
+	z-index:1;
+}
+
+/*----------------------------------------------------------------------------- 
+Gleent Innovative Technologies Stylesheet
+
+Version:   Krikel3
+Website:   http://www.gleent.com
+Email:     billing@gleent.com
+		   support@gleent.com
+		   sales@gleent.com
+-----------------------------------------------------------------------------*/
+
+/* =1 Global -----------------------------------------------------------------------*/
+a:link, a:visited {
+	color:#0081B6;
+	text-decoration:underline;
+}
+a:hover, a:active {
+	color:#006498;
+	text-decoration:none;
+}
+.float-right 		{ float:right; }
+.float-left  		{ float:left; }
+.text-left 			{ text-align:left; }
+.text-right 		{ text-align:right; }
+.text-center 		{ text-align:center; }
+.text-justify 		{ text-align:justify; }
+.text-indent		{ text-indent:15px; }
+.break-top			{ margin-top:15px; }
+.break-bottom		{ margin-bottom:15px; }
+.hide 				{ display: none; }
+.clear 				{ clear:both; }
+.font-medium 		{ font: 1.1em "Segoe UI"; }
+.font-small 		{ font: 0.9em "Segoe UI"; }
+.font-smaller 		{ font: 0.7em "Segoe UI"; }
+.bold 				{ font-weight:bold; }
+.italic 			{ font-style:italic; }
+.text-underline		{ text-decoration:underline; }
+.underline 			{ border-bottom:1px dotted #89b7cf; }
+.overline			{ border-top:1px solid #eee; }
+.black 				{ color:#333; }
+.white				{ color:#fff; }
+.gray 				{ color:#616161; }
+.white 				{ color:#fff; }
+.blue 				{ color:#03519d; }
+.green 				{ color:#85b03e; }
+.red 				{ color:#ff0000; }
+.blue-green			{ color:#00b0da; }
+.gold				{ color:#feb13c; }
+.no-bullet 			{ list-style: none;list-style-image:none; }
+.no-padding 		{ padding:0; }
+.no-margin			{ margin:0; }
+.no-indent			{ margin-left:0;padding-left:0; }
+.no-border			{ border:1px solid #fff; }
+.no-div				{ border:none; background:none;}
+.img-center 		{ display:block; margin: 4px auto; }
+.img-left 			{ float:left; margin:4px 10px 4px 0; }
+.img-right 			{ float:right; margin:4px 0 4px 10px; }
+.clearfix:after 	{ content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
+.clearfix 			{ display: block; }
+
+h1 { font-size:32px; line-height:30px; }
+h2 { font-size:20px; line-height:20px; }
+h3 { font-size:13px; }
+h4 { font-size:12px; }
+
+html[xmlns] .clearfix {	display: block; }
+* html .clearfix { height: 1%; }
+
+html {}
+body {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	color:#595959;
+	margin:0;
+	padding:0;
+	line-height:18px;
+	background:url(themes-images/body_bg.jpg) repeat #f7f7f7;
+}
+#wrapper {
+	padding:0;
+	margin:0;
+	width:auto;
+}
+
+/* =2 Header
+------------------------------------------------------------------------------------------------*/
+#header_container {}
+#top_navigation {
+	background:#333232;
+	height:30px;
+	width:auto;
+	padding:0 20px;
+	line-height:30px;
+	color:#c7c7c7;
+}
+div a.account_name:link, div a.account_name:visited {
+	padding:0 13px 0 0;
+	background:url(themes-images/topnavigation_dropicon.png) no-repeat right 3px;
+	color:#c7c7c7;
+	margin: 0 5px 0 0;
+	text-decoration:none;
+}
+div a.account_name:hover, div a.account_name:active {
+	color:#ffffff;
+}
+a.logout:link, a.logout:visited {
+	color:#c7c7c7;
+	text-decoration:none;
+	border-left:1px solid #7e7e7e;
+	padding:0 0 0 8px;
+}
+a.logout:hover, a.logout:active {
+	color:#ffffff;
+}
+#header {
+	width:auto;
+	margin:auto;
+	padding:20px 20px 10px 20px;
+	position:relative;
+	z-index:100;
+	background:url(themes-images/header_bg.jpg) repeat-x top center #065d8b;
+}
+#header img.logo {
+	z-index:1;
+}
+/* =2 Menu (menu.css)
+------------------------------------------------------------------------------------------------*/
+
+/* =3 Banner
+------------------------------------------------------------------------------------------------*/
+#banner {
+	width:auto;
+	height:100%;
+	padding:20px 0 0 0;
+	margin:0 auto 40px auto;
+	text-align:center;
+	height:325px;
+	position:relative;
+	background:#293144;
+	z-index:0;
+}
+#banner_image {
+	margin:0 auto;
+	width:943px;
+	display:block;
+	position:relative;
+	height:354px;
+	background:url(themes-images/banner.png) no-repeat top center;
+}
+#banner_image h1 {
+	position:absolute;
+	left:50px; top:140px;
+	margin:0;
+	padding:0;
+	font-size:30px;
+	font-family: 'Kreonbold';
+	color:#eaeaea;
+}
+#banner_image h3 {
+	position:absolute;
+	left:55px; top:185px;
+	width:500px;
+	text-align:left;
+	color:#666666;
+	font-family:Arial, Helvetica, sans-serif;
+	margin:0;
+	padding:0;
+	font-size:16px;
+	font-weight:normal;
+}
+
+/* =4 Content
+------------------------------------------------------------------------------------------------*/
+#wrap {
+	padding:20px;
+}
+#container {
+	margin:0 0 0 290px;
+	width:auto;
+}
+#container div#content {
+	padding:0;
+}
+#content {
+	width:auto;
+	margin:0 auto;
+	padding:10px 20px;
+}
+.page_title {
+	display:block;
+	margin:0 0 15px 0;
+	font-family: 'Kreonbold';
+	padding:0;
+	color:#343e56;
+	font-size:30px;
+	letter-spacing:-1px;
+}
+#home_content {
+	padding:10px 0;
+}
+#inner_content {
+	width:600px;
+	float:left;
+	padding:10px 20px 10px 0;
+	border-right:1px dotted #cccccc;
+}
+
+/* ---------------------- Submenu ----------------------*/
+#submenu {
+	float:left;
+	width:270px;
+	margin:0 0 0 -290px;
+}
+ul.ulmenu {
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+ul.ulmenu li:first-child {
+	border-top:1px solid #c4c4c4;
+}
+ul.ulmenu li {
+	background:url(themes-images/submenu_bg.png) repeat-x 0 0;
+	border-left:1px solid #c4c4c4;
+	border-right:1px solid #c4c4c4;
+	border-bottom:1px solid #c4c4c4;
+}
+ul.ulmenu li.selected {
+	background:url(themes-images/submenu_bg.png) repeat-x 0 -32px;
+}
+ul.ulmenu li.selected a, ul.ulmenu li.selected a:hover {
+	color:#ffffff;
+}
+ul.ulmenu li a {
+	display:block;
+	width:215px;
+	padding:0 30px 0 25px;
+	color:#5f5f5f;
+	text-decoration:none;
+	position:relative;
+	height:32px;
+	line-height:32px;
+	background:url(themes-images/submenu_tab_icon.png) no-repeat 6px 7px;
+}
+ul.ulmenu li a:hover {
+	color:#111111;
+}
+ul.ulmenu li a img.subdropicon {
+	float:right;
+	position:absolute;
+	right:7px; top:6px;
+	border:0;
+}
+ul.ulsubmenu {
+	list-style:none;
+	padding:0;
+	margin:0;
+	background:#ffffff;
+}
+ul.ulsubmenu li:first-child {
+	border:0;
+}
+ul.ulsubmenu li {
+	border-top:1px solid #e6e6e6;
+	border-left:0;
+	border-right:0;
+	border-bottom:0;
+	background:none;
+}
+li.selected ul.ulsubmenu li a, ul.ulsubmenu li a {
+	background:url(themes-images/submenu_list_icon.png) no-repeat 12px 13px;
+	color:#8c8c8c;
+}
+li.selected ul.ulsubmenu li a:hover, ul.ulsubmenu li a:hover {
+	color:#555555;
+}
+
+/* ---------------------- Sidebar ----------------------*/
+#sidebar {
+	width:300px;
+	float:right;
+	padding:10px 0;
+}
+ul.xoxo {
+	margin:0;
+	padding:0;
+}
+ul.xoxo li {
+	list-style:none;
+	padding:0 0 20px 0;
+}
+ul.xoxo .sidebar_title {
+	font-family: 'Kreonbold';
+	color:#036a95;
+	padding:0;
+	margin:0 0 15px 0;
+}
+ul.widget_container {
+	margin:0;
+	padding:0 0 0 10px;
+}
+ul.widget_container li {
+	background:url(themes-images/widget-li.png) no-repeat 5px 5px;
+	padding:0 0 2px 15px;
+	margin:0 0 2px 0;
+	border-bottom:1px solid #eaeaea;
+}
+ul.widget_container li a {
+	text-decoration:none;
+}
+
+/* =5 Footer
+-----------------------------------------------------------------------------------------------*/
+#footer_container {
+	min-height:25px;
+	background: url(themes-images/footer_bg.jpg) repeat-x top #595858;
+	padding:20px;
+	width:auto;
+	clear:both;
+}
+#footer {
+	width:940px;
+	margin:0 auto;
+	font-size:13px;
+	text-align:center;
+	color:#dadada;
+}
+#footer p {
+	margin:0;
+}
+#footer small {
+	color:#8c8c8c;
+	margin:0;
+}
+#footer ul {
+	list-style:none;
+	padding:0;
+	margin:0 0 10px 0;
+	width:700px;
+	float:left;
+}
+#footer ul li {
+	display:inline;
+	padding:0 10px;
+	text-transform:capitalize;
+}
+#footer ul li a:link, #footer ul li a:visited {
+	color:#AEBDD1;
+	text-decoration:none;
+	font-weight:bold;
+}
+#footer ul li a:hover, #footer ul li a:active {
+	color:#ffffff;
+	text-decoration:none;
+}
+
+/* =Login
+---------------------------------------------------------------------------------------*/
+#login_wrapper {
+	padding:120px 0 0 0;
+}
+#login_container {
+	background:url(themes-images/login/dark_noise_bg.jpg) repeat;
+	margin:50px 0 0 0;
+	position:relative;
+}
+div.login_content {
+	background:url(themes-images/login/dark_shadow_bg.png) repeat-x top center;
+}
+div.login_content form {
+	width:440px;
+	position:relative;
+	padding:20px 0 0 0;
+	margin:0 auto;
+	background:url(themes-images/login/form_bg.png) repeat-y center top;
+}
+div.login_content form div.bottom_div {
+	position:absolute;
+	left:0; bottom:-18px;
+	height:18px;
+	width:440px;
+	display:block;
+	background:url(themes-images/login/form_bottom_bg.png) no-repeat top center;
+}
+div.login_content form div.top_title {
+	position:absolute;
+	left:0; top:-32px;
+	padding:15px 20px;
+	height:32px;
+	width:400px;
+	display:block;
+	background:url(themes-images/login/title_bg.png) no-repeat top center;
+}
+div.login_content form div.gleent_logo {
+	width:420px;
+	height:40px;
+	display:block;
+	position:absolute;
+	left:20px; bottom:-60px;
+	background:url(themes-images/login/gleent_logo.png) no-repeat top center;
+}
+div.login_content form label.input_container {
+	width:auto;
+	padding:15px 20px;
+	margin:0 4px;
+	border-bottom:1px solid #c9c9c9;
+	border-top:1px solid #ffffff;
+	background:url(themes-images/login/input_item_bg.jpg) repeat-x top center;
+	display:block;
+}
+div.login_content form label.button_container {
+	background:none;
+	border:0 !important;
+	display:block;
+	padding:15px 20px 0 20px;
+	margin:0 4px;
+	width:auto;
+}
+div.login_content form label span {
+	float:left;
+	display:block;
+	height:35px;
+	line-height:40px;
+	width:100px;
+	font-size:15px;
+}
+div.login_content form label input.input_field {
+	width:270px;
+	border:1px solid #cccccc;
+	line-height:35px;
+	height:35px;
+	padding:0 5px;
+	color:#777777;
+	-moz-border-radius:3px;
+	-o-border-radius:3px;
+	-khtml-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+}
+div.login_content form label input.login_button {
+	width:98px;
+	height:34px;
+	border:0;
+	margin:0 5px 0 0;
+	vertical-align:middle;
+	line-height:25px;
+	font-size:14px;
+	font-weight:bold;
+	cursor:pointer;
+	color:#ffffff;
+	background:url(themes-images/login/button_bg.png) no-repeat top center;
+}
+a.forgot_password:link, a.forgot_password:visited {
+	color:#8c8c8c;
+	text-decoration:none;
+}
+a.forgot_password:hover, a.forgot_password:active {
+	color:#555555;
+}
+
+div.confirmation-box{
+	width:372px;
+	height:90px;
+	background:url(images/questionmark.png) no-repeat left top;
+}
+div.confirmation-alert{
+	width:372px;
+	height:68px;
+	background:url(images/alert.png) no-repeat left top;
+}
+div.confirmation-box div{
+	line-height:2;
+	margin-left:91px;
+	padding-top:24px;
+}
+div.confirmation-alert div{
+	line-height:2;
+	margin-left:91px;
+	padding-top:9px;
+}

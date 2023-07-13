@@ -1,0 +1,40 @@
+<?php
+class G_Break_Time_Schedule_Manager {
+
+    public static function save(G_Break_Time_Schedule $gbts) {
+        if (G_Request_Helper::isIdExist($gbts) > 0 ) {
+            $sql_start = "UPDATE ". BREAK_TIME_SCHEDULE . " ";
+            $sql_end   = "WHERE id = ". Model::safeSql($gbts->getId());      
+        }else{
+            $sql_start = "INSERT INTO ". BREAK_TIME_SCHEDULE . " ";
+            $sql_end  = "";     
+        }
+        
+        $sql = $sql_start ."
+            SET
+            schedule_in     = " . Model::safeSql($gbts->getScheduleIn()) . ",
+            schedule_out    = " . Model::safeSql($gbts->getScheduleOut()) . ",                  
+            break_in        = " . Model::safeSql($gbts->getBreakIn()) . ",                  
+            break_out       = " . Model::safeSql($gbts->getBreakOut()) . ",                  
+            total_hrs_break = " . Model::safeSql($gbts->getTotalHrsBreak()) . ",                                        
+            to_deduct       = " . Model::safeSql($gbts->getToDeduct()) . ",
+            to_required_logs       = " . Model::safeSql($gbts->getToRequiredLogs()) . ",
+            total_hrs_to_deduct = " . Model::safeSql($gbts->getTotalHrsToDeduct()) . "
+             "
+            . $sql_end ."   
+        
+        ";        
+        Model::runSql($sql);
+        return mysql_insert_id();       
+    }
+
+    public static function delete(G_Break_Time_Schedule $gbts){
+        if(G_Request_Helper::isIdExist($gr) > 0){
+            $sql = "
+                DELETE FROM ". BREAK_TIME_SCHEDULE ."               
+                WHERE id =" . Model::safeSql($gbts->getId());
+            Model::runSql($sql);
+        }
+    }
+}
+?>

@@ -1,0 +1,1 @@
+<img src="<?php echo BASE_FOLDER;?>/application/views/new_schedule/html/import_changed_schedule.png" />

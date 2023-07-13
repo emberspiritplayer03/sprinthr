@@ -1,0 +1,19 @@
+<form method="post" id="import_overtime_form" action="<?php echo $action;?>" enctype="multipart/form-data">	
+<input type="hidden" id="h_employee_id" name="h_employee_id" value="<?php echo $h_employee_id; ?>" />
+<div id="form_main" class="inner_form popup_form">
+	<div id="form_default" align="center">
+    	<input type="file" name="overtime_file" id="overtime_file" />
+    </div>
+    <div align="right">
+    	<small><a target="_blank" href="<?php echo url('attendance/html_import_overtime');?>">Need Help?</a></small>
+    </div>    
+    <div id="form_default" class="form_action_section">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td class="field_label">&nbsp;</td>
+            <td><input value="Import" id="import_overtime_submit" class="curve blue_button" type="submit">&nbsp;<a href="javascript:void(0);" onclick="closeTheDialog()">Cancel</a></td>
+          </tr>
+        </table>		
+    </div>
+</div>
+</form>

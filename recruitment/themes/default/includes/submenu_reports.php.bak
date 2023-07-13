@@ -1,0 +1,115 @@
+<div id="sidebar" class="sidebar_left">
+    <ul class="ulmenu">
+        <h2> Reports</h2>
+        <li class="selected">
+        	<div class="tabtitle">
+            	<a id="personal_information_tab"  style="cursor:pointer"  >Recruitment <img id="personal_information_min_button" class="subdropicon" src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/submenu_down_icon.png" /><img id="personal_information_max_button" class="subdropicon" src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/submenu_left_icon.png" style="display:none" /></a>
+            </div>
+            <ul id="personal_information_submenu" class="ulsubmenu">
+            <li id="personal_details_nav" class="left_nav"><a href="<?php echo url('settings/company');  ?>" onclick="javascript:hashClick('#personal_details');">Applicant List</a></li>
+            <li id="contact_details_nav" class="left_nav"><a href="<?php echo url('settings/branch');  ?>" onclick="javascript:hashClick('#contact_details');">Applicant By Name</a></li>
+            <li id="emergency_contacts_nav" class="left_nav"><a href="#">Applicants By Action</a></li>
+            <li id="emergency_contacts_nav" class="left_nav"><a href="#">Applications</a></li>
+            <li id="emergency_contacts_nav" class="left_nav"><a href="#">Applicant Statistics</a></li>
+            <li id="emergency_contacts_nav" class="left_nav"><a href="#">Planned Activities</a></li>
+            <li id="emergency_contacts_nav" class="left_nav"><a href="#">Vacancy Assignments</a></li>
+            <li id="emergency_contacts_nav" class="left_nav"><a href="#">Job Advertisements</a></li>
+            <!-- <li id="medical_history_nav" class="left_nav"><a href="#medical_history" onclick="javascript:hashClick('#medical_history');">Medical History</a></li>-->
+            </ul>
+        </li>
+        
+      <li class="selected">
+        	<div class="tabtitle">
+            	<a id="personal_information_tab"  style="cursor:pointer"  >Personnel Administration<img id="personal_information_min_button" class="subdropicon" src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/submenu_down_icon.png" /><img id="personal_information_max_button" class="subdropicon" src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/submenu_left_icon.png" style="display:none" /></a>
+            </div>
+         <ul id="personal_information_submenu" class="ulsubmenu">
+           <li id="personal_details_nav" class="left_nav"><a href="<?php echo url('settings/company');  ?>" onclick="javascript:hashClick('#personal_details');">Task Overview</a></li>
+           <li id="contact_details_nav" class="left_nav"><a href="<?php echo url('settings/branch');  ?>" onclick="javascript:hashClick('#contact_details');">Anniversaries</a></li>
+            <li class="left_nav"><a href="#">Power of Attorney</a></li>
+            <li class="left_nav"><a href="#">Education</a></li>
+           <li id="emergency_contacts_nav" class="left_nav"><a href="#">Employees who have Entered/Left the Company</a></li>
+           <li class="left_nav"><a href="#">Family Members</a></li>
+           <li class="left_nav"><a href="#">Birthday List</a></li>
+           <li class="left_nav"><a href="#">Vehicle Search List</a></li>
+           <li class="left_nav"><a href="#">Telephone Directory</a></li>
+           <li class="left_nav"><a href="#">Time Spent in Pay Scale</a></li>
+           <li class="left_nav"><a href="#">HR Master Data Sheet</a></li>
+           <li class="left_nav"><a href="#">Flexible Employee Data</a></li>
+           <li class="left_nav"><a href="#">List of Employees</a></li>
+           <li class="left_nav"><a href="#">Maternity Overview / Leave</a></li>
+           <li class="left_nav"><a href="#">Headcount Development</a></li>
+           <li class="left_nav"><a href="#">Nationalities</a></li>
+           <li class="left_nav"><a href="#">List of Salaries According to Seniority</a><br>
+           </li>
+           <!-- <li id="medical_history_nav" class="left_nav"><a href="#medical_history" onclick="javascript:hashClick('#medical_history');">Medical History</a></li>-->
+         </ul>
+        </li>
+        
+         <li class="selected">
+        	<div class="tabtitle">
+            	<a id="personal_information_tab"  style="cursor:pointer"  >Personnel Development <img id="personal_information_min_button" class="subdropicon" src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/submenu_down_icon.png" /><img id="personal_information_max_button" class="subdropicon" src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/submenu_left_icon.png" style="display:none" /></a>
+            </div>
+            <ul id="personal_information_submenu" class="ulsubmenu">
+            <li id="personal_details_nav" class="left_nav"><a href="<?php echo url('settings/company');  ?>" onclick="javascript:hashClick('#personal_details');">Profile Matchup</a></li>
+            <li id="contact_details_nav" class="left_nav"><a href="<?php echo url('settings/branch');  ?>" onclick="javascript:hashClick('#contact_details');">Branch</a></li>
+            <li id="emergency_contacts_nav" class="left_nav"></li>
+            <!-- <li id="medical_history_nav" class="left_nav"><a href="#medical_history" onclick="javascript:hashClick('#medical_history');">Medical History</a></li>-->
+            </ul>
+        </li>
+        
+         <li class="selected">
+        	<div class="tabtitle">
+            	<a id="personal_information_tab"  style="cursor:pointer"  >Benefits Report<img id="personal_information_min_button" class="subdropicon" src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/submenu_down_icon.png" /><img id="personal_information_max_button" class="subdropicon" src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/submenu_left_icon.png" style="display:none" /></a>
+            </div>
+            <ul id="personal_information_submenu" class="ulsubmenu">
+            <li id="personal_details_nav" class="left_nav"><a href="<?php echo url('settings/company');  ?>" onclick="javascript:hashClick('#personal_details');">Company Structure</a></li>
+            <li id="contact_details_nav" class="left_nav"><a href="<?php echo url('settings/branch');  ?>" onclick="javascript:hashClick('#contact_details');">Branch</a></li>
+            <li id="emergency_contacts_nav" class="left_nav"></li>
+            <!-- <li id="medical_history_nav" class="left_nav"><a href="#medical_history" onclick="javascript:hashClick('#medical_history');">Medical History</a></li>-->
+            </ul>
+        </li>
+        
+         <li class="selected">
+        	<div class="tabtitle">
+            	<a id="personal_information_tab"  style="cursor:pointer"  >Compensation Management<img id="personal_information_min_button" class="subdropicon" src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/submenu_down_icon.png" /><img id="personal_information_max_button" class="subdropicon" src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/submenu_left_icon.png" style="display:none" /></a>
+            </div>
+            <ul id="personal_information_submenu" class="ulsubmenu">
+            <li id="personal_details_nav" class="left_nav"><a href="<?php echo url('settings/company');  ?>" onclick="javascript:hashClick('#personal_details');">Company Structure</a></li>
+            <li id="contact_details_nav" class="left_nav"><a href="<?php echo url('settings/branch');  ?>" onclick="javascript:hashClick('#contact_details');">Branch</a></li>
+            <li id="emergency_contacts_nav" class="left_nav"></li>
+            <!-- <li id="medical_history_nav" class="left_nav"><a href="#medical_history" onclick="javascript:hashClick('#medical_history');">Medical History</a></li>-->
+            </ul>
+        </li>
+        
+        
+        <li class="selected">
+        	<div class="tabtitle">
+            	<a id="employment_information_tab"  style="cursor:pointer">Time Managment <img id="employment_information_min_button" class="subdropicon" src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/submenu_down_icon.png" /><img id="employment_information_max_button" class="subdropicon" src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/submenu_left_icon.png" style="display:none" /></a>
+            </div>
+            <ul id="employment_information_submenu" class="ulsubmenu">
+                <li id="employment_status_nav" class="left_nav"><a href="<?php echo url('settings/options?sidebar=1');  ?>" onclick="javascript:hashClick('#employment_status');">Subdivision Type</a></li>
+                <li id="compensation_nav" class="left_nav"><a href="<?php echo url('settings/options?sidebar=2');  ?>" onclick="javascript:hashClick('#compensation');">Dependent Relationship</a></li>
+                <li id="performance_nav" class="left_nav"></li>
+              <!--<li id="membership_nav" class="left_nav"><a href="#membership" onclick="javascript:hashClick('#membership');">Membership</a></li>-->
+            </ul>
+        </li>
+        <li class="selected">
+        	<div class="tabtitle">
+            	<a id="employment_information_tab"  style="cursor:pointer">Payroll Reports<img id="employment_information_min_button" class="subdropicon" src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/submenu_down_icon.png" /><img id="employment_information_max_button" class="subdropicon" src="<?php echo BASE_FOLDER; ?>themes/<?php echo THEME; ?>/themes-images/submenu_left_icon.png" style="display:none" /></a>
+            </div>
+            <ul id="employment_information_submenu" class="ulsubmenu">
+                <li id="employment_status_nav" class="left_nav"><a href="<?php echo url('settings/options?sidebar=1');  ?>" onclick="javascript:hashClick('#employment_status');">Subdivision Type</a></li>
+                <li id="compensation_nav" class="left_nav"><a href="<?php echo url('settings/options?sidebar=2');  ?>" onclick="javascript:hashClick('#compensation');">Dependent Relationship</a></li>
+                <li id="performance_nav" class="left_nav"><a href="<?php echo url('settings/options?sidebar=3');  ?>" onclick="javascript:hashClick('#performance');">Pay Period</a></li>
+                <li id="training_nav" class="left_nav"><a href="<?php echo url('settings/options?sidebar=4');  ?>" onclick="javascript:hashClick('#training');">Skill Management</a></li>
+                <li id="memo_notes_nav" class="left_nav"><a href="<?php echo url('settings/options?sidebar=5');  ?>" onclick="javascript:hashClick('#memo_notes');">License</a></li>
+                <li id="supervisor_nav" class="left_nav"><a href="<?php echo url('settings/options?sidebar=6');  ?>" onclick="javascript:hashClick('#supervisor');">Membership Type</a></li>
+                <li id="leave_nav" class="left_nav"><a href="<?php echo url('settings/options?sidebar=7');  ?>" onclick="javascript:hashClick('#leave');">Employment Status</a></li>
+                <li id="leave_nav" class="left_nav"><a href="<?php echo url('settings/options?sidebar=8');  ?>" onclick="javascript:hashClick('#leave');">Application Status</a></li>
+              <!--<li id="membership_nav" class="left_nav"><a href="#membership" onclick="javascript:hashClick('#membership');">Membership</a></li>-->
+            </ul>
+        </li>
+        
+       
+    </ul>
+</div>

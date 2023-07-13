@@ -1,0 +1,400 @@
+<?php
+class G_Break_Time_Schedule_Header extends Break_Time_Schedule_Header {
+	protected $is_applied_to_all;
+
+	const YES = 1;
+	const NO  = 0;
+
+	const ALL_EMPLOYEES = 'All employees';
+
+	public function __construct() {
+		
+	}
+
+	public function setIsAppliedToAll($value){
+		$this->is_applied_to_all = $value;
+	}
+
+	public function getAllActiveRecords($order_by = "", $limit = "", $fields = array()) {
+		$data = array();
+		$data = G_Break_Time_Schedule_Header_Helper::sqlGetAllActiveRecords($order_by, $limit, $fields);
+		return $data;
+	}
+
+	public function countTotalActiveRecords() {
+		$total_records = G_Break_Time_Schedule_Header_Helper::sqlTotalActiveRecords();		
+		return $total_records;
+	}
+	
+	private function checkIfNotEmpty( $obj_variables = array() ) {
+		foreach( $obj_variables as $variable ){
+			if( trim($this->{$variable}) == '' ){
+				return false;
+			}
+		}
+
+		return true;
+	}	
+
+	public function getBreakTimeHeaderAndDetailsData() {
+		$data = array();
+
+		if( $this->id > 0 ){
+
+			//Header
+			$fields = array("id","DATE_FORMAT(schedule_in,'%h:%i %p')AS formatted_schedule_in","DATE_FORMAT(schedule_out,'%h:%i %p')AS formatted_schedule_out","break_time_schedules","applied_to","date_start");
+			$header = G_Break_Time_Schedule_Header_Helper::sqlGetDataById($this->id, $fields);
+			$header = Tools::encryptArrayIndexValue("id",$header);
+			$data['header'] = $header;
+
+			//Details
+			$fields = array("id","obj_id","obj_type","DATE_FORMAT(break_in,'%h:%i %p')AS formatted_break_in","DATE_FORMAT(break_out,'%h:%i %p')AS formatted_break_out","to_deduct","to_required_logs","applied_to_legal_holiday","applied_to_special_holiday","applied_to_restday","applied_to_regular_day");
+			$details = G_Break_Time_Schedule_Details_Helper::sqlGetAllDataByHeaderId($this->id, $fields);
+			$data['details'] = $details;
+		} 
+		return $data;
+	}
+
+	/*
+		Note: Will not parse applied to all 
+		$applied_to = 'CscSL-hGVsmC4xz8zJ7wuz0S5eKfzpxrPR40iVylW7Q:d,NltI_8hiiaR7gMKq87Dzo27f53HGpQJQqmpuo-gOcJg:e';
+		$br = new G_Break_Time_Schedule_Header();		
+		$br->setAppliedTo($applied_to);
+		$data = $br->parseAppliedToData();
+	*/
+	public function parseAppliedToData(){
+		$applied_to_data = array();
+
+		if( !empty($this->applied_to) ){			
+			$applied_to_array = explode(",", $this->applied_to);
+
+			foreach( $applied_to_array as $row ){
+				$row_data = explode(":", $row);
+				$prefix   = trim(strtolower($row_data[1]));
+				$obj_id   = Utilities::decrypt($row_data[0]);
+				switch ($prefix) {
+					case G_Break_Time_Schedule_Details::PREFIX_EMPLOYEE:
+						$fields   = array("id","CONCAT(firstname, ' ', lastname)AS employee_name");
+						$employee = G_Employee_Helper::sqlGetEmployeeDetailsById($obj_id, $fields);
+						
+						if( !empty($employee) ){
+							$applied_to_data[] = array('id'=> $employee['id'],'type' => $prefix,'description' => $employee['employee_name']);
+						}
+
+						break;						
+					case G_Break_Time_Schedule_Details::PREFIX_DEPARTMENT:
+						$fields     = array("id","title");
+						$department = G_Company_Structure_Helper::sqlDepartmentDetailsById($obj_id, $fields);
+
+						if( !empty($department) ){
+							$applied_to_data[] = array('id'=> $department['id'],'type' => $prefix,'description' => $department['title']);
+						}
+
+						break;
+					default:						
+						break;
+				}
+			}
+
+		}
+
+		return $applied_to_data;
+	}
+
+	private function convertBreakScheduleToString( $breaktime_schedules = array() ){
+		$str_breaktime_schedules = '';
+		if( !empty($breaktime_schedules) ){
+			foreach( $breaktime_schedules as $schedule ){
+				$break_in  = $schedule['break_in'];
+				$break_out = $schedule['break_out'];
+
+				if( Tools::isTime1LessThanTime2($break_in, $break_out)){
+					$formatted_break_in  = date("h:i A",strtotime($break_in));
+					$formatted_break_out = date("h:i A",strtotime($break_out));
+					$array_break_schedules[] = $formatted_break_in . " - " . $formatted_break_out; 
+				}
+
+			}
+
+			$str_breaktime_schedules = implode(" / ", $array_break_schedules);
+		}
+
+		return $str_breaktime_schedules;
+	}
+
+	private function isWithDuplicateBreakTimeSchedules( $breaktime_schedules = array() ){
+		$is_with_duplicate = false;
+		foreach( $breaktime_schedules as $schedule ){
+			$breakin[]  = $schedule['break_in'];
+			$breakout[] = $schedule['break_out'];
+		}
+
+		$breakin_duplicates  		 = array_diff_key($breakin, array_unique(array_map('strtolower', $breakin)));
+		$breakin_filtered_duplicates = array_unique($breakin_duplicates);
+
+		$breakout_duplicates  		 = array_diff_key($breakout, array_unique(array_map('strtolower', $breakout)));
+		$breakout_filtered_duplicates = array_unique($breakout_duplicates);
+
+		if( !empty($breakin_filtered_duplicates) || !empty($breakout_filtered_duplicates) ){
+			$is_with_duplicate = true;
+		}
+
+		$is_with_duplicate = false; //override
+		return $is_with_duplicate;
+	}
+
+	/*
+		Note : Check array data for invalid in / out 		
+	*/
+	private function checkArrayBreakSchedulesIfValid( $breaktime_schedules = array() ){
+		$is_valid = true;		
+		return true;
+		foreach( $breaktime_schedules as $schedule ){
+			$breakin  = $schedule['break_in'];
+			$breakout = $schedule['break_out'];			
+			if( !Tools::isTime1LessThanTime2($breakin, $breakout) ){				
+				return false;
+			}
+		}
+
+		return $is_valid;
+	}
+
+	public function addBreakTimeSchedule( $breaktime_schedules = array() ){
+		$return['is_success'] = false;		
+		$return['message']    = 'Cannot save record. Invalid form entries!';
+
+		$required_variables = array('schedule_in','schedule_out');
+
+		//if( self::checkIfNotEmpty($required_variables) && Tools::isTime1LessThanTime2($this->schedule_in, $this->schedule_out) ){			
+		if( self::checkIfNotEmpty($required_variables) ){			
+			$str_breaktime_schedules = self::convertBreakScheduleToString($breaktime_schedules); //Convert to single breaktime schedules
+			if( $this->is_applied_to_all == self::YES ){
+				//if( self::checkArrayBreakSchedulesIfValid($breaktime_schedules) && !self::isWithDuplicateBreakTimeSchedules($breaktime_schedules) ){
+				if( self::checkArrayBreakSchedulesIfValid($breaktime_schedules) && !self::isWithDuplicateBreakTimeSchedules($breaktime_schedules) ){
+					$this->applied_to 			= self::ALL_EMPLOYEES;
+					$this->break_time_schedules = $str_breaktime_schedules;
+					$header_id = self::save();
+					if( $header_id > 0 ){
+						foreach( $breaktime_schedules as $schedule ){
+							$details = new G_Break_Time_Schedule_Details();
+							$details->setHeaderId($header_id);                    
+					        $details->setObjId($this->applied_to);
+					        $details->setObjType(G_Break_Time_Schedule_Details::PREFIX_ALL);     
+					        $details->setBreakIn($schedule['break_in']);
+					        $details->setBreakOut($schedule['break_out']);    
+
+					        $applied_to_day = $schedule['applied_to_day_type'];
+					        foreach( $applied_to_day as $key => $value ){
+					        	switch ($key) {
+					        		case 'regular_day':
+					        			$details->applyToRegularDay();
+					        			break;
+					        		case 'legal_holiday':
+					        			$details->applyToLegalHoliday();
+					        			break;
+					        		case 'special_holiday':
+					        			$details->applyToSpecialHoliday();
+					        			break;
+					        		case 'rest_day':
+					        			$details->applyToRestDay();
+					        			break; 
+					        		default:					        			
+					        			break;
+					        	}
+					        }
+
+					        $details->setToDeduct($schedule['is_deducted']);
+					        $details->setToRequiredLogs($schedule['is_required_logs']);
+					        $details->save();
+						}
+
+						$return['is_success'] = true;		
+						$return['message']    = 'Record saved!';
+					}
+				}else{
+					$return['message']    = 'Invalid form entries!';	
+				}
+			}else{				
+				if( self::checkArrayBreakSchedulesIfValid($breaktime_schedules) && !self::isWithDuplicateBreakTimeSchedules($breaktime_schedules) ){
+					if( !empty($this->applied_to) ){					
+
+						$parsed_applied_to = self::parseAppliedToData();						
+
+						foreach( $parsed_applied_to as $row ){
+							$this->applied_to 			= $row['description'];
+							$this->break_time_schedules = $str_breaktime_schedules;
+							$header_id = self::save();
+
+							if( $header_id > 0 ){
+								
+								$details = new G_Break_Time_Schedule_Details();
+								$details->setHeaderId($header_id);         
+
+								foreach( $breaktime_schedules as $schedule ){
+							        $details->setObjId($row['id']);
+							        $details->setObjType($row['type']);     
+							        $details->setBreakIn($schedule['break_in']);
+							        $details->setBreakOut($schedule['break_out']);
+
+							        $applied_to_day = $schedule['applied_to_day_type'];
+							        foreach( $applied_to_day as $key => $value ){
+							        	switch ($key) {
+							        		case 'regular_day':
+							        			$details->applyToRegularDay();
+							        			break;
+							        		case 'legal_holiday':
+							        			$details->applyToLegalHoliday();
+							        			break;
+							        		case 'special_holiday':
+							        			$details->applyToSpecialHoliday();
+							        			break;
+							        		case 'rest_day':
+							        			$details->applyToRestDay();
+							        			break; 
+							        		default:					        			
+							        			break;
+							        	}
+							        }
+
+							        $details->setToDeduct($schedule['is_deducted']);
+					       			$details->setToRequiredLogs($schedule['is_required_logs']);
+							        $details->save();
+								}
+							}
+						}
+
+						$current_date = strtotime(date("Y-m-d"));
+						$start_date   = strtotime($this->date_start);											
+						if($current_date >= $start_date){					
+							$current_date = date("Y-m-d");									
+							G_Attendance_Helper::updateAttendanceByPeriod($current_date, $current_date);
+						}
+
+						$return['is_success'] = true;		
+						$return['message']    = 'Record saved!';
+					}
+				}else{					
+					$return['message']    = 'Invalid form entries!';
+				}
+			}
+
+		}	
+
+		return $return;
+	}
+
+	public function updateBreakTimeSchedule( $breaktime_schedules = array() ){
+		$return['is_success'] = false;		
+		$return['message']    = 'Cannot update record. Invalid form entries!';
+
+		$required_variables = array('schedule_in','schedule_out');		
+		//if( self::checkIfNotEmpty($required_variables) && Tools::isTime1LessThanTime2($this->schedule_in, $this->schedule_out) ){						
+		if( self::checkIfNotEmpty($required_variables) ){						
+			$str_breaktime_schedules = self::convertBreakScheduleToString($breaktime_schedules); //Convert to single breaktime schedules			
+			if( self::checkArrayBreakSchedulesIfValid($breaktime_schedules) && !self::isWithDuplicateBreakTimeSchedules($breaktime_schedules) ){				
+				$this->break_time_schedules = $str_breaktime_schedules;
+				self::save(); //Update header				
+
+				$details = new G_Break_Time_Schedule_Details();
+				$details->setHeaderId($this->id);
+				$data    = $details->getObjDataByHeaderId(); //Get stored obj type before deleting				
+				$details->deleteAllByHeaderId(); //Remove all schedules by header id - will recreate new set
+
+				foreach( $breaktime_schedules as $schedule ){	
+					$details = new G_Break_Time_Schedule_Details();		
+					$details->setHeaderId($this->id);							
+			        $details->setObjId($data['obj_id']);
+			        $details->setObjType($data['obj_type']);     
+			        $details->setBreakIn($schedule['break_in']);
+			        $details->setBreakOut($schedule['break_out']);    
+
+			        $applied_to_day = $schedule['applied_to_day_type'];			       
+			        foreach( $applied_to_day as $key => $value ){
+			        	switch ($key) {
+			        		case 'regular_day':
+			        			$details->applyToRegularDay();
+			        			break;
+			        		case 'legal_holiday':
+			        			$details->applyToLegalHoliday();
+			        			break;
+			        		case 'special_holiday':
+			        			$details->applyToSpecialHoliday();
+			        			break;
+			        		case 'rest_day':
+			        			$details->applyToRestDay();
+			        			break; 
+			        		default:					        			
+			        			break;
+			        	}
+			        }
+
+			        $details->setToDeduct($schedule['is_deducted']);
+			        $details->setToRequiredLogs($schedule['is_required_logs']);
+			        $details->save();
+				}
+
+				$current_date = strtotime(date("Y-m-d"));
+				$start_date   = strtotime($this->date_start);											
+				if($current_date >= $start_date){					
+					$current_date = date("Y-m-d");									
+					G_Attendance_Helper::updateAttendanceByPeriod($current_date, $current_date);
+				}
+
+				$return['is_success'] = true;		
+				$return['message']    = 'Record updated!';
+			}else{
+				$return['message']    = 'Invalid form entries!';	
+			}
+		}	
+
+		return $return;
+	}
+
+	public function addBreakInSchedule() {
+		$return['is_success'] = false;
+		$return['message']    = 'Cannot save record';
+
+		$required_variables = array('break_in','break_out','schedule_in','schedule_out');		
+		if( self::checkIfNotEmpty($required_variables) ){			
+			if( !self::checkIfWithConflictSchedule() ){				
+				$this->total_hrs_break = Tools::computeHoursDifference($this->break_in, $this->break_out);
+				$is_success = self::save();
+				if( $is_success ){					
+					$return['is_success'] = true;
+					$return['message'] = "Record saved";
+				}
+			}else{
+				$return['message'] = "Conflict break schedule.";
+			}			
+		}
+
+		return $return;
+	}
+
+	public function deleteBreakTimeSchedule(){
+		$return['is_success'] = false;
+		$return['message']    = 'Record not found';
+
+		if( $this->id > 0 ){
+			$details = new G_Break_Time_Schedule_Details();
+			$details->setHeaderId($this->id);
+			$details->deleteAllByHeaderId();
+
+			self::delete();
+			$return['is_success'] = true;
+			$return['message']    = 'Record deleted';
+		}
+
+		return $return;
+	}
+
+	public function save() {
+		return G_Break_Time_Schedule_Header_Manager::save($this);
+	}
+
+	public function delete() {
+		return G_Break_Time_Schedule_Header_Manager::delete($this);
+	}
+}
+?>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>	
+		<loan_type>Salary Loan</loan_type>	
+	</Fields>
+
+	<Fields>
+		<loan_type>Cash Advance</loan_type>	
+	</Fields>
+
+	<Fields>
+		<loan_type>Pagibig Loan</loan_type>	
+	</Fields>
+	
+	<Fields>	
+		<loan_type>SSS Loan</loan_type>	
+	</Fields>
+	
+	<Fields>
+		<loan_type>Others</loan_type>	
+	</Fields>
+	
+	
+</Main>

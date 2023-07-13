@@ -1,0 +1,156 @@
+<script>
+$("#birthdate").datepicker({dateFormat:'yy-mm-dd',changeMonth:true,changeYear:true,maxDate:'-17Y',showOtherMonths:true});
+$("#personal_details_form").validationEngine({scroll:false});
+$('#personal_details_form').ajaxForm({
+	success:function(o) {
+		if(o==1) {
+			loadPhoto();
+			dialogOkBox('Successfully Updated',{});
+			$("#personal_details_wrapper").html('');
+			loadPage("#personal_details");
+			loadEmployeeSummary();
+		}else {
+			dialogOkBox(o,{});
+
+		}		
+	},
+	beforeSubmit:function() {
+		showLoadingDialog('Saving...');	
+	}
+});
+</script>
+
+<form id="personal_details_form" name="form1" method="post" action="<?php echo url('employee/_update_personal_details'); ?>"  style="display:none">
+<input type="hidden" name="employee_id" value="<?php echo Utilities::encrypt($details->id); ?>" />
+<input name="photo" type="hidden" id="photo" value="<?php echo $details->getPhoto(); ?>"  />
+  <table id="personal_details_table" class="table_form" width="587" border="0" cellpadding="3" cellspacing="3">
+    <tr>
+      <td width="156" align="right" valign="top">Employee Code:
+      
+      </td>
+      <td valign="top"><input class="validate[required]" type="text" name="employee_code" id="employee_code" value="<?php echo $details->employee_code; ?>" /></td>
+      <td width="187" rowspan="8" align="center" valign="top">
+      <div id="photo_frame_personal_edit_wrapper">
+      <img  onclick="javascript:loadPhotoDialog();" src="<?php echo $filename; ?>?<?php echo $filemtime; ?>" width="140" border="1"  />
+      <br /><center><a href="javascript:void(0);">[Click to upload]</a></center>
+      </div></td>
+    </tr>
+    <tr>
+      <td width="156" align="right" valign="top">Salutation:</td>
+      <td width="241" valign="top">
+      <input type="text" name="salutation" id="salutation" value="<?php echo  ucfirst($details->salutation); ?>" /></td>
+    </tr>
+    <tr>
+      <td width="156" align="right" valign="top">Firstname:</td>
+      <td valign="top">
+      <input type="text" class="validate[required]"  name="firstname" id="firstname" value="<?php echo ucfirst($details->firstname); ?>" /></td>
+    </tr>
+    <tr>
+      <td width="156" align="right" valign="top">Lastname:</td>
+      <td valign="top">
+      <input type="text" class="validate[required]"  name="lastname" id="lastname" value="<?php echo  ucfirst($details->lastname); ?>" /></td>
+    </tr>
+    <tr>
+      <td width="156" align="right" valign="top">Middlename:</td>
+      <td valign="top">
+      <input type="text" name="middlename" id="middlename" value="<?php echo  ucfirst($details->middlename); ?>" /></td>
+    </tr>
+    <tr>
+      <td width="156" align="right" valign="top">Nickname:</td>
+      <td valign="top"> <input type="text" name="nickname" id="nickname" value="<?php echo  ucfirst($details->nickname); ?>" /></td>
+    </tr>
+    <tr>
+      <td width="156" align="right" valign="top">Gender:</td>
+      <td valign="top">
+        <select  class="validate[required]"  name="gender" id="gender">
+          <option value="" >-- Select Option --</option>
+          <?php if($details->gender!='') {
+		?><option selected="selected" value="<?php echo $details->gender ?>"><?php echo ucfirst($details->gender); ?></option>
+          <?php	
+		} ?>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+      </select></td>
+    </tr>
+    <tr>
+      <td width="156" align="right" valign="top">Birthdate:</td>
+      <td valign="top">
+        <?php $birthdate = ($details->birthdate=='0000-00-00')? '' : $details->birthdate; ?>
+      <input type="text" name="birthdate" id="birthdate" value="<?php echo $birthdate; ?>" /></td>
+    </tr>
+    <tr>
+      <td width="156" align="right" valign="top">Marital Status:</td>
+      <td valign="top">
+       <select  class="validate[required]"  name="marital_status" id="marital_status">
+      	<option value="" >-- Select Option --</option>
+        <?php if($details->marital_status!='') {
+		?><option selected="selected" value="<?php echo ucfirst($details->marital_status); ?>"><?php echo ucfirst($details->marital_status); ?></option>
+		<?php	
+		} ?>
+        <?php foreach($GLOBALS['hr']['marital_status'] as $key=>$marital_status) { ?>
+        <option value="<?php echo $marital_status; ?>"><?php echo $marital_status; ?></option>
+        <?php } ?>
+      </select>
+     </td>
+      <td valign="top">&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="156" align="right" valign="top">SSS Number:</td>
+      <td valign="top">
+      <input type="text" name="sss_number" id="sss_number" value="<?php echo $details->sss_number; ?>" /></td>
+      <td valign="top">&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="156" align="right" valign="top">Tin Number:</td>
+      <td valign="top">
+      <input type="text" name="tin_number" id="tin_number" value="<?php echo $details->tin_number; ?>"  /></td>
+      <td valign="top">&nbsp;</td>
+    </tr>
+      <tr>
+      <td align="right" valign="top">Pagibig Number</td>
+      <td valign="top"><input type="text" name="pagibig_number" id="pagibig_number" value="<?php echo $details->pagibig_number; ?>"  /></td>
+      <td valign="top">&nbsp;</td>
+    </tr>
+	<?php foreach($field as $key=>$value) { 
+	$employee_id = $details->id;
+	$e = G_Employee_Finder::findById($employee_id);
+    $f =  G_Employee_Dynamic_Field_Finder::findBySettingsEmployeeFieldId($value->getId(),$e);
+	
+    if($f) {
+        $title = $f->title;		 
+        $val = $f->value;
+        $name = 'e_'.$f->id;
+    }else {
+        $title = $value->title;		 
+        $val = '';
+        $name = 's_'.$value->id;
+    }
+      ?>
+  
+    <tr>
+        <td align="right" valign="top"><?php echo ucfirst($title); ?>:</td>
+        <td valign="top"><input type="text" name="<?php echo $name; ?>" value="<?php echo $val; ?>" /></td>
+        <td valign="top">&nbsp;</td>
+  </tr>
+  <?php } ?>
+<!--<tbody>
+    <tr>
+      <td align="right" valign="top">&nbsp;</td>
+      <td valign="top"><a href="javascript:void(0);" onclick="javascript:loadAddNewFieldForm();">Add New Field</a></td>
+      <td valign="top">&nbsp;</td>
+    </tr>
+</tbody>
+  --><tr>
+      <td align="right" valign="top">&nbsp;</td>
+      <td valign="top">&nbsp;</td>
+      <td valign="top">&nbsp;</td>
+    </tr>
+
+    <tr>
+      <td align="right" valign="top">&nbsp;</td>
+      <td valign="top"><input type="submit" name="button" id="button" value="Update" /> 
+        <a href="javascript:void(0);" onclick="javascript:loadPersonalDetailsTable();">Cancel</a></td>
+      <td valign="top">&nbsp;</td>
+    </tr>
+  </table>
+</form>

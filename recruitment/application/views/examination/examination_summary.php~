@@ -1,0 +1,22 @@
+<div id="form_main" class="inner_form popup_form wider">
+<div id="form_default" class="no-padding">
+<table width="100%">
+  <tr>
+    <td class="field_label padding_top">Name:</td>
+    <td><strong><?php echo $applicant_name; ?></strong></td>
+  </tr>
+  <tr>
+    <td class="field_label padding_top">Exam Title:</td>
+    <td><strong class="blue"><?php echo $exam_title; ?></strong></td>
+  </tr>
+  <tr>
+    <td class="field_label padding_top">Passing Percentage</td>
+    <td><?php echo $passing_percentage; ?>%</td>
+  </tr>
+</table>
+<p>
+	Note : <b>Timer will start as soon as you click the start button.</b>
+</p>
+
+</div>
+</div>

@@ -1,0 +1,44 @@
+<style>
+/*div.button-container{ margin:10px 0;}*/
+</style>
+<script type="text/javascript">
+	/*$(function() {
+		$("#tabs").tabs();
+	});*/
+</script>
+<!--<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Dependent Relationship</a></li>       		
+	</ul>
+	<div id="tabs-1">
+    	<div class="button-container" align="right">
+        	<a href="javascript:void(0);" onclick="javascript:load_add_new_relationship();">Add New</a>
+        </div>
+		<div id="relationship-list"></div>
+	</div>    
+</div>-->
+<?php 
+	//chdir(dirname(__FILE__));
+	//include_once('../includes/modal_forms.php'); 
+?>
+<script>
+//load_dependent_relationship();
+</script>
+
+<div class="ui-state-highlight ui-corner-all">
+<span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-info"></span>
+Dependent Relationship: <a href="javascript:void(0);" onclick="javascript:load_add_new_relationship();">Add New</a>
+</div>
+<br />
+<div class="yui-skin-sam">
+	<div id="dependent_relationship_datatable"></div>
+</div>
+
+<script>					  
+load_dependent_relationship_datatable();
+</script>
+
+<?php 
+	chdir(dirname(__FILE__));
+	include_once('../includes/modal_forms.php'); 
+?>

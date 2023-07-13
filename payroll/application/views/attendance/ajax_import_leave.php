@@ -1,0 +1,32 @@
+<script>
+$("#import_leave_form").validationEngine({scroll:false});
+
+$('#import_leave_form').ajaxForm({
+			success:function(o) {				
+				$("#import_leave_wrapper").dialog("destroy");
+				disablePopUp();
+				$dialog.dialog('destroy');
+				dialogOkBox(o,{height:'auto',width:450}) 
+			}, 
+			beforeSubmit:function() {
+				showLoadingDialog('Importing...');	
+			}
+		});
+
+</script>
+
+<form method="post" id="import_leave_form" action="<?php echo 'leave/_import_leave_excel';?>" enctype="multipart/form-data">	
+<div id="form_main" class="inner_form popup_form">
+	<div id="form_default" align="center">
+    	<input type="file" name="leave" id="leave" />
+    </div>
+    <div id="form_default" class="form_action_section">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td class="field_label">&nbsp;</td>
+            <td><input value="Save" id="import_leave_submit" class="curve blue_button" type="submit">&nbsp;<a href="javascript:void(0);" onclick="closeImportDialog()">Cancel</a></td>
+          </tr>
+        </table>		
+    </div>
+</div>
+</form>

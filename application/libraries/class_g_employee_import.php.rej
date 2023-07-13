@@ -1,0 +1,29 @@
+diff a/application/libraries/class_g_employee_import.php b/application/libraries/class_g_employee_import.php	(rejected hunks)
+@@ -332,18 +332,20 @@
+             }
+             else {
+                 if ($this->isAlreadyExist($employee_code)) {
+-                    // echo 7;
+-                    $this->addErrorDuplicateEmployeeCode($employee_code);
++                    $this->addErrorDuplicateEmployeeCode($current_row);
+                     $has_error = true;
+                 }
+                 //required
+-                if (!$this->isRequiredFieldsHaveValues()) {       
+-                    // echo 8;
++                if ($this->isRequiredFieldsHaveValues()) {       
++                    if($employee_code != NULL && $counter_to_remove_row1 != 0){
++                        $this->addErrorEmptyRequiredField($current_row);
++                    }
++                    $has_error = true;
++                }
++                if($this->isRequiredFieldsValuesNoEmployeeCode()){
+                     if($employee_code == NULL && $counter_to_remove_row1 != 0){
+-                        $this->addErrorEmptyRequiredField("No Employee Code");
+-                        
++                        $this->addErrorInEmptyRequiredFieldEmployeeCode($current_row);
+                     }
+-                    $this->addErrorEmptyRequiredField($employee_code);
+                     $has_error = true;
+                 }
+                 if (!$has_error) {

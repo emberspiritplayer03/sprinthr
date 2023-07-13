@@ -1,0 +1,2 @@
+<h2>Confirmation link already expired.</h2>
+<a href="javascript:void(0);" onclick="javascript:resendEmail('<?php echo $eid; ?>','<?php echo $hid; ?>');">Resend confirmation link</a> | <a href="javascript:void(0);" onclick="javascript:cancelRegistration('<?php echo $eid; ?>','<?php echo $hid; ?>')">Cancel registration</a> | <a href="<?php echo url('register');?>">Back to registration</a>

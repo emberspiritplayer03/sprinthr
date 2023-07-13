@@ -1,0 +1,1 @@
+<img src="<?php echo BASE_FOLDER;?>/application/views/employee/account/html/import_account_format.jpg" />

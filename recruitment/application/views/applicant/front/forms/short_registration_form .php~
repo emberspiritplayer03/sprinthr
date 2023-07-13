@@ -1,0 +1,122 @@
+<script type="text/javascript">
+$(function() {
+	$("#birthdate").datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,
+		changeYear: true,maxDate: '-20Y'});
+		
+	$("#date_applied").datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,
+		changeYear: true});
+	
+	
+	$("#add_candidate_form").validationEngine({scroll:true});
+	$('#add_candidate_form').ajaxForm({
+		success:function(o) {
+			if(o.is_saved) {
+				window.location = o.url;				
+			} else {
+				$("#token").val(o.token);
+				dialogOkBox("Error : Application was not successful! Please try again",{ok_url: 'registration'});
+			}
+		},
+		beforeSubmit:function() {
+			showLoadingDialog('Saving...');	
+		},
+		dataType : 'json'
+	});
+	
+	 $('#filename').uploadify({
+		'uploader'  	  : '<?php echo MAIN_FOLDER; ?>application/scripts/uploadify/uploadify.swf',
+		'script'    	  : '<?php echo MAIN_FOLDER; ?>application/scripts/uploadify/uploadify.php',
+		//'script'    	  : base_url +'registration/ajax_upload_resume',
+		//'script'    	  : '<?php //echo url('registration/ajax_upload_resume'); ?>',
+		'cancelImg' 	  : '<?php echo MAIN_FOLDER; ?>application/scripts/uploadify/cancel.png',
+		'folder'          : '<?php echo MAIN_FOLDER; ?>hr/files/applicant/resume',
+		//'folder'          : '<?php echo MAIN_FOLDER; ?>files',
+		'auto'      	  : true,
+		'scriptAccess'    : 'always',
+		'removeCompleted' : true,
+		'sizeLimit'       : 2097152, //2mb in bytes
+		'buttonText'  	  : 'Browse ...',
+		'displayData' 	  : 'speed',
+		'fileExt'         : '*.doc;*.docx;*.pdf;',
+		'fileDesc'        : 'Document File',
+		'multi'			  : false,
+		'onComplete': function(event, queueID, fileObj, response, data){
+			if(response) {
+				$('#uploaded_file_wrapper').show();
+				$('#filename_wrapper').html(fileObj.name);
+				$('#directory_name').val(response);
+				$('#upload_filename').val(fileObj.name);
+			}
+			//alert(response);
+			/*var file_name = fileObj.name;
+			$.post(base_url + 'client/_json_encode_get_image',{file_name:file_name},function(o) {
+				if(o.image) {
+					document.test.src = o.image;
+				}
+			},'json');*/
+		}
+	  });
+});
+
+function remove_file() {
+	$('#uploaded_file_wrapper').hide();
+	$('#directory_name').val('');
+	$('#upload_filename').val('');
+}
+</script>
+<div id="formcontainer">
+<div class="mtshad"></div>
+<form action="<?php echo url('applicant/_save_applicant_info'); ?>" method="post" enctype="multipart/form-data" name="add_candidate_form" id="add_candidate_form" >
+<input type="hidden" name="job_id" id="job_id" value="<?php echo $j->getJobId(); ?>" />
+<input type="hidden" name="token" id="token" value="<?php echo $token; ?>" />
+<div id="formwrap">
+	<h3 class="form_sectiontitle" id="candidate_form_wrapper">Kindly complete the below entries</h3>
+    <div id="form_main">
+    	<h3 class="section_title"><span>Application Information</span></h3>
+        <div id="form_default">            
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td class="field_label">Applying for Position: </td>
+            <td>
+            <em class="note label"><?php echo $j->getJobTitle(); ?></em></td>
+          </tr>
+          <tr>
+            <td class="field_label">Date Applied: </td>
+            <td><input type="text" class="validate[required] text-input text" value="<?php echo date('Y-m-d'); ?>" name="date_applied" id="date_applied" /></td>
+          </tr>
+          <tr>
+            <td valign="top" class="field_label">Email Address:</td>
+            <td><input type="text" class="validate[required,custom[email]]" name="email_address" id="email_address" value="<?php echo $a->getEmail(); ?>"></td>
+          </tr>
+          <tr>
+            <td valign="top" class="field_label">Resume:</td>
+            <td>
+            	<input type="file" name="filename" id="filename" />
+                <div id="uploaded_file_wrapper" style="display:none;">
+                <br />
+                	<strong><i><span id="filename_wrapper"></span></i></strong> <a href="javascript:void(0);" onclick="javascript:remove_file();">Remove</a>
+                    <input type="hidden" id="directory_name" name="directory_name" value="" />
+                    <input type="hidden" id="upload_filename" name="upload_filename" value="" />
+                </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" valign="top" class="field_label">&nbsp;</td>
+          </tr>
+          </table>
+        </div>
+        <div class="form_separator"></div>
+        <div id="form_default" class="form_action_section">
+            <table>
+            	<tr>
+                	<td class="field_label">&nbsp;</td>
+                    <td>
+                    	<input type="submit" value="Send Application" class="curve blue_button" /> | <a href="<?php echo url("benchmark_bio/job_vacancy_list"); ?>">Back to Job Vacancy List</a>                        
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</form>
+</div>

@@ -1,0 +1,139 @@
+<?php
+class Global_Controller
+{
+	function __construct()
+	{		
+		Loader::helper(array('url', 'html'));
+		Loader::sysLibrary('session');		
+		$this->session = $this->var['session'] = new WG_Session(array('namespace' => 'user'));
+		$session = new WG_Session(array('namespace' => 'editor'));
+
+		$session->set('ckfinder_baseUrl', BASE_FOLDER_EDITOR);
+		$session->set('ckfinder_baseDir', BASE_FOLDER_EDITOR);
+		Loader::appUtilities();
+		Loader::appLibrary('class_loader');
+		Loader::includeScript('init.js');
+		
+		$this->is_trial_period();
+		$this->is_evaluation_version();
+		$this->companyModuleEnabled();
+			
+		//Applicant
+		$this->applicant_session_info();
+		$this->count_applicant_total_application();
+	}
+	
+	function create_global_token() {
+		$this->var['g_token'] = Utilities::createFormToken();
+	}
+	
+	function applicant_session_info() {
+		if($_SESSION['sprint_applicant']){
+			$this->var['hdr_email_address']    = $_SESSION['sprint_applicant']['username'];
+			$this->var['hdr_applicant_name']   = $_SESSION['sprint_applicant']['applicant_name'];
+		}
+	}
+	
+	function count_applicant_total_application() {
+		if($_SESSION['sprint_applicant']['username']){
+			$count = G_Applicant_Helper::countTotalApplicantPendingApplicationByEmailAddress($_SESSION['sprint_applicant']['username']);
+		}else{
+			$count = 0;
+		}
+		$this->var['total_pending_applications'] = $count;
+	}
+	
+	function login()
+	{
+		Loader::appController('login');	
+		$login = new Login_Controller;
+		if (!$login->_isLogin())
+		{
+			redirect('login');
+		}
+	}
+	
+	function audit_login()
+	{
+		Loader::appController('audit_login');	
+		$login = new Audit_Login_Controller;
+		if (!$login->_isLogin())
+		{
+			redirect('audit_login');
+		}
+		
+	}
+	
+	function subLogin()
+	{
+		Loader::appController('login');	
+		$login = new Login_Controller;
+		if (!$login->_isLogin())
+		{
+			
+		}else{
+			redirect('login');
+		}
+	}
+	
+	function is_trial_period()
+	{
+		if(TRIAL_PERIOD == true){
+			$this->var['is_trial_period'] = true;
+		}else{
+			$this->var['is_trial_period'] = false;
+		}	
+	}
+	
+	function is_evaluation_version()
+	{
+		if(EVALUATION_VERSION == true){
+			$logo = 'evaluation_logo.png';
+		}else{
+			$logo = 'logo.png';
+		}
+		$this->var['sprint_logo'] = $logo;
+	}
+	
+	function companyModuleEnabled()
+	{
+		$mod_package    = $GLOBALS['module_package']['attendance'];
+		$mod_package_hr = $GLOBALS['module_package']['hr'];
+		
+		$this->var['mod_package']    = $mod_package;
+		$this->var['mod_package_hr'] = $mod_package_hr;
+	}
+	
+	function db_admin_login() {
+		Loader::appController('login');
+		$login = new Login_Controller;
+		if ($login->isDatabaseLogin())
+		{
+			return true;
+		}else{
+			redirect('login/database');
+		}
+	}
+	
+	function triggerAuditTrail($status,$action,$additional_details = NULL,$user = NULL) {
+		if($user == NULL) {
+			$auser = ;
+		}else{
+			$auser = ;
+		}
+		$audit = new Sprint_Audit();			
+		$audit->setUser($auser);
+		$audit->setAction($action);
+		$audit->setDetails($additional_details);
+		$audit->triggerAudit($status); //0=fail, 1=success			
+	}
+	
+	function triggerAudit($status,$user,$action,$additional_details = NULL) {
+		$audit = new Sprint_Audit();			
+		$audit->setUser($user);
+		$audit->setAction($action);
+		$audit->setDetails($additional_details);
+		$audit->triggerAudit($status); //0=fail, 1=success	
+	}
+}
+?>

@@ -1,0 +1,5 @@
+employees:Can Access,employee_evaluation:Can Access,employee_access:Both,employee_management:View Only,personal_details:View Only,contact_details:View Only,emergency_contacts:View Only,dependents:View Only,bank:View Only,employment_status:View Only,compensation:View Only,benefits:View Only,contract:View Only,contribution:View Only,training:View Only,memo:View Only,requirements:View Only,supervisor:View Only,employees_leave:View Only,work_experience:View Only,educations:View Only,skills:View Only,language:View Only,license:View Only,attachment:View Only,schedule:View Only,new_schedule:Can Access,attendance:No Access,reports:No Access,settings:No Access
+dtr:Can Access
+no access
+employee_dashboard:Can Access,employee_overtime:Can Access,employee_leave:Can Access,employee_official_business:Can Access,employee_reports:Can Access,employee_payslip:Can Access,employee_profile:Can Access
+no access

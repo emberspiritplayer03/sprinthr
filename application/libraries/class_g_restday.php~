@@ -1,0 +1,64 @@
+<?php
+/*
+	Usage:
+	$e = G_Employee_Finder::findByEmployeeCode(2007);
+	$o = new G_Restday;
+	$o->setDate('2012-09-10');
+	$o->setTimeIn('18:00:00');
+	$o->setTimeOut('23:00:00');
+	$o->setEmployeeId($e->getId());
+	$o->save();
+*/
+class G_Restday extends Restday {
+	protected $id;
+	protected $employee_id;
+	protected $reason;
+	
+	public function __construct() {
+		
+	}
+	
+	public function setId($value) {
+		$this->id = $value;	
+	}
+	
+	public function getId() {
+		return $this->id;	
+	}
+	
+	public function setReason($value) {
+		$this->reason = $value;	
+	}
+	
+	public function getReason() {
+		return $this->reason;	
+	}		
+	
+	public function setEmployeeId($value) {
+		$this->employee_id = $value;	
+	}
+	
+	public function getEmployeeId() {
+		return $this->employee_id;	
+	}
+	
+	public function checkWeekNumberIfWithRestDayByEmployeeNumber($date,$e) {
+		$date = date("Y-m-d",strtotime($date));		
+		$wkc	= (int) date("W",strtotime($date));		
+		$c  = G_Restday_Helper::countRestDayByEmployeeAndWeekNumber($e,$wkc);
+			
+		//$rds = G_Restday_Helper::getEmployeeRestDayByWeek($e,$wkc);
+		//print_r($rds);
+		
+		return $c;		
+	}
+	
+	public function save() {
+		return G_Restday_Manager::save($this);	
+	}
+	
+	public function delete() {
+		return G_Restday_Manager::delete($this);	
+	}
+}
+?>

@@ -1,0 +1,11 @@
+<?php
+include('employment_status.php');
+include('compensation.php');
+include('contract.php');
+include('contribution.php');
+include('training.php');
+include('memo.php');
+include('requirements.php');
+include('supervisor.php');
+include('leave.php');
+?>

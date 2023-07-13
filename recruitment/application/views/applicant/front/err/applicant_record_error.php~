@@ -1,0 +1,2 @@
+<h2>Applicant Record cannot be found.</h2>
+<a href="<?php echo main_url("job_vacancy"); ?>">Back to job vacancy list</a>

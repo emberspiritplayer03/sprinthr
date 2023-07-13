@@ -1,0 +1,529 @@
+<?php
+class G_Attendance_Log_Finder {
+	
+	public static function findById($id) {
+		$sql = "
+			SELECT * 
+			FROM " . G_ATTENDANCE_LOG ." 
+			WHERE id =". Model::safeSql($id) ."
+			LIMIT 1
+		";		
+		return self::getRecord($sql);
+	}	
+
+	public static function findByEmployeeCodeAndDate($employee_code, $date) {
+		$sql = "
+			SELECT * 
+			FROM " . G_ATTENDANCE_LOG ." 
+			WHERE employee_code =". Model::safeSql($employee_code) ." 
+			AND date = ". Model::safeSql($date) ."  
+			ORDER BY id DESC LIMIT 1
+
+		";		
+		return self::getRecord($sql);
+	}	
+	
+	public static function findAllWithMultipleLogsByPeriod($start_date, $end_date) {
+		$sql = "
+			SELECT a.id, a.user_id as employee_id, a.employee_code, a.employee_name, a.date, a.time, a.type
+			FROM (
+				SELECT b.employee_code, b.date, b.type
+				FROM ". G_ATTENDANCE_LOG ." b
+				WHERE b.date >= ". Model::safeSql($start_date) ."
+				AND b.date <= ". Model::safeSql($end_date) ."
+				GROUP BY b.employee_code, b.date, b.type
+				HAVING count(*) > 1) x, ". G_ATTENDANCE_LOG ." a
+			WHERE x.employee_code = a.employee_code
+			AND x.date = a.date
+			AND x.type = a.type
+			AND a.date >= ". Model::safeSql($start_date) ."
+			AND a.date <= ". Model::safeSql($end_date) ."
+			ORDER BY a.employee_code, a.date, a.type	
+		";
+		return self::getRecords($sql);
+	}
+	
+	public static function findAllWithoutOutLogsByPeriod($start_date, $end_date) {		
+		$logs = self::findAllByPeriod($start_date, $end_date);
+		foreach ($logs as $l) {
+			$timesheets[$l->getEmployeeCode()][$l->getType()][$l->getDate()][$l->getTime()] = $l->getDate();
+			$ids[$l->getEmployeeCode()][$l->getDate().'-'.$l->getTime()] = $l->getId();
+		}
+		$tr = new G_Timesheet_Raw_Filter($timesheets);
+		$tr->filter();
+		$errors = $tr->getErrorsNoOut();
+		//echo '<pre>';
+		//print_r($errors);
+		foreach ($errors as $employee_code => $timesheet) {
+			foreach ($timesheet as $date => $time) {
+				$log_id = $ids[$employee_code][$date .'-'. $time];
+				$e = new G_Attendance_Log;
+				$e->setId($log_id);
+				$e->setEmployeeCode($employee_code);
+				$e->setDate($date);
+				$e->setTime($time);
+				$e->setType('in');
+				$data[$log_id] = $e;
+			}
+		}
+		return $data;
+	}
+	
+	public static function findAllWithoutInLogsByPeriod($start_date, $end_date) {
+		$logs = self::findAllByPeriod($start_date, $end_date);
+		foreach ($logs as $l) {
+			$timesheets[$l->getEmployeeCode()][$l->getType()][$l->getDate()][$l->getTime()] = $l->getDate();
+			$ids[$l->getEmployeeCode()][$l->getDate().'-'.$l->getTime()] = $l->getId();
+		}
+		$tr = new G_Timesheet_Raw_Filter($timesheets);
+		$tr->filter();
+		$errors = $tr->getErrorsNoIn();
+		//echo '<pre>';
+		//print_r($errors);		
+		foreach ($errors as $employee_code => $timesheet) {
+			foreach ($timesheet as $date => $time) {
+				$log_id = $ids[$employee_code][$date .'-'. $time];
+				$e = new G_Attendance_Log;
+				$e->setId($log_id);
+				$e->setEmployeeCode($employee_code);
+				$e->setDate($date);
+				$e->setTime($time);
+				$e->setType('out');
+				$data[$log_id] = $e;
+			}
+		}
+		return $data;
+	}
+	
+	public static function findByEmployeeCodeDateTimeType($employee_code, $date, $time, $type) {
+		$sql = "
+			SELECT id, user_id as employee_id, employee_code, employee_name, date, time, type
+			FROM ". G_ATTENDANCE_LOG ."
+			WHERE employee_code = ". Model::safeSql($employee_code) ."
+			AND date = ". Model::safeSql($date) ."
+			AND time = ". Model::safeSql($time) ."
+			AND type = ". Model::safeSql($type) ."
+			LIMIT 1
+		";
+		return self::getRecord($sql);
+	}
+	
+	public static function findAllByPeriod($start_date, $end_date) {
+		$sql = "
+			SELECT id, user_id as employee_id, employee_code, employee_name, date, time, type
+			FROM ". G_ATTENDANCE_LOG ."
+			WHERE date >= ". Model::safeSql($start_date) ."
+			AND date <= ". Model::safeSql($end_date) ."	
+			ORDER BY date, time
+		";
+		return self::getRecords($sql);
+	}
+
+	public static function findAllByPeriodAndLimit($start_date, $end_date, $limit = 30) {
+		/*$sql = "
+			SELECT id, user_id as employee_id, employee_code, employee_name, date, time, type
+			FROM ". G_ATTENDANCE_LOG ."
+			WHERE date >= ". Model::safeSql($start_date) ."
+			AND date <= ". Model::safeSql($end_date) ."	
+			ORDER BY date DESC, time DESC, id DESC
+			LIMIT ". Model::safeSql($limit) ."
+		";*/
+		$sql = "
+			SELECT id, user_id as employee_id, employee_code, employee_name, date, time, type
+			FROM ". G_ATTENDANCE_LOG ."
+			WHERE date >= ". Model::safeSql($start_date) ."
+			AND date <= ". Model::safeSql($end_date) ."	
+			ORDER BY id DESC, date DESC, time DESC
+			LIMIT ". Model::safeSql($limit) ."
+		";
+		return self::getRecords($sql);
+	}
+	
+	public static function findAllWithMultipleLogsByPeriodWithLimit($start_date, $end_date, $order_by, $limit) {
+		$sql = "
+			SELECT a.id, a.user_id as employee_id, CONCAT(e.lastname, ' ' , e.firstname, ' ', e.middlename) as employee_name, a.employee_code, a.date, a.time, a.type
+			FROM (
+				SELECT b.employee_code, b.date, b.type
+				FROM ". G_ATTENDANCE_LOG ." b
+				WHERE b.date >= ". Model::safeSql($start_date) ."
+				AND b.date <= ". Model::safeSql($end_date) ."
+				GROUP BY b.employee_code, b.date, b.type
+				HAVING count(*) > 1) x, ". G_ATTENDANCE_LOG ." a LEFT JOIN " . EMPLOYEE . " e
+				ON a.employee_code = e.employee_code  
+			WHERE x.employee_code = a.employee_code
+			AND x.date = a.date
+			AND x.type = a.type
+			AND a.date >= ". Model::safeSql($start_date) ."
+			AND a.date <= ". Model::safeSql($end_date) ."
+			" . $order_by . " 
+			" . $limit . "	
+		";		
+		return self::getRecords($sql);
+	}
+	
+	public static function findAllWithMultipleLogsByPeriodAndEmployeeIdWithLimit($arrId, $start_date, $end_date, $order_by, $limit) {
+		$arrId    = explode(",",$arrId);
+		$arr_size = count($arrId);		
+		$counter  = 1;
+		$sql = "
+			SELECT a.id, a.user_id as employee_id, CONCAT(e.lastname, ' ' , e.firstname, ' ', e.middlename) as employee_name, e.id as e_employee_id, a.employee_code, a.date, a.time, a.type
+			FROM (
+				SELECT b.employee_code, b.date, b.type
+				FROM ". G_ATTENDANCE_LOG ." b
+				WHERE b.date >= ". Model::safeSql($start_date) ."
+				AND b.date <= ". Model::safeSql($end_date) ."
+				GROUP BY b.employee_code, b.date, b.type
+				HAVING count(*) > 1) x, ". G_ATTENDANCE_LOG ." a LEFT JOIN " . EMPLOYEE . " e
+				ON a.employee_code = e.employee_code  
+			WHERE (x.employee_code = a.employee_code
+			AND x.date = a.date
+			AND x.type = a.type
+			AND a.date >= ". Model::safeSql($start_date) ."
+			AND a.date <= ". Model::safeSql($end_date) .") ";
+			
+			foreach($arrId as $key => $value){
+				if($counter == 1){
+				  $sql .= "AND (";
+				}else{}
+				
+				$sql .= "e.id=" . Model::safeSql(Utilities::decrypt($value));
+				
+				if($counter < $arr_size){
+				  $sql .= " OR ";
+				}else{$sql .= ")";}
+				$counter++;
+			}		
+			
+		$sql .= " " . $order_by . " " . $limit . " ";			
+		return self::getRecords($sql);
+	}
+	
+	public static function findAllWithoutInOutLogsByPeriod($start_date, $end_date) {
+		$logs = self::findAllByPeriod($start_date, $end_date);
+		foreach ($logs as $l) {			
+			$timesheets[$l->getEmployeeCode()][$l->getType()][$l->getDate()][$l->getTime()] = $l->getDate();
+			$ids[$l->getEmployeeCode()][$l->getDate().'-'.$l->getTime()] = $l->getId();			
+			$idn[$l->getEmployeeCode()][$l->getDate().'-'.$l->getTime()] = $l->getEmployeeName();		
+		}		
+		$tr = new G_Timesheet_Raw_Filter($timesheets);
+		$tr->filter();
+		
+		$errors_no_in  = $tr->getErrorsNoIn();		
+		$errors_no_out = $tr->getErrorsNoOut();
+		//echo '<pre>';
+		//print_r($idn);
+		foreach ($errors_no_out as $employee_code => $timesheet) {
+			foreach ($timesheet as $date => $time) {
+				$log_id = $ids[$employee_code][$date .'-'. $time];
+				$ename  = $idn[$employee_code][$date .'-'. $time];
+				$e = new G_Attendance_Log;
+				$e->setId($log_id);
+				$e->setEmployeeCode($employee_code);
+				$e->setEmployeeName($ename);
+				$e->setDate($date);
+				$e->setTime($time);
+				$e->setType('in');
+				$data[$log_id] = $e;
+			}
+		}
+		
+		
+		//echo '<pre>';
+		//print_r($errors);		
+		foreach ($errors_no_in as $employee_code => $timesheet) {
+			foreach ($timesheet as $date => $time) {				
+				$log_id = $ids[$employee_code][$date .'-'. $time];
+				$e = new G_Attendance_Log;
+				$e->setId($log_id);
+				$e->setEmployeeCode($employee_code);
+				$e->setDate($date);
+				$e->setTime($time);
+				$e->setType('out');
+				$data[$log_id] = $e;
+			}
+		}
+		
+		return $data;
+	}
+	
+	public static function findAllWithoutInOutLogsByPeriodWithLimit($start_date, $end_date, $order_by, $limit) {
+		$logs = self::findAllByPeriodWithLimit($start_date, $end_date, $order_by, $limit);
+		foreach ($logs as $l) {			
+			$timesheets[$l->getEmployeeCode()][$l->getType()][$l->getDate()][$l->getTime()] = $l->getDate();
+			$ids[$l->getEmployeeCode()][$l->getDate().'-'.$l->getTime()] = $l->getId();			
+			$idn[$l->getEmployeeCode()][$l->getDate().'-'.$l->getTime()] = $l->getEmployeeName();		
+		}		
+		$tr = new G_Timesheet_Raw_Filter($timesheets);
+		$tr->filter();
+		
+		$errors_no_in  = $tr->getErrorsNoIn();		
+		$errors_no_out = $tr->getErrorsNoOut();
+	
+		//echo '<pre>';
+		//print_r($idn);
+		foreach ($errors_no_out as $employee_code => $timesheet) {
+			foreach ($timesheet as $date => $time) {
+				$log_id = $ids[$employee_code][$date .'-'. $time];
+				$ename  = $idn[$employee_code][$date .'-'. $time];
+				$e = new G_Attendance_Log;
+				$e->setId($log_id);
+				$e->setEmployeeCode($employee_code);
+				$e->setEmployeeName($ename);
+				$e->setDate($date);
+				$e->setTime($time);
+				$e->setType('in');
+				$data[$log_id] = $e;
+			}
+		}
+		
+		
+		/*//echo '<pre>';
+		//print_r($errors);
+				
+		foreach ($errors_no_out as $employee_code => $timesheet) {
+			foreach ($timesheet as $date => $time) {								
+				$log_id = $ids[$counter . $employee_code][$date .'-'. $time];
+				$ename  = $idn[$employee_code][$date .'-'. $time];
+				$e = new G_Attendance_Log;
+				$e->setId($log_id);
+				$e->setEmployeeCode($employee_code);
+				$e->setEmployeeName($ename);
+				$e->setDate($date);
+				$e->setTime($time);
+				$e->setType('out');
+				$data[$log_id] = $e;
+				$counter++;
+			}
+		}*/
+		
+		return $data;
+	}
+	
+	public static function findAllWithoutInOutLogsByPeriodAndEmployeeIdWithLimitDebug($arrId,$start_date, $end_date, $order_by, $limit) {
+		$logs = self::findAllByPeriodAndEmployeeIdWithLimit($arrId,$start_date, $end_date, $order_by, $limit,"GROUP BY e.employee_code,date");
+		$counter = 1;		
+		foreach ($logs as $l) {			
+			$timesheets[$counter . '_' . $l->getEmployeeCode()][$l->getType()][$l->getDate()][$l->getTime()] = $l->getDate();
+			$ids[$counter . '_' . $l->getEmployeeCode()][$l->getDate().'-'.$l->getTime()] = $l->getId();			
+			$idn[$counter . '_' . $l->getEmployeeCode()][$l->getDate().'-'.$l->getTime()] = $l->getEmployeeName();					
+			$counter++;
+		}			
+							
+		$tr = new G_Timesheet_Raw_Filter($timesheets);
+		$tr->filter_sub();
+		
+		$errors_no_out = $tr->getErrorsNoOut();
+		$errors_no_in  = $tr->getErrorsNoIn();		
+		/*echo '<pre>';
+		print_r($logs);
+		exit;*/
+		foreach ($errors_no_out as $employee_code => $timesheet) {						
+			foreach ($timesheet as $date => $time) {							
+					$log_id = $ids[$employee_code][$date .'-'. $time];
+					$ename  = $idn[$employee_code][$date .'-'. $time];
+					$eCode  = explode("_",$employee_code);
+					$employee_code = $eCode[1];					
+					$e = new G_Attendance_Log;
+					$e->setId($log_id);
+					$e->setEmployeeCode($employee_code);
+					$e->setEmployeeName($ename);
+					$e->setDate($date);
+					$e->setTime($time);
+					$e->setType('in');					
+					$data[$log_id] = $e;
+			}		
+		}
+		
+		
+		//echo '<pre>';
+		//print_r($errors);		
+		
+		/*foreach ($errors_no_in as $employee_code => $timesheet) {
+			$counter = 1;
+			foreach ($timesheet as $date => $time) {
+					$log_id = $ids[$employee_code][$date .'-'. $time];
+					$ename  = $idn[$employee_code][$date .'-'. $time];
+					
+					$eCode  = explode("_",$employee_code);
+					$employee_code = $eCode[1];					
+					
+					$e = new G_Attendance_Log;
+					$e->setId($log_id);
+					$e->setEmployeeCode($employee_code);
+					$e->setEmployeeName($ename);
+					$e->setDate($date);
+					$e->setTime($time);
+					$e->setType('out');
+					$data[$log_id] = $e;
+			}
+		}*/
+		
+		return $data;
+	}
+	
+	public static function findAllWithoutInOutLogsByPeriodAndEmployeeIdWithLimit($arrId,$start_date, $end_date, $order_by, $limit) {
+		$logs = self::findAllByPeriodAndEmployeeIdWithLimit($arrId,$start_date, $end_date, $order_by, $limit);
+		$counter = 1;		
+		foreach ($logs as $l) {			
+			$timesheets[$l->getEmployeeCode()][$l->getType()][$l->getDate()][$l->getTime()] = $l->getDate();
+			$ids[$l->getEmployeeCode()][$l->getDate().'-'.$l->getTime()] = $l->getId();			
+			$idn[$l->getEmployeeCode()][$l->getDate().'-'.$l->getTime()] = $l->getEmployeeName();		
+			$counter++;
+		}		
+				
+		$tr = new G_Timesheet_Raw_Filter($timesheets);
+		$tr->filter();
+		
+		$errors_no_in  = $tr->getErrorsNoIn();		
+		$errors_no_out = $tr->getErrorsNoOut();
+		
+		/*echo '<pre>';
+		print_r($logs);
+		exit;*/
+		foreach ($errors_no_out as $employee_code => $timesheet) {
+			$counter = 1;
+			foreach ($timesheet as $date => $time) {
+				//for($x=1;$x<=$counter;$x++){
+					$log_id = $ids[$employee_code][$date .'-'. $time];
+					$ename  = $idn[$employee_code][$date .'-'. $time];
+					$e = new G_Attendance_Log;
+					$e->setId($log_id);
+					$e->setEmployeeCode($employee_code);
+					$e->setEmployeeName($ename);
+					$e->setDate($date);
+					$e->setTime($time);
+					$e->setType('in');
+					$data[$log_id] = $e;
+					//$x++;
+				//}
+			}		
+		}
+		
+		
+		//echo '<pre>';
+		//print_r($errors);		
+		foreach ($errors_no_in as $employee_code => $timesheet) {
+			$counter = 1;
+			foreach ($timesheet as $date => $time) {				
+				//for($x=1;$x<=$counter;$x++){
+					$log_id = $ids[$employee_code][$date .'-'. $time];
+					$ename  = $idn[$employee_code][$date .'-'. $time];
+					$e = new G_Attendance_Log;
+					$e->setId($log_id);
+					$e->setEmployeeCode($employee_code);
+					$e->setEmployeeName($ename);
+					$e->setDate($date);
+					$e->setTime($time);
+					$e->setType('out');
+					$data[$log_id] = $e;
+					//$x++;
+				//}
+			}
+		}
+		
+		return $data;
+	}
+	
+	public static function findAllByPeriodWithLimit($start_date, $end_date, $order_by, $limit) {
+		$sql = "
+			SELECT al.id, al.user_id as employee_id, CONCAT(e.lastname, ' ' , e.firstname, ' ', e.middlename) as employee_name, al.employee_code, al.date, al.time, al.type
+			FROM ". G_ATTENDANCE_LOG ." al LEFT JOIN " . EMPLOYEE . " e
+				ON al.employee_code = e.employee_code  
+			WHERE al.date >= ". Model::safeSql($start_date) ."
+			AND al.date <= ". Model::safeSql($end_date) ."	
+			" . $order_by . " 
+			" . $limit . "		
+		";
+		return self::getRecords($sql);
+	}
+		
+	public static function findAllByPeriodAndEmployeeIdWithLimit($arrId,$start_date,$end_date,$order_by,$limit,$group) {			
+		if($arrId != ''){
+			$arrId    = explode(",",$arrId);			
+			$arr_size = count($arrId);				
+			$counter  = 1;	
+		}
+		
+		$sql = "
+			SELECT al.id, al.user_id as employee_id, CONCAT(e.lastname, ' ' , e.firstname, ' ', e.middlename) as employee_name, e.id as e_employee_id, al.employee_code, al.date, al.time, al.type
+			FROM ". G_ATTENDANCE_LOG ." al LEFT JOIN " . EMPLOYEE . " e
+				ON al.employee_code = e.employee_code  
+			WHERE (al.date >= ". Model::safeSql($start_date) ."
+			AND al.date <= ". Model::safeSql($end_date) . ") ";
+				foreach($arrId as $key => $value){
+					if($counter == 1){
+					  $sql .= "AND (";
+					}else{}
+					
+					$sql .= "e.id=" . Model::safeSql(Utilities::decrypt($value));
+					
+					if($counter < $arr_size){
+					  $sql .= " OR ";
+					}else{ $sql .= ")";}
+					$counter++;
+				}					
+		$sql .=	" " . $order_by . " " . $group . " " . $limit . " ";	
+		
+		return self::getRecords($sql);
+	}
+	
+	public static function findAllYesterdayUntilNow() {
+		$yesterday = date('Y-m-d', strtotime('yesterday'));
+		$now = date('Y-m-d', strtotime('now'));
+		$sql = "
+			SELECT id, user_id as employee_id, employee_code, employee_name, date, time, type
+			FROM ". G_ATTENDANCE_LOG ."
+			WHERE date >= ". Model::safeSql($yesterday) ."
+			AND date <= ". Model::safeSql($now) ."
+			ORDER BY date, time
+		";
+		return self::getRecords($sql);
+	}
+	
+	public static function findAllNow() {
+		$date = date('Y-m-d', strtotime('now'));
+		$sql = "
+			SELECT id, user_id as employee_id, employee_code, employee_name, date, time, type
+			FROM ". G_ATTENDANCE_LOG ."
+			WHERE date >= ". Model::safeSql($date) ."
+			ORDER BY date, time
+		";
+		return self::getRecords($sql);
+	}	
+	
+	private static function getRecord($sql) {
+		$result = Model::runSql($sql);
+		$total = mysql_num_rows($result);
+		if ($total == 0) {
+			return false;	
+		}		
+		$row = Model::fetchAssoc($result);
+		$records = self::newObject($row);	
+		return $records;
+	}
+	
+	private static function getRecords($sql) {
+		$result = Model::runSql($sql);
+		$total = mysql_num_rows($result);
+		if ($total == 0) {
+			return false;	
+		}
+		while ($row = Model::fetchAssoc($result)) {
+			$records[$row['id']] = self::newObject($row);
+		}
+		return $records;
+	}
+	
+	private static function newObject($row) {
+		$e = new G_Attendance_Log;
+		$e->setId($row['id']);
+		$e->setEmployeeId($row['user_id']);
+		$e->setEmployeeCode($row['employee_code']);
+		$e->setEmployeeName($row['employee_name']);
+		$e->setDate($row['date']);
+		$e->setTime($row['time']);
+		$e->setType(strtolower($row['type']));
+		return $e;
+	}
+}
+?>

@@ -1,0 +1,9 @@
+<?php 
+define('MAIN_FOLDER','/internal-projects/products/development/sprint_hr/');
+
+define('BASE_FOLDER', '/internal-projects/products/development/sprint_hr/tdd/');
+
+//leave '/' if you don't have folder
+define('LIBRARY_FOLDER', '/'); //this is for folder library in root directory
+
+?>

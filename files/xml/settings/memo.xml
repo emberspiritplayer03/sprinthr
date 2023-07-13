@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<title>Termination</title>
+		<content>Sample content for Termination</content>
+		<created_by>HR</created_by>
+	</Fields>
+	
+	<Fields>
+		<title>Tardiness</title>
+		<content>Sample content for Tardiness</content>
+		<created_by>HR</created_by>
+	</Fields>
+	
+</Main>
+
+

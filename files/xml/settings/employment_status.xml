@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<code>FT</code>
+		<status>Full Time</status>
+	</Fields>
+	
+	<Fields>
+		<code>PT</code>
+		<status>Part Time</status>
+	</Fields>
+	
+	<Fields>
+		<code>REG</code>
+		<status>Regular</status>
+	</Fields>
+	
+	<Fields>
+		<code>PROB</code>
+		<status>Probationary</status>
+	</Fields>
+</Main>
+
+

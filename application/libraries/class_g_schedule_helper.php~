@@ -1,0 +1,111 @@
+<?php
+class G_Schedule_Helper {
+	
+	/*
+		returns array from G_Schedule_Finder
+	*/
+	public static function getCurrentEmployeeSchedule(IEmployee $e) {
+		$date = Tools::getGmtDate('Y-m-d');	
+		$s = G_Schedule_Finder::findActiveByEmployee($e, $date);
+		if ($s) {
+			$schedule_group_id = $s->getScheduleGroupId();	
+			$schedules = G_Schedule_Finder::findAllByScheduleGroupId($schedule_group_id);
+		} else {
+			$schedules = G_Schedule_Finder::findAllDefault();	
+		}
+		return $schedules;
+	}
+	
+	/*
+		$schedules - Returned value from G_Schedule_Finder
+	*/
+	public static function showSchedules($schedules) {
+		$string = '<div class="styled_items_holder"><ul>';
+		foreach ($schedules as $schedule) {
+			$string .= '<li><div class="item-detail-styled"><i class="icon-time icon-fade vertical-middle"></i> ';
+			$string .= '<strong>'. $schedule->getWorkingDays() . '</strong>';
+			$string .= ' ('. Tools::timeFormat($schedule->getTimeIn()) .' - '. Tools::timeFormat($schedule->getTimeOut()).')';	
+			$string .= '</div></li>';
+		}
+		$string .= '</div></ul>';
+        		
+		return $string;
+	}
+
+	public static function isGroupAlreadyAssigned(IGroup $g, G_Schedule $s) {
+		define('ENTITY_GROUP', 2);
+		$sql = "
+			SELECT COUNT(*) as total
+			FROM g_employee_group_schedule s
+			WHERE s.employee_group_id = ". Model::safeSql($g->getId()) ."
+			AND s.schedule_id = ". Model::safeSql($s->getId()) ."
+			AND s.employee_group = ". Model::safeSql(ENTITY_GROUP) ."
+		";
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return ($row['total'] > 0) ? true : false;
+	}
+	
+	public static function isEmployeeAlreadyAssigned(IEmployee $e, G_Schedule $s) {
+		define('ENTITY_EMPLOYEE', 1);
+		$sql = "
+			SELECT COUNT(*) as total
+			FROM g_employee_group_schedule s
+			WHERE s.employee_group_id = ". Model::safeSql($e->getId()) ."
+			AND s.schedule_id = ". Model::safeSql($s->getId()) ."
+			AND s.employee_group = ". Model::safeSql(ENTITY_EMPLOYEE) ."
+		";
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return ($row['total'] > 0) ? true : false;
+	}
+	
+	public static function countMembers(G_Schedule $s) {
+		$sql = "
+			SELECT COUNT(*) as total
+			FROM g_employee_group_schedule s
+			WHERE s.schedule_id = ". Model::safeSql($s->getId()) ."
+		";
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}	
+	
+	public static function mergeByName(G_Schedule $schedule) {			
+		$schedules = array();
+		foreach ($schedule as $s) {
+			$schedules[$s->getName()][] = $s;
+		}
+		return $schedules;
+	}
+	
+	/*
+		$schedules = G_Schedule_Finder::findAllByName($schedule_name);
+		$times = G_Schedule_Helper::getTimeInAndOutByDay('mon', $schedules);
+		echo $times['in'];
+		echo $times['out'];
+	*/
+	public static function getTimeInAndOutByDay($day, $schedules) {
+		foreach ($schedules as $s) {
+			$working_days = $s->getWorkingDays();
+			$days = explode(',', $working_days);
+			if (in_array($day, $days)) {
+				$return['in'] = $s->getTimeIn();
+				$return['out'] = $s->getTimeOut();
+				return $return;
+			}			
+		}
+		return false;
+	}
+	
+	public static function isScheduleEmpty() {
+		$sql = "
+			SELECT COUNT(*) as total
+			FROM " . G_SCHEDULE . " s			
+		";
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}	
+}
+?>

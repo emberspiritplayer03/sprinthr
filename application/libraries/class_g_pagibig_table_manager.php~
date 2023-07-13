@@ -1,0 +1,35 @@
+<?php
+class G_Pagibig_Table_Manager {
+	public static function save(G_Pagibig_Table $gpt) {
+		if (G_Pagibig_Table_Helper::isIdExist($gpt) > 0 ) {
+			$sql_start = "UPDATE ". G_PAGIBIG . " ";
+			$sql_end   = "WHERE id = ". Model::safeSql($gpt->getId());		
+		}else{
+			$sql_start = "INSERT INTO ". G_PAGIBIG . " ";
+			$sql_end  = " ";		
+		}
+		
+		$sql = $sql_start ."
+			SET
+			company_structure_id   =" . Model::safeSql($gpt->getCompanyStructureId()) . ",
+			salary_from  	        =" . Model::safeSql($gpt->getSalaryFrom()) . ",
+			salary_to		        =" . Model::safeSql($gpt->getSalaryTo()) . ",					
+			multiplier_employee    =" . Model::safeSql($gpt->getMultiplierEmployee()) . ",																
+			multiplier_employer	  =" . Model::safeSql($gpt->getMultiplierEmployer()) . " "				
+			. $sql_end ."	
+		
+		";			
+		Model::runSql($sql);
+		return mysql_insert_id();		
+	}
+		
+	public static function delete(G_Pagibig_Table $gpt){
+		if(G_Pagibig_Table_Helper::isIdExist($gpt) > 0){
+			$sql = "
+				DELETE FROM ". G_PAGIBIG ."
+				WHERE id =" . Model::safeSql($gpt->getId());
+			Model::runSql($sql);
+		}	
+	}
+}
+?>

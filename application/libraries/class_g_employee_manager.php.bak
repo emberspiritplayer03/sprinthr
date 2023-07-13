@@ -1,0 +1,66 @@
+<?php
+class G_Employee_Manager {
+	public static function save(G_Employee $e) {
+		if (G_Employee_Helper::isIdExist($e) > 0 ) {
+			$sql_start = "UPDATE ". EMPLOYEE . "";
+			$sql_end   = "WHERE id = ". Model::safeSql($e->getId());		
+		}else{
+			$sql_start = "INSERT INTO ". EMPLOYEE . "";
+			$sql_end   = "";		
+		}
+		
+		$sql = $sql_start ."
+			SET
+			employee_code        	= " . Model::safeSql($e->getEmployeeCode()) .",
+			hash 					= " . Model::safeSql($e->getHash()) .",
+			photo 					= " . Model::safeSql($e->getPhoto()) .",
+			salutation 				= " . Model::safeSql($e->getSalutation()) .",
+			lastname 				= " . Model::safeSql($e->getLastname()) .",
+			firstname 				= " . Model::safeSql($e->getFirstname()) .",
+			middlename 				= " . Model::safeSql($e->getMiddlename()) .",
+			extension_name			= " . Model::safeSql($e->getExtensionName()) .",
+			nickname 				= " . Model::safeSql($e->getNickname()) .",
+			birthdate 				= " . Model::safeSql($e->getBirthdate()) .",
+			gender 					= " . Model::safeSql($e->getGender()) .",
+			marital_status 			= " . Model::safeSql($e->getMaritalStatus()) .",
+			nationality 			= " . Model::safeSql($e->getNationality()) .",
+			sss_number 				= " . Model::safeSql($e->getSssNumber()) .",
+			pagibig_number			= " . Model::safeSql($e->getTinNumber()) .",
+			tin_number 				= " . Model::safeSql($e->getPagibigNumber()) .",
+			hired_date 				= " . Model::safeSql($e->getHiredDate()) .",
+			eeo_job_category_id		= " . Model::safeSql($e->getEeoJobCategoryId()) .",	
+			terminated_date			= " . Model::safeSql($e->getTerminatedDate()) ."
+			 "
+			. $sql_end ."	
+		
+		";	
+		Model::runSql($sql);
+		return mysql_insert_id();		
+	}
+		
+	public static function delete(G_Employee $e){
+		if(G_Employee_Helper::isIdExist($e) > 0){
+			$sql = "
+				DELETE FROM ". EMPLOYEE ."
+				WHERE id =" . Model::safeSql($e->getId());
+			Model::runSql($sql);
+		}
+	
+	}
+	
+	public static function addHash(G_Employee $e,$hash) {
+		if (G_Employee_Helper::isIdExist($e) > 0 ) {
+			$sql_start = "UPDATE ". EMPLOYEE . "";
+			$sql_end   = "WHERE id = ". Model::safeSql($e->getId());		
+		}
+		
+		$sql = $sql_start ."
+			SET
+			hash		        	= " . Model::safeSql($hash) .""
+			. $sql_end ."
+		";	
+
+		Model::runSql($sql);
+	}
+}
+?>

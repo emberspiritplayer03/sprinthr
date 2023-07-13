@@ -1,0 +1,38 @@
+<ul style="list-style:none;">
+	<?php 
+		foreach($data as $key => $value){
+			foreach($value as $keysub => $subvalue){
+				$jhid =  Utilities::createHash($subvalue['job_id']);
+				$jeid =  Utilities::encrypt($subvalue['job_id']);
+	?>
+		<li>
+			<h2>
+				<?php echo $subvalue['job_title']; ?><br />
+				<small style="font-size:69%;margin-top:10px;line-height:15px;color:red;">Open until : <b><?php echo $subvalue['advertisement_end']; ?></b></small>
+			</h2>
+			<div class="job-description-container" style="background-color:#F7F7F9;padding:10px;margin:5px;border:1px solid #E1E1E8;">
+				<p><?php echo $subvalue['job_description']; ?></p>
+			</div>
+				<div class="apply-btn-container" style="float:right;margin-right:10px;">
+				<?php $count = G_Applicant_Helper::isEmailAndJobIdExists($hdr_email_address,$subvalue['job_id']);?>
+				<?php if($count == 0){ ?>
+					<?php if($total_pending_applications < MAX_JOB_APPLICATION){?>
+						<a class="btn" href="<?php echo url("applicant/apply?jeid={$jeid}&jhid={$jhid}"); ?>">
+							<i class="icon-hand-up"></i> Apply
+						</a>	
+					<?php }else{ ?>
+						<span class="label label-important"><i class="icon-remove-sign icon-white"></i> Can no longer apply for this job.</span>
+					<?php } ?>
+				<?php }else{ ?>
+					<span class="label label-warning"><i class="icon-star icon-white"></i> Already sent application</span>
+				<?php } ?>		
+				</div>
+			<div class="clear"></div>
+			<hr />
+			
+		</li>
+	<?php			
+			}
+		}
+	?>
+</ul>	

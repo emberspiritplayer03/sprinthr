@@ -1,0 +1,125 @@
+<?php
+//define('MODULE_USERS', 0);
+define('COMPANY_INFO','g_company_info');
+define('COMPANY_STRUCTURE','g_company_structure');
+define('COMPANY_BRANCH','g_company_branch');
+
+define('SUBDIVISION_TYPE','g_settings_subdivision_type');
+define('LOCATION','g_settings_location');
+define('LICENSE','g_settings_license');
+define('DEPENDENT_RELATIONSHIP','g_settings_dependent_relationship');
+define('MEMBERSHIP_TYPE','g_settings_membership_type');
+define('EMPLOYMENT_STATUS','g_settings_employment_status');
+define('SKILLS','g_settings_skills');
+define('G_JOB', 'g_job');
+define('G_JOB_SPECIFICATION', 'g_job_specification');
+define('G_JOB_EMPLOYMENT_STATUS', 'g_job_employment_status');
+define('G_EEO_JOB_CATEGORY', 'g_eeo_job_category');
+define('G_JOB_SALARY_RATE', 'g_job_salary_rate');
+define('G_SETTINGS_EMPLOYMENT_STATUS', 'g_settings_employment_status');
+define('G_SETTINGS_PAY_PERIOD', 'g_settings_pay_period');
+define('G_SETTINGS_APPLICATION_STATUS', 'g_settings_application_status');
+define('G_JOB_VACANCY', 'g_job_vacancy');
+define('EMPLOYEE','g_employee');
+define('APPLICANT','g_applicant');
+define('G_EMPLOYEE_JOB_HISTORY','g_employee_job_history');
+define('G_EMPLOYEE_BRANCH_HISTORY','g_employee_branch_history');
+define('G_EMPLOYEE_SUBDIVISION_HISTORY','g_employee_subdivision_history');
+define('G_SCHEDULE', 'g_schedule');
+define('G_HOLIDAY', 'g_holiday');
+define('G_HOLIDAY_BRANCH', 'g_holiday_branch');
+define('G_EMPLOYEE_CONTACT_DETAILS', 'g_employee_contact_details');
+define('G_EMPLOYEE_EMERGENCY_CONTACT', 'g_employee_emergency_contact');
+define('G_EMPLOYEE_DEPENDENT', 'g_employee_dependent');
+define('G_EMPLOYEE_DIRECT_DEPOSIT', 'g_employee_direct_deposit');
+define('G_EMPLOYEE_ATTENDANCE', 'g_employee_attendance');
+define('G_EMPLOYEE_BRANCH_HISTORY', 'g_employee_branch_history');
+define('G_EMPLOYEE_BASIC_SALARY_HISTORY', 'g_employee_basic_salary_history');
+define('G_EMPLOYEE_JOB_HISTORY', 'g_employee_job_history');
+define('G_EMPLOYEE_SUBDIVISION_HISTORY', 'g_employee_subdivision_history');
+define('G_EMPLOYEE_PERFORMANCE', 'g_employee_performance');
+define('G_EMPLOYEE_TRAINING', 'g_employee_training');
+define('G_EMPLOYEE_WORK_EXPERIENCE', 'g_employee_work_experience');
+define('G_EMPLOYEE_EDUCATION', 'g_employee_education');
+define('G_EMPLOYEE_SKILLS', 'g_employee_skills');
+define('G_EMPLOYEE_SUPERVISOR', 'g_employee_supervisor');
+define('G_EMPLOYEE_LICENSE', 'g_employee_license');
+define('G_EMPLOYEE_LANGUAGE', 'g_employee_language');
+define('G_EMPLOYEE_MEMBERSHIP', 'g_employee_membership');
+define('G_EMPLOYEE_MEMO', 'g_employee_memo');
+define('G_EMPLOYEE_LEAVE_AVAILABLE', 'g_employee_leave_available');
+define('G_EMPLOYEE_LEAVE_REQUEST', 'g_employee_leave_request');
+define('G_EMPLOYEE_DYNAMIC_FIELD', 'g_employee_dynamic_field');
+define('G_EMPLOYEE_ATTACHMENT', 'g_employee_attachment');
+define('G_LEAVE', 'g_leave');
+define('G_EMPLOYEE_LEAVE_REQUEST', 'g_employee_leave_request');
+define('G_EMPLOYEE_REQUIREMENTS', 'g_employee_requirements');
+define('G_EMPLOYEE_CONTRIBUTION', 'g_employee_contribution');
+
+define('G_JOB_APPLICATION_EVENT', 'g_job_application_event');
+define('G_APPLICANT_ATTACHMENT', 'g_applicant_attachment');
+define('G_APPLICANT_REQUIREMENTS', 'g_applicant_requirements');
+define('G_APPLICANT_EXAMINATION', 'g_applicant_examination');
+define('G_APPLICANT_EDUCATION', 'g_applicant_education');
+define('G_APPLICANT_TRAINING', 'g_applicant_training');
+define('G_APPLICANT_SKILLS', 'g_applicant_skills');
+define('G_APPLICANT_LICENSE', 'g_applicant_license');
+define('G_APPLICANT_LANGUAGE', 'g_applicant_language');
+define('G_APPLICANT_WORK_EXPERIENCE', 'g_applicant_work_experience');
+define('G_EXAM', 'g_exam');
+define('G_EXAM_CHOICES', 'g_exam_choices');
+define('G_EXAM_QUESTION', 'g_exam_question');
+define('G_PERFORMANCE', 'g_performance');
+define('G_PERFORMANCE_INDICATOR', 'g_performance_indicator');
+define('G_SALARY_CYCLE', 'g_salary_cycle');
+define('G_CUTOFF_PERIOD', 'g_cutoff_period');
+define('G_SETTINGS_EMPLOYEE_FIELD', 'g_settings_employee_field');
+
+define('YES', 1);
+define('NO', 0);
+
+//APPLICANT STATUS
+define('APPLICATION_SUBMITTED',0);
+define('INTERVIEW',1);
+define('JOB_OFFERED',2);
+define('OFFER_DECLINED',3);
+define('REJECTED',4);
+define('HIRED',5);
+
+//APPLICATION EVENT TYPE
+define('INTERVIEW_EVENT',1);
+define('OFFER_JOB_EVENT',2);
+define('DECLINED_OFFER_EVENT',3);
+define('REJECTED_EVENT',4);
+define('HIRED_EVENT',5);
+
+
+
+//EMPLOYEE STATUS
+define('PROBATIONARY',0);
+define('REGULAR',1);
+define('PART_TIME',2);
+define('AWOL',3);
+define('RESIGNED',4);
+define('TERMINATED',5);
+define('SUSPENDED',6);
+
+//marital status
+define('SINGLE', 0);
+define('MARRIED', 1);
+define('SEPARATED', 2);
+define('WIDOWED', 3);
+
+// LEAVE
+define('LEAVE_PENDING', 0);
+define('LEAVE_APPROVED', 1);
+define('LEAVE_DISAPPROVED', -1);
+
+
+// Performance Rate
+define('RATE_1', 1);
+define('RATE_2', 2);
+define('RATE_3', 3);
+define('RATE_4', 4);
+define('RATE_5', 5);
+?>

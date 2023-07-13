@@ -1,0 +1,31 @@
+@font-face {
+		font-family: 'OpenSans';
+		src: url('fonts/opensans-regular.eot');
+		src: url('fonts/opensans-regular.eot?#iefix') format('embedded-opentype'),
+			 url('fonts/opensans-regular.woff') format('woff'),
+			 url('fonts/opensans-regular.ttf') format('truetype'),
+			 url('fonts/opensans-regular.svg#opensans-regular') format('svg');
+		font-weight: normal;
+		font-style: normal;
+}
+@font-face {
+		font-family: 'ProximaNova-Regular';
+		src: url('fonts/proximanovaregular.eot');
+		src: url('fonts/proximanovaregular.eot?#iefix') format('embedded-opentype'),
+			 url('fonts/proximanovaregular.woff') format('woff'),
+			 url('fonts/proximanovaregular.ttf') format('truetype'),
+			 url('fonts/proximanovaregular.svg#proximanovaregular') format('svg');
+		font-weight: normal;
+		font-style: normal;
+}
+@font-face {
+		font-family: 'GothamBlack-Italic';
+		src: url('fonts/gothamblackitalic.eot');
+		src: url('fonts/gothamblackitalic.eot?#iefix') format('embedded-opentype'),
+			 url('fonts/gothamblackitalic.woff') format('woff'),
+			 url('fonts/gothamblackitalic.ttf') format('truetype'),
+			 url('fonts/gothamblackitalic.svg#gothamblackitalic') format('svg');
+		font-weight: normal;
+		font-style: normal;
+}
+body, #footer, input, button, select, textarea {/*font-family: 'OpenSans';*/ }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Main>
+	<Fields>
+		<benefit_code>MEAL</benefit_code>
+		<benefit_name>Meal Allowance</benefit_name>
+		<benefit_description>Meal Allowance</benefit_description>
+		<benefit_amount>0.00</benefit_amount>
+	</Fields>
+	<Fields>
+		<benefit_code>TRANSPO</benefit_code>
+		<benefit_name>Transpo Allowance</benefit_name>
+		<benefit_description>Transportation Allowance</benefit_description>
+		<benefit_amount>0.00</benefit_amount>
+	</Fields>
+</Main>

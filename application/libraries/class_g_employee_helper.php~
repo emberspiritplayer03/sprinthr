@@ -1,0 +1,859 @@
+<?php
+class G_Employee_Helper {
+	public static function getAllEmployeeCodes() {
+		$sql = "
+			SELECT employee_code
+			FROM ". EMPLOYEE ."
+		";
+		$result = Model::runSql($sql);
+		while ($row = Model::fetchAssoc($result)) {
+			$data[$row['employee_code']] = $row['employee_code'];	
+		}
+		return $data;
+	}
+	
+	public static function getAllEmployeeNames() {
+		$sql = "
+			SELECT employee_code, CONCAT(e.firstname, ' ',e.lastname) as name
+			FROM ". EMPLOYEE ." e
+		";
+		$result = Model::runSql($sql);
+		while ($row = Model::fetchAssoc($result)) {
+			$data[$row['employee_code']] = $row['name'];	
+		}
+		return $data;
+	}	
+	
+	public static function activeToTerminated($data,G_Employee $e) {
+		if($e){			
+			//Update Employee Info			
+			$e->setTerminatedDate($data['terminated_date']);
+			$e->save();
+			
+			//Add Memo for termination						
+			$created_by = G_Employee_Finder::findById(Utilities::decrypt($_SESSION['sprint_hr']['employee_id']));			
+			$memo       = G_Settings_Memo_Finder::findById(G_Settings_Memo::TERMINATION);
+						
+			$m = new G_Employee_Memo;			
+			$m->setEmployeeId($e->getId());
+			$m->setMemoId($memo->getId());
+			$m->setTitle($memo->getTitle());
+			$m->setMemo($data['memo']);
+			$m->setDateCreated(date("Y-m-d"));
+			$m->setCreatedBy($created_by->lastname. ' ' . $created_by->firstname);
+			$m->save();	
+			
+			//terminate the basic salary
+			$current_salary = G_Employee_Basic_Salary_History_Finder::findCurrentSalary($e);
+			if($current_salary) {
+				$current_salary->setEndDate($data['terminated_date']);
+				$current_salary->save();	
+			}
+			
+			//terminate the subdivision
+			$current_subdivision = G_Employee_Subdivision_History_Finder::findCurrentSubdivision($e);
+			if($current_subdivision) {
+				$current_subdivision->setEndDate($data['terminated_date']);
+				$current_subdivision->save();	
+			}	
+		}
+	}
+	
+	public static function countTotalPayslipDateRange($start_date, $end_date) {
+		$sql = "
+			SELECT COUNT(DISTINCT e.id) as total
+			FROM g_employee_payslip p, g_employee e			
+			WHERE (p.period_start >= " . Model::safeSql($start_date) . " AND p.period_end <= " . Model::safeSql($end_date) . ") 
+			AND (p.employee_id = e.id)
+		";				
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+	
+	public static function countTotalPayslipIsNotArchiveDateRange($start_date, $end_date) {
+		$sql = "
+			SELECT COUNT(DISTINCT e.id) as total
+			FROM g_employee_payslip p, g_employee e			
+			WHERE (p.period_start >= " . Model::safeSql($start_date) . " AND p.period_end <= " . Model::safeSql($end_date) . ") 
+			AND (p.employee_id = e.id)
+			AND e.e_is_archive =" . Model::safeSql(G_Employee::NO) . "
+		";				
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+	
+	public static function countTotalPagibigDeductionByDateRange($start_date, $end_date) {
+		$employees = G_Employee_Finder::findByPayslipDateRangeIsNotArchive($start_date, $end_date);	
+		foreach($employees as $e){
+			$p = G_Payslip_Finder::findByEmployeeAndDateRange($e, $start_date, $end_date);
+			$ph = new G_Payslip_Helper($p);			
+			$ee_amount = (float) $ph->getValue('pagibig');
+			$er_amount = (float) $ph->getValue('pagibig_er');
+			$e_total   = (float) $ee_amount + $er_amount; 
+			$ee_gtotal += $ee_amount;
+			$er_gtotal += $er_amount; 			
+		}
+			$g_total  = $ee_gtotal + $er_gtotal;
+			$total = array("ee" => $ee_gtotal,"er" => $er_gtotal,"gtotal" => $g_total);
+			return $total;
+	}
+		
+	
+	public static function countTotalRecordsByCompanyStructureId(G_Company_Structure $gcs) {
+		$sql = "
+			SELECT COUNT(*) as total
+			FROM " . EMPLOYEE ."
+			WHERE company_structure_id = ". Model::safeSql($gcs->getId()) ."
+		";
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+	
+	public static function countTotalRecordsIsNotArchiveByCompanyStructureId($csid) {
+		$sql = "
+			SELECT COUNT(*) as total
+			FROM " . EMPLOYEE ."
+			WHERE company_structure_id = ". Model::safeSql($csid) ."
+			AND e_is_archive =" . Model::safeSql(G_Employee::NO) . " 
+		";
+				
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+	
+	public static function countTotalRecordsIsArchiveByCompanyStructureId($csid) {
+		$sql = "
+			SELECT COUNT(*) as total
+			FROM " . EMPLOYEE ."
+			WHERE company_structure_id = ". Model::safeSql($csid) ."
+			AND e_is_archive =" . Model::safeSql(G_Employee::YES) . " 
+		";
+				
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+	
+	public static function isUsernameFirstNameLastNameBirthdateByCompanyStructureId($eAr,$company_structure_id) {
+		$sql = "
+			SELECT COUNT(*) as total
+			FROM " . EMPLOYEE ." e
+				LEFT JOIN " . G_USER . " u
+					ON e.id = u.employee_id 
+			WHERE (e.company_structure_id = ". Model::safeSql($company_structure_id) ." AND e.e_is_archive =" . Model::safeSql(G_Employee::NO) . ")
+				AND (e.firstname =" . Model::safeSql($eAr['firstname']) . "
+				AND e.lastname =" . Model::safeSql($eAr['lastname']) . "
+				AND e.birthdate =" . Model::safeSql($eAr['birthdate']) . "
+				AND e.e_is_archive =" . Model::safeSql(G_Employee::NO) . "
+				AND u.username =" . Model::safeSql($eAr['username']) . "
+				)				
+		";
+		//echo $sql;
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+	
+	public static function getTotalSalaryByDepartment() {
+		$sql = "SELECT d.name AS department, SUM( s.basic_salary ) AS salary
+			FROM g_employee_basic_salary_history s, g_employee_subdivision_history d
+			WHERE s.employee_id = d.employee_id
+			AND s.end_date = ''
+			AND d.end_date = ''
+			GROUP BY department";	
+			
+		$result = Model::runSql($sql,true);
+		return $result;			
+	}
+	
+	
+	
+	public static function getTotalSalaryByRange() {
+		$sql = "SELECT 
+				SUM( IF( basic_salary <3000, 1, 0 ) ) AS below_3k, 
+				SUM( IF( basic_salary BETWEEN 3000 AND 8000 , 1, 0 ) ) AS between_3k_8k,
+				SUM( IF( basic_salary BETWEEN 8001 AND 15000 , 1, 0 ) ) AS between_8k_15k, 
+				SUM( IF( basic_salary BETWEEN 15001 AND 20000 , 1, 0 ) ) AS between_15k_20k, 
+				SUM( IF( basic_salary BETWEEN 20001 AND 30000 , 1, 0 ) ) AS between_20k_30k, 
+				SUM( IF( basic_salary BETWEEN 30001 AND 40000 , 1, 0 ) ) AS between_30k_40k, 
+				SUM( IF( basic_salary BETWEEN 40001 AND 50000 , 1, 0 ) ) AS between_40k_50k,
+				SUM( IF( basic_salary BETWEEN 50001 AND 60000 , 1, 0 ) ) AS between_50k_60k,
+				SUM( IF( basic_salary > 60000 , 1, 0 ) ) AS above_60k
+				FROM g_employee_basic_salary_history s
+				WHERE s.end_date = '' ";
+				
+		$result = Model::runSql($sql,true);
+		return $result;
+	}
+	
+	public static function getTotalEmployeeByMonth($year,$month) {
+		$month = ($month=='')? '' :  'AND MONTH( hired_date )='.$month ;
+		$year = ($year=='')? date("Y") : $year ;
+		$sql = "SELECT YEAR(hired_date) as year, MONTH( hired_date ) as month , 
+				SUM(1) AS total_employee
+				FROM g_employee
+				WHERE YEAR( hired_date ) = ".$year."
+				".$month."
+				GROUP BY year,month";
+		$result = Model::runSql($sql,true);
+		return $result;
+	}
+	
+	public static function getTotalTerminatedByYearAndMonth() {
+		$sql = "
+		SELECT YEAR( terminated_date ) AS year, MONTH( terminated_date ) AS
+		month , SUM(IF(terminated_date>0,1,0 ) ) AS total_terminated
+		FROM g_employee
+		GROUP BY year,
+		MONTH asc";	
+
+		$result = Model::runSql($sql,true);
+		return $result;
+	}
+	
+	public static function getTotalHiredByYearAndMonth() {
+		$sql = "
+		SELECT YEAR( hired_date ) AS year, MONTH( hired_date ) AS
+		month , SUM( 1 ) AS total_hired
+		FROM g_employee
+		GROUP BY year,
+		MONTH asc";	
+		$result = Model::runSql($sql,true);
+		return $result;
+	}
+	
+	public static function getHeadcountByDepartment() {
+		$sql = "SELECT h.name AS department, SUM( 1 ) AS total_employee
+			FROM g_employee_subdivision_history h
+			WHERE h.end_date = ''
+			GROUP BY department
+			ORDER BY department
+			";
+
+		$result = Model::runSql($sql,true);
+		return $result;
+	}
+	
+	public static function findByDepartmentIdMonth($department_id,$month) {
+		if($department_id!='') {
+		
+			$where = 'WHERE ';
+			$query .= $where . "  d.company_structure_id=".$department_id .' AND j.end_date="" AND d.end_date=""';
+		}else {
+			//all	
+			$where = 'WHERE ';
+			$query .=  $where . ' j.end_date="" AND d.end_date=""';
+		}
+		
+		if($month!=''){
+			$where = ' AND ';
+			$query .= ($month)? $where . " MONTH(e.birthdate)=".Model::safeSql($month) : '' ;
+		}	
+		
+		$sql = "SELECT 
+		d.name as department,
+		e.employee_code,
+		CONCAT(e.lastname, ', ', e.firstname, ' ', substr(e.middlename,1,1),'.') as employee_name,
+		e.birthdate,
+		year(curdate())-year(e.birthdate) - (right(curdate(),5) < right(e.birthdate,5)) as age,
+		j.name as position,
+		j.employment_status
+		FROM g_employee_subdivision_history d
+		LEFT JOIN g_employee e ON e.id=d.employee_id
+		LEFT JOIN g_employee_job_history j ON j.employee_id=e.id 
+		".$query."
+		ORDER BY e.birthdate ";
+		
+		$rec = Model::runSql($sql,true);
+		return $rec;
+	}
+	
+	public static function findHashByEmployeeId($id) {
+		$sql = "
+			SELECT e.hash 
+			FROM g_employee e
+			WHERE e.id = ". $id ."	
+			LIMIT 1		
+		";
+		
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row;
+	}
+	
+	
+	public static function isIdExist(G_Employee $e) {
+		$sql = "
+			SELECT COUNT(*) as total
+			FROM " . EMPLOYEE ."
+			WHERE id = ". Model::safeSql($e->getId()) ."
+		";
+		$result = Model::runSql($sql);
+		$row    = Model::fetchAssoc($result);
+		return $row['total'];
+	}
+	
+	public static function findByEmployeeCode($q) {
+		$sql = "
+			SELECT u.id, CONCAT(u.firstname,' ', u.lastname) as name,u.photo, u.hash
+			FROM g_employee u
+			WHERE (u.employee_code  LIKE '{$q}%') LIMIT 10
+			";
+
+			$records = Model::runSql($sql, true);
+			return $records;
+	}
+	
+	public static function findByLastnameFirstname($q) {
+		$sql = "
+			SELECT u.id, CONCAT(u.firstname,' ', u.lastname) as name,u.photo, u.hash
+			FROM g_employee u
+			WHERE (u.lastname LIKE '%{$q}%' OR u.firstname LIKE '%{$q}%') LIMIT 10
+			";
+
+			$records = Model::runSql($sql, true);
+			return $records;
+	}
+	
+	public static function findByDynamicSearch(G_Company_Structure $gcs,$order_by,$limit,$search='') {
+		$sql = "
+			SELECT
+			`e`.`id`,
+			e.hash,
+			company_branch.name as  branch_name,
+			`d`.`name` AS `department`,
+			`e`.`employee_code`,
+			e.photo,
+			e.salutation,
+
+			CONCAT(e.lastname,', ',e.firstname,' ',substring(e.middlename,1,1),'. ', e.extension_name) AS `employee_name`,
+			
+			`j`.`name` AS `position`,
+			j.employment_status AS employment_status
+			FROM
+			`g_employee` AS `e`
+			Left Join `g_employee_subdivision_history` AS `d` ON `e`.`id` = `d`.`employee_id` AND `d`.`end_date` = ''
+			Left Join `g_employee_branch_history` AS `b` ON `e`.`id` = `b`.`employee_id` AND `b`.`end_date` = ''
+			Left Join g_company_branch as company_branch ON b.company_branch_id=company_branch.id
+			Left Join `g_employee_job_history` AS `j` ON (`j`.`employee_id` = `e`.`id` AND `j`.`end_date` = '' ) OR (j.employee_id=e.id AND j.employment_status='Terminated')
+			Inner Join `g_company_structure` AS `company` ON `e`.`company_structure_id` = `company`.`id`
+			Left Join g_job AS job ON job.id=j.job_id
+
+			WHERE company.id=".Model::safeSql($gcs->getId())." 
+			".$search."
+			".$order_by."
+			".$limit."
+		";
+		
+		$result = Model::runSql($sql,true);
+
+		return $result;
+	}
+	
+	public static function findBySearch(G_Company_Structure $gcs,$order_by,$limit,$search='') {
+		$sql = "
+			SELECT
+			`e`.`id`,
+			e.hash,
+			company_branch.name as  branch_name,
+			`d`.`name` AS `department`,
+			`e`.`employee_code`,
+			e.photo,
+			e.salutation,
+
+			CONCAT(e.lastname,', ',e.firstname,' ',substring(e.middlename,1,1),'. ', e.extension_name) AS `employee_name`,
+			
+			`j`.`name` AS `position`,
+			j.employment_status AS employment_status
+			FROM 
+			`g_employee` AS `e`
+			Left Join `g_employee_subdivision_history` AS `d` ON `e`.`id` = `d`.`employee_id` AND `d`.`end_date` = ''
+			Left Join `g_employee_branch_history` AS `b` ON `e`.`id` = `b`.`employee_id` AND `b`.`end_date` = ''
+			Left Join g_company_branch as company_branch ON b.company_branch_id=company_branch.id
+			Left Join `g_employee_job_history` AS `j` ON (`j`.`employee_id` = `e`.`id` AND `j`.`end_date` = '' ) OR (j.employee_id=e.id AND j.employment_status='Terminated')
+			Left Join `g_employee_basic_salary_history` AS `salary` ON `salary`.`end_date` = '' AND `salary`.`employee_id` = `e`.`id`
+			Inner Join `g_company_structure` AS `company` ON `e`.`company_structure_id` = `company`.`id`
+			Left Join `g_employee_contact_details` AS `contact` ON `e`.`id` = `contact`.`employee_id`
+			Left Join g_eeo_job_category AS job_category ON job_category.id=e.eeo_job_category_id
+			Left Join g_job AS job ON job.id=j.job_id
+			Left Join g_job_specification AS job_specification ON job_specification.id=job.job_specification_id
+
+			WHERE company.id=".Model::safeSql($gcs->getId())." 
+			".$search."
+			".$order_by."
+			".$limit."
+		";
+
+		$result = Model::runSql($sql,true);
+
+		return $result;
+	}
+	
+	
+	public static function findByCompanyStructureId(G_Company_Structure $gcs,$order_by,$limit,$search='') {
+		$sql = "
+			SELECT
+			`e`.`id`,
+			e.hash,
+			`e`.`company_structure_id`,
+			e.eeo_job_category_id,
+			`salary`.`job_salary_rate_id`,
+			j.job_id AS job_id,
+			j.id as job_history_id,
+			b.id as branch_history_id,
+			b.company_branch_id as branch_id,
+			d.company_structure_id as department_id,
+			`company`.`title` AS `company_name`,
+			job_specification.id as job_specification_id,
+			company_branch.name as  branch_name,
+			`d`.`name` AS `department`,
+			`e`.`employee_code`,
+			e.photo,
+			e.salutation,
+			e.firstname,
+			e.lastname,
+			e.middlename,
+			e.extension_name,
+			CONCAT(e.lastname,', ',e.firstname,' ',substring(e.middlename,1,1),'. ', e.extension_name) AS `employee_name`,
+			`salary`.`basic_salary`,
+			`e`.`birthdate`,
+			`e`.`gender`,
+			`e`.`marital_status`,
+			`e`.`nationality`,
+			e.number_dependent,
+			`e`.`sss_number`,
+			`e`.`tin_number`,
+			`e`.`pagibig_number`,
+			e.philhealth_number,
+			e.hired_date,
+			e.terminated_date,
+			`j`.`name` AS `position`,
+			j.employment_status AS employment_status,
+			`contact`.`address`,
+			`contact`.`city`,
+			`contact`.`province`,
+			`contact`.`zip_code`,
+			`contact`.`country`,
+			`contact`.`home_telephone`,
+			`contact`.`mobile`,
+			`contact`.`work_telephone`,
+			`contact`.`work_email`,
+			`contact`.`other_email`,
+			contract.end_date,
+			contract.start_date,
+			job_category.category_name as job_category_name,
+			job_specification.description as job_description,
+			job_specification.duties as job_duties,
+			t.tags
+	
+			FROM
+			`g_employee` AS `e`
+			Left Join `g_employee_subdivision_history` AS `d` ON `e`.`id` = `d`.`employee_id` AND `d`.`end_date` = ''
+			Left Join `g_employee_branch_history` AS `b` ON `e`.`id` = `b`.`employee_id` AND `b`.`end_date` = ''
+			Left Join g_company_branch as company_branch ON b.company_branch_id=company_branch.id
+			Left Join `g_employee_job_history` AS `j` ON  (`j`.`employee_id` = `e`.`id` AND `j`.`end_date` = '' ) OR (j.employee_id=e.id AND j.employment_status='Terminated')
+			Left Join `g_employee_basic_salary_history` AS `salary` ON `salary`.`end_date` = '' AND `salary`.`employee_id` = `e`.`id`
+			Inner Join `g_company_structure` AS `company` ON `e`.`company_structure_id` = `company`.`id`
+			Left Join `g_employee_contact_details` AS `contact` ON `e`.`id` = `contact`.`employee_id`
+			Left Join g_eeo_job_category AS job_category ON job_category.id=e.eeo_job_category_id
+			Left Join g_job AS job ON job.id=j.job_id
+			Left Join g_job_specification AS job_specification ON job_specification.id=job.job_specification_id
+			Left Join g_employee_tags AS `t` ON `e`.`id` = `t`.`employee_id` 
+			Left Join g_employee_extend_contract AS contract ON contract.employee_id=e.id
+			WHERE company.id=".Model::safeSql($gcs->getId())."
+			".$search."
+			GROUP BY e.id
+			".$order_by."
+					
+			".$limit."
+			
+		";
+
+		$result = Model::runSql($sql,true);
+
+		return $result;
+	}
+	
+	public static function findByEmployeeId($employee_id) {
+		$sql = "
+			SELECT
+			`e`.`id`,
+			e.hash,
+			`e`.`company_structure_id`,
+			e.eeo_job_category_id,
+			`salary`.`job_salary_rate_id`,
+			j.job_id AS job_id,
+			j.id as job_history_id,
+			b.id as branch_history_id,
+			b.company_branch_id as branch_id,
+			d.company_structure_id as department_id,
+			`company`.`title` AS `company_name`,
+			job_specification.id as job_specification_id,
+			company_branch.name as  branch_name,
+			`d`.`name` AS `department`,
+			`e`.`employee_code`,
+			e.photo,
+			e.employee_status_id,
+			e.salutation,
+			e.firstname,
+			e.lastname,
+			e.middlename,e.extension_name,
+			CONCAT(e.lastname,', ',e.firstname,' ',e.middlename,' ', e.extension_name) AS `employee_name`,
+			`salary`.`basic_salary`,
+			`e`.`birthdate`,
+			`e`.`gender`,
+			`e`.`marital_status`,
+			`e`.`nationality`,
+			e.number_dependent,
+			`e`.`sss_number`,
+			`e`.`tin_number`,
+			`e`.`pagibig_number`,
+			e.philhealth_number,
+			e.hired_date,
+			e.terminated_date,
+			e.e_is_archive,
+			`j`.`name` AS `position`,
+			j.employment_status AS employment_status,
+			`contact`.`address`,
+			`contact`.`city`,
+			`contact`.`province`,
+			`contact`.`zip_code`,
+			`contact`.`country`,
+			`contact`.`home_telephone`,
+			`contact`.`mobile`,
+			`contact`.`work_telephone`,
+			`contact`.`work_email`,
+			`contact`.`other_email`,
+			job_category.category_name as job_category_name,
+			job_specification.description as job_description,
+			job_specification.duties as job_duties
+	
+			FROM
+			`g_employee` AS `e`
+			Left Join `g_employee_subdivision_history` AS `d` ON `e`.`id` = `d`.`employee_id` AND `d`.`end_date` = ''
+			Left Join `g_employee_branch_history` AS `b` ON `e`.`id` = `b`.`employee_id` AND `b`.`end_date` = ''
+			Left Join g_company_branch as company_branch ON b.company_branch_id=company_branch.id
+			Left Join `g_employee_job_history` AS `j` ON (`j`.`employee_id` = `e`.`id` AND `j`.`end_date` = '' ) OR (j.employee_id=e.id AND j.employment_status='Terminated')
+			Left Join `g_employee_basic_salary_history` AS `salary` ON `salary`.`end_date` = '' AND `salary`.`employee_id` = `e`.`id`
+			Inner Join `g_company_structure` AS `company` ON `e`.`company_structure_id` = `company`.`id`
+			Left Join `g_employee_contact_details` AS `contact` ON `e`.`id` = `contact`.`employee_id`
+			Left Join g_eeo_job_category AS job_category ON job_category.id=e.eeo_job_category_id
+			Left Join g_job AS job ON job.id=j.job_id
+			Left Join g_job_specification AS job_specification ON job_specification.id=job.job_specification_id	
+			WHERE e.id=".Model::safeSql($employee_id)." 
+			
+			".$order_by."
+			GROUP BY e.id
+			".$limit."
+		";
+		$row = Model::runSql($sql);
+		$result = Model::fetchAssoc($row);
+		return $result;
+	}
+	
+		public static function getNextHash($employee_id)
+	{
+		$sql = "
+			SELECT
+			a.hash
+			FROM
+			`g_employee` AS `a`
+			
+			WHERE a.id>".Model::safeSql($employee_id)."
+			ORDER BY a.id ASC		
+			LIMIT 1
+			";
+		$result = Model::runSql($sql,true);
+
+		return  $result[0]['hash'];
+	}
+	
+		public static function getPreviousHash($employee_id)
+	{
+		$sql = "
+			SELECT
+			a.hash
+			FROM
+			`g_employee` AS `a`
+			
+			WHERE a.id<".Model::safeSql($employee_id)."
+			ORDER BY a.id DESC		
+			LIMIT 1
+			";
+
+		$result = Model::runSql($sql,true);
+
+		return $result[0]['hash'];
+	}
+	
+	
+	public static function getNextId($employee_id)
+	{
+		$sql = "
+			SELECT
+			a.id
+			FROM
+			`g_employee` AS `a`
+			
+			WHERE a.id>".Model::safeSql($employee_id)."
+			ORDER BY a.id ASC		
+			LIMIT 1
+			";
+		$result = Model::runSql($sql,true);
+
+		return  $result[0]['id'];
+	}
+	
+		public static function getPreviousId($employee_id)
+	{
+		$sql = "
+			SELECT
+			a.id
+			FROM
+			`g_employee` AS `a`
+			
+			WHERE a.id<".Model::safeSql($employee_id)."
+			ORDER BY a.id DESC		
+			LIMIT 1
+			";
+
+		$result = Model::runSql($sql,true);
+
+		return $result[0]['id'];
+	}
+	
+	public static function getNextIdAlphabetic($employee_id) {
+		$sql = "
+			SELECT
+			a.id
+			FROM
+			". EMPLOYEE ." AS `a`
+			
+			WHERE a.lastname > (SELECT a.lastname FROM ". EMPLOYEE ." as a WHERE a.id = ".Model::safeSql($employee_id).")
+			OR a.lastname = (SELECT a.lastname FROM ". EMPLOYEE ." as a WHERE a.id = ".Model::safeSql($employee_id).")
+			AND a.id > ".Model::safeSql($employee_id)."
+			ORDER BY a.lastname ASC, a.id ASC
+			
+			LIMIT 1
+			";
+		$result = Model::runSql($sql,true);
+
+		return  $result[0]['id'];
+	}	
+	
+	public static function getPreviousIdAlphabetic($employee_id) {
+		$sql = "
+			SELECT
+			a.id
+			FROM
+			". EMPLOYEE ." AS `a`
+			
+			WHERE a.lastname < (SELECT a.lastname FROM ". EMPLOYEE ." as a WHERE a.id = ". Model::safeSql($employee_id) .")
+			OR a.lastname = (SELECT a.lastname FROM ". EMPLOYEE ." as a WHERE a.id = ". Model::safeSql($employee_id) .")
+			AND a.id < ". Model::safeSql($employee_id) ."
+			ORDER BY a.lastname DESC, a.id DESC
+			
+			LIMIT 1
+			";
+
+		$result = Model::runSql($sql,true);
+
+		return $result[0]['id'];
+	}
+	
+	public static function getDynamicQueries($queries) {
+				$field_list = array(
+							'branch',
+							'department',
+							'position',
+							'employment status',
+							'employee id',
+							'lastname',
+							'firstname',
+							'birthdate',
+							'age','gender',
+							'marital status',
+							'address',
+							'gender',
+							'city',
+							'home telephone',
+							'mobile',
+							'work email',
+							'hired date',
+							'terminated date',
+							'end of contract',
+							'tags');
+		
+		
+				$result = explode(':',$queries);
+				$ctr=0;
+				$query='';
+				
+				foreach($result as $key=>$value) {
+					
+					if(substr_count($value,',')==1) { //with comma
+						$r = explode(',',$value);
+						foreach($r as $key=>$vl){
+							if($ctr==0) {/* add category */
+								$ctr=1;
+								$str = ($vl=='') ? "" : $vl ;	
+								
+								$field = Tools::searchInArray($field_list,strtolower($vl));
+								$category = strtolower($field[0]);	
+								
+								$category = strtolower($str);
+							}else { /* add value*/
+								$ctr=0;$str = ($vl=='') ? "" : $vl ;
+								$or = (strlen($query[$category])>0) ? ' /OR/ ': '' ; 
+								$query[$category].= $or. strtolower($str);
+							}	
+						}
+					}else { // no comma
+
+						if($ctr==0) {/* add category*/
+							$ctr=1;
+							$field = Tools::searchInArray($field_list,strtolower($value));
+							$y=0;
+							foreach($field as $key=>$f) {
+								if($y==0) {
+									$field = $f;	
+								}
+								$y++;	
+							}
+							$category = strtolower($f);		
+						}else { /* add value*/
+							$ctr=0;	
+							$or = (strlen($query[$category])>0) ? ' /OR/ ': '' ; 
+							$query[$category].= $or. strtolower($value);
+						}
+					}
+				}
+			
+			$field_list = array(
+							'branch'=>'company_branch.name',
+							'department'=>'d.name',
+							'position'=>'j.name',
+							'employment status'=>'j.employment_status',
+							'employee id'=>'e.employee_code',
+							'lastname'=>'e.lastname',
+							'firstname'=>'e.firstname',
+							'birthdate'=>'e.birthdate',
+							'age'=>'age',
+							'gender'=>'e.gender',
+							'marital status'=>'e.marital_status',
+							'address'=>'contact.address',
+							'city'=>'contact.city',
+							'home telephone'=>'contact.home_telephone',
+							'mobile'=>'contact.mobile',
+							'work email'=>'contact.work_email',
+							'hired date'=>'e.hired_date',
+							'terminated date'=>'e.terminated_date',
+							'end of contract'=>'contract.end_date',
+							'tags'=>'t.tags');
+				$x=1;			
+				$total_query = count($query);
+				$has_basic=0;
+				$has_more_queries=0;
+				$is_first_time=1;
+				
+				foreach($query as $key=>$value) {
+				
+					if($value!='') {
+						if($field_list[$key]!="") {
+							$q[$field_list[$key]].=$value;
+			
+							if(substr_count($value, '/OR/')>0) {
+								
+								$has_more_queries=1;
+									
+								$v = explode("/OR/",$value);
+								$r = count($v);
+								$ctr=1;
+								$xx='';
+								foreach($v as $k=>$str) {
+									if($field_list[$key]=='e.employee_code') {
+										$comma = ($r==$ctr)? '': ' OR ' ;
+										$xx.=$field_list[$key]."='".trim($str)."'".$comma;
+									}else {
+										$comma = ($r==$ctr)? '': ' OR ' ;
+										$xx.=$field_list[$key]." LIKE '%".trim($str)."%'".$comma;
+									}
+									$ctr++;
+								}		
+								$sep.= " AND ". "(". $xx.")";	
+							}else {
+								
+								$has_basic=1;
+
+								if($field_list[$key]=='e.employee_code') {
+									$and = ($x<=$total_query && $value=='')? '': ' AND ' ;
+									$and = ($is_first_time==1)? '' : $and ;
+									$search.= $where.$and. " $field_list[$key]='". $value ."' ";
+								}elseif($field_list[$key]=='e.gender') {
+									$and = ($x<=$total_query && $value=='' )? '': ' AND ' ;
+									$and = ($is_first_time==1)? '' : $and ;
+									$search.= $where.$and. " $field_list[$key] LIKE '". $value ."%' ";
+								}else {
+									$and = ($x<=$total_query && $value=='')? '': ' AND ' ;
+									$and = ($is_first_time==1)? '' : $and ;
+									$search.= $where.$and. " $field_list[$key] LIKE '%". $value ."%' ";	
+								}
+								
+								if($is_first_time==1) {
+									$is_first_time=0;
+								}
+							}
+	
+						}	
+					}
+					$x++;
+				}
+				
+				if($total_query>1) {
+					if($has_basic==1) {	
+						$search = "AND (".$search.")";	
+					}
+				}else {
+					if($has_basic==1) {
+						$search = "AND (".$search.")";	
+					}
+				}
+				$search.=$sep;					
+				$search = "AND (e.e_is_archive = '" . G_Employee::NO . "') " .  $search;
+		return $search;
+	}
+	
+	public static function getSortValue($sort) {
+		if($sort=='branch_name') {
+				$sort = 'e.id';
+		}elseif($sort=='department') {
+			$sort = 'd.name';
+		}elseif($sort=='employee_name') {
+			$sort = 'e.lastname';
+		}elseif($sort=='employee_code') {
+			$sort = 'e.employee_code';
+		}	
+		return $sort;
+	}
+	
+	public static function constructSqlFilterEmployeeAlreadyInTheGroup($company_structure_id) 
+	{
+		$specific_employee = array();
+		$se = G_Employee_Subdivision_History_Finder::findAllCurrentEmployeesByCompanyStructureId($company_structure_id);
+		foreach($se as $e):
+			array_push($specific_employee, $e->getEmployeeId());
+		endforeach;
+		
+		$implode = implode(' AND employee_id != ',$specific_employee);
+		if($implode) {
+			$construct_sql = "AND (employee_id != $implode)";
+		}
+		return $construct_sql;
+		
+	}
+}
+?>
